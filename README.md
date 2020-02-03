@@ -15,3 +15,8 @@ import InBrainSurveys from 'inbrain-surveys';
 // TODO: What to do with the module?
 InBrainSurveys;
 ```
+
+
+DEV TO DO:
+-- Push the example (here or another repo)
+-- Remove scripts/ folder
