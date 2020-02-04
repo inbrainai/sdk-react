@@ -43,7 +43,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             
             // Call Braintree sdk
             // FIXME: is there any possible failure here or callback ?
-            InBrain.getInstance().init(this.reactContext.getCurrentActivity(), clientId, clientSecret);
+            InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
 
             // Everything went well, resolve the promise
             promise.resolve("CALL SUCCESS init =>  clientId: " + clientId + " clientSecret: " + clientSecret);
@@ -70,7 +70,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             };
 
             // Call braintree SDK
-            InBrain.getInstance().showSurveys(this.reactContext.getCurrentActivity(), callback);
+            InBrain.getInstance().showSurveys(getCurrentActivity(), callback);
         } catch(Exception e){
             promise.reject("E_ERROR_SHOW", e);
         }
