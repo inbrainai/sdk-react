@@ -22,8 +22,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void sampleMethod(String stringArgument, int numberArgument, Callback callback) {
-        // TODO: Implement some actually useful functionality
-        InBrain.getInstance().init(this, 'CLIENT_ID', 'CLIENT_SECRET');
-        callback.invoke("Received numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
+       System.out.println("ABCD");
+        try {
+            InBrain.getInstance().init(this.reactContext, "CLIENT_ID", "CLIENT_SECRET");
+            callback.invoke("CALL SUCCESS numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
+        }catch(Exception e){
+            callback.invoke("CALL ERROR: " + e.getMessage());
+        }
     }
 }

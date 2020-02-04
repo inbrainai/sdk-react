@@ -19,6 +19,7 @@ export default class App extends Component<{}> {
   };
   componentDidMount() {
     InBrainSurveys.sampleMethod('Testing', 123, (message) => {
+      console.log(message);
       this.setState({
         status: 'native callback received',
         message
