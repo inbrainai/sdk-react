@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.inbrain.sdk.InBrain;
 import com.inbrain.sdk.callback.StartSurveysCallback;
+import com.facebook.react.bridge.Promise;
 
 public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
@@ -21,34 +22,45 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
         return "InBrainSurveys";
     }
 
-    @ReactMethod
-    public void init(String clientId, String clientSecret, Callback callback) {
-       System.out.println("TEST SAMPLE");
-        try {
-            InBrain.getInstance().init(this.reactContext.getCurrentActivity(), clientId, clientSecret);
-            callback.invoke("CALL SUCCESS init =>  clientId: " + clientId + " clientSecret: " + clientSecret);
-        }catch(Exception e){
-            callback.invoke("CALL ERROR init: " + e.getMessage());
+    private void notNull(String name, Object toCheck) {
+        if(toCheck == null) {
+            throw new IllegalArgumentException(name + " must not be null");
         }
     }
 
     @ReactMethod
-    public void showSurveys(final Callback callback) {
+    public void init(String clientId, String clientSecret, Promise promise) {
+       System.out.println("TEST SAMPLE");
+        try {
+            if(clientId == null){
+                throw new RuntimeException("Client ID Must be set");
+            }
+            InBrain.getInstance().init(this.reactContext.getCurrentActivity(), clientId, clientSecret);
+            promise.resolve("CALL SUCCESS init =>  clientId: " + clientId + " clientSecret: " + clientSecret);
+        } catch(IllegalArgumentException e){
+            promise.reject("E_ERROR_INIT_PARAM", e);
+        } catch(Exception e){
+            promise.reject("E_ERROR_INIT", e);
+        }
+    }
+
+    @ReactMethod
+    public void showSurveys(final Promise promise) {
         try {
 
-            StartSurveysCallback inBrainCallBack = new StartSurveysCallback(){
+            StartSurveysCallback callback = new StartSurveysCallback(){
                 public void onSuccess() {
-                    callback.invoke("CALL SUCCESS showSurveys");
+                    promise.resolve("CALL SUCCESS showSurveys");  
                 };
 
                 public void onFail(String message) {
-                    callback.invoke("CALL FAILED showSurveys: " + message);
+                    promise.resolve("CALL FAILED showSurveys: " + message);  
                 };
             };
 
-            InBrain.getInstance().showSurveys(this.reactContext.getCurrentActivity(), inBrainCallBack);
-        }catch(Exception e){
-            callback.invoke("CALL ERROR showSurveys: " + e.getMessage());
+            InBrain.getInstance().showSurveys(this.reactContext.getCurrentActivity(), callback);
+        } catch(Exception e){
+            promise.reject("E_ERROR_SHOW", e);
         }
     }
 }
