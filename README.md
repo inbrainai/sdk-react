@@ -18,5 +18,5 @@ InBrainSurveys;
 
 
 DEV TO DO:
--- Push the example (here or another repo)
+-- Push the example somewhere else
 -- Remove scripts/ folder

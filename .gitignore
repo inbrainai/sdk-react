@@ -41,5 +41,3 @@ buck-out/
 \.buckd/
 *.keystore
 
-# Example
-example
