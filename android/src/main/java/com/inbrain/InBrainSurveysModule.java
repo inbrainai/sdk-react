@@ -34,7 +34,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void showSurveys(final Callback callback) {
-       System.out.println("TEST SAMPLE");
         try {
 
             StartSurveysCallback inBrainCallBack = new StartSurveysCallback(){
