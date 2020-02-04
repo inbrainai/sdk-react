@@ -4,9 +4,15 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.inbrain.sdk.InBrain;
 import com.inbrain.sdk.callback.StartSurveysCallback;
+import com.inbrain.sdk.callback.GetRewardsCallback;
+import com.inbrain.sdk.model.Reward;
 import com.facebook.react.bridge.Promise;
+import java.util.List;
 
 public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
@@ -30,12 +36,16 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void init(String clientId, String clientSecret, Promise promise) {
-       System.out.println("TEST SAMPLE");
         try {
-            if(clientId == null){
-                throw new RuntimeException("Client ID Must be set");
-            }
+            // Validate parameters
+            notNull("clientId", clientId);
+            notNull("clientSecret", clientSecret);
+            
+            // Call Braintree sdk
+            // FIXME: is there any possible failure here or callback ?
             InBrain.getInstance().init(this.reactContext.getCurrentActivity(), clientId, clientSecret);
+
+            // Everything went well, resolve the promise
             promise.resolve("CALL SUCCESS init =>  clientId: " + clientId + " clientSecret: " + clientSecret);
         } catch(IllegalArgumentException e){
             promise.reject("E_ERROR_INIT_PARAM", e);
@@ -48,19 +58,57 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
     public void showSurveys(final Promise promise) {
         try {
 
+            // Build the callback
             StartSurveysCallback callback = new StartSurveysCallback(){
                 public void onSuccess() {
                     promise.resolve("CALL SUCCESS showSurveys");  
                 };
 
                 public void onFail(String message) {
-                    promise.resolve("CALL FAILED showSurveys: " + message);  
+                    promise.reject("E_ERROR_SHOW", message);  
                 };
             };
 
+            // Call braintree SDK
             InBrain.getInstance().showSurveys(this.reactContext.getCurrentActivity(), callback);
         } catch(Exception e){
             promise.reject("E_ERROR_SHOW", e);
+        }
+    }
+
+    @ReactMethod
+    public void getRewards(final Promise promise) {
+        try {
+
+            InBrain.getInstance().getRewards(new GetRewardsCallback() {  
+                @Override  
+                public boolean handleRewards(List<Reward> rewards) {  
+
+                    WritableArray array = Arguments.createArray();
+
+                    for(Reward reward: rewards){
+                        WritableMap map = Arguments.createMap();
+                        map.putInt("transactionId", (int) reward.transactionId); // FIXME possible loss conversion
+                        map.putDouble("amount", reward.amount);
+                        map.putString("currency", reward.currency);
+                        map.putInt("transactionType", reward.transactionType);
+                        array.pushMap(map);
+                    }
+
+                    // Resolve promise with the list of rewards
+                    promise.resolve(array);  
+
+                    return false; // FIXME false for manual confirm / true for automatic ?
+                }  
+            
+                @Override  
+                public void onFailToLoadRewards(int errorCode) {  
+                    promise.reject("E_ERROR_GET", "" +errorCode); // FIXME handle error code  
+                }  
+            });
+
+        } catch(Exception e){
+            promise.reject("E_ERROR_GET", e);
         }
     }
 }
