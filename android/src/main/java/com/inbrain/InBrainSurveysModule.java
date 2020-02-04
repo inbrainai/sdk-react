@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.inbrain.sdk.InBrain;
 
 public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
@@ -22,6 +23,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void sampleMethod(String stringArgument, int numberArgument, Callback callback) {
         // TODO: Implement some actually useful functionality
+        InBrain.getInstance().init(this, 'CLIENT_ID', 'CLIENT_SECRET');
         callback.invoke("Received numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
     }
 }
