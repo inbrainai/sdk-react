@@ -1,5 +1,3 @@
-import { NativeModules } from 'react-native';
+import inbrain from './src/InBrain';
 
-const { InBrainSurveys } = NativeModules;
-
-export default InBrainSurveys;
+export default inbrain;

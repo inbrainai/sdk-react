@@ -1,6 +1,5 @@
 #import "InBrainSurveys.h"
 
-
 @implementation InBrainSurveys
 
 RCT_EXPORT_MODULE()
@@ -14,17 +13,33 @@ RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)cli
     resolve(@[[NSString stringWithFormat: @"REsolve promise clientId: %@ clientSecret: %@", clientId, clientSecret]]);
 }
 
-// ****************
-// ***** INIT *****
-// ****************
+
+
+// **************************
+// ***** SET APP USER ID*****
+// **************************
+RCT_EXPORT_METHOD(setAppUserId:(NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // TODO: Implement some actually useful functionality
+    resolve(@[[NSString stringWithFormat: @"Resolve setAppUserId userId: %@", userId]]);
+}
+
+// ************************
+// ***** SHOW SURVEYS *****
+// ************************
 RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     // TODO: Implement some actually useful functionality
-    resolve(@[[NSString stringWithFormat: @"Resolve show clientId"]]);
+    resolve(@[[NSString stringWithFormat: @"Resolve showSurveys"]]);
 }
 
-// ****************
-// ***** INIT *****
-// ****************
+// ************************
+// ***** SHOW SURVEYS *****
+// ************************
+RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // TODO: Implement some actually useful functionality
+    resolve(@[@"reward1",@"reward2"]);
+}
 
 @end

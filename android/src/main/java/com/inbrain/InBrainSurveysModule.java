@@ -98,8 +98,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
     public void getRewards(final Promise promise) {
         try {
 
-            System.out.println("Get Rewards Android");
-
             InBrain.getInstance().getRewards(new GetRewardsCallback() {  
                 @Override  
                 public boolean handleRewards(List<Reward> rewards) {  
@@ -117,7 +115,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
                     // Resolve promise with the list of rewards
                     System.out.println("Resolve promise");
-                    promise.resolve("TEST REWARDS " + rewards.size());
 
                     return false; // FIXME false for manual confirm / true for automatic ?
                 }  
