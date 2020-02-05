@@ -15,10 +15,10 @@ The module has to be manually linked using:
 import inbrain from 'inbrain-surveys';
 
 // TODO: What to do with the module?
-`inbrain.init`
-`inbrain.setAppUserId`
-`inbrain.showSurveys`
-`inbrain.getRewards`
+inbrain.init
+inbrain.setAppUserId
+inbrain.showSurveys
+inbrain.getRewards
 ```
 
 
