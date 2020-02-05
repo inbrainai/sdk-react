@@ -55,6 +55,24 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void setAppUserId(String userId, Promise promise) {
+        try {
+            // Validate parameters
+            notNull("userId", userId);
+            
+            // Call Braintree sdk
+            InBrain.getInstance().setAppUserId(userId);
+
+            // Everything went well, resolve the promise
+            promise.resolve("CALL SUCCESS user id =>  clientId: " + userId);
+        } catch(IllegalArgumentException e){
+            promise.reject("E_ERROR_USER_PARAM", e);
+        } catch(Exception e){
+            promise.reject("E_ERROR_USER", e);
+        }
+    }
+
+    @ReactMethod
     public void showSurveys(final Promise promise) {
         try {
 
@@ -80,6 +98,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
     public void getRewards(final Promise promise) {
         try {
 
+            System.out.println("Get Rewards Android");
+
             InBrain.getInstance().getRewards(new GetRewardsCallback() {  
                 @Override  
                 public boolean handleRewards(List<Reward> rewards) {  
@@ -96,7 +116,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                     }
 
                     // Resolve promise with the list of rewards
-                    promise.resolve(array);  
+                    System.out.println("Resolve promise");
+                    promise.resolve("TEST REWARDS " + rewards.size());
 
                     return false; // FIXME false for manual confirm / true for automatic ?
                 }  
