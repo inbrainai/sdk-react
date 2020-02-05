@@ -2,7 +2,7 @@
   "name": "inbrain-surveys",
   "title": "Inbrain Surveys",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "Survey library to monetize your mobile app, provided by inBrain.ai",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -28,7 +28,7 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "^16.8.3",
-    "react-native": ">=0.60.0"
+    "react-native": ">=0.60 <0.62"
   },
   "devDependencies": {
     "@types/react": "16.8.8",
@@ -37,5 +37,11 @@
     "react": "^16.8.3",
     "react-native": "^0.60.0",
     "typescript": "^3.7.5"
-  }
+  },
+  "files": [
+    "android",
+    "ios",
+    "lib",
+    "react-native-webview.podspec"
+  ]
 }
