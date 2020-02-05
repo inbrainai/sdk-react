@@ -3,31 +3,39 @@
   "title": "Inbrain Surveys",
   "version": "1.0.0",
   "description": "TODO",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./node_modules/typescript/bin/tsc",
+    "watch": "./node_modules/typescript/bin/tsc -w",
+    "clean": "rm -r ./lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/inbrain-surveys.git",
-    "baseUrl": "https://github.com/github_account/inbrain-surveys"
+    "url": "https://github.com/inbrainai/sdk-android.git",
+    "baseUrl": "https://github.com/inbrainai/sdk-android"
   },
   "keywords": [
-    "react-native"
+    "inbrain",
+    "surveys"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "yourname@email.com"
+    "name": "Paul Saulue-Laborde",
+    "email": "psaulue@gmail.com"
   },
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^16.8.1",
-    "react-native": ">=0.59.0-rc.0 <1.0.x"
+    "react": "^16.8.3",
+    "react-native": ">=0.60.0"
   },
   "devDependencies": {
+    "@types/react": "16.8.8",
+    "@types/react-native": "0.60.11",
+    "babel-plugin-module-resolver": "^4.0.0",
     "react": "^16.8.3",
-    "react-native": "^0.59.10"
+    "react-native": "^0.60.0",
+    "typescript": "^3.7.5"
   }
 }
