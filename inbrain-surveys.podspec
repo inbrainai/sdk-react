@@ -18,8 +18,9 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,swift}"
   s.requires_arc = true
-
+  #s.ios.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Swift.xcframework"
   s.dependency "React"
+  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '${PROJECT_DIR}../node_modules/inbrain-surveys/ios/Frameworks' }
   # ...
   # s.dependency "..."
 end

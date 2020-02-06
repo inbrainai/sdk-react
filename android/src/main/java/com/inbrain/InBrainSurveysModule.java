@@ -5,6 +5,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.inbrain.sdk.InBrain;
@@ -12,6 +14,8 @@ import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.model.Reward;
 import com.facebook.react.bridge.Promise;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class InBrainSurveysModule extends ReactContextBaseJavaModule {
@@ -33,6 +37,14 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             throw new IllegalArgumentException(name + " must not be null");
         }
     }
+
+   /* private <T> void notEmpty(String name, List<T> toCheck) {
+        notNull(toCheck);
+
+        if(toCheck.isEmpty()) {
+            throw new IllegalArgumentException(name + " must not be empty");
+        }
+    }*/
 
     @ReactMethod
     public void init(String clientId, String clientSecret, Promise promise) {
@@ -114,7 +126,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                     }
 
                     // Resolve promise with the list of rewards
-                    System.out.println("Resolve promise");
+                    promise.resolve("array");
 
                     return false; // FIXME false for manual confirm / true for automatic ?
                 }  
@@ -127,6 +139,32 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
 
         } catch(Exception e){
             promise.reject("E_ERROR_GET", e);
+        }
+    }
+
+    @ReactMethod
+    public void confirmRewards(ReadableArray rewardsArray, final Promise promise) {
+        try {
+
+            List<Reward> rewards = new ArrayList<>();
+            for(int i = 0; i<rewardsArray.size(); i++){
+                ReadableMap rewardMap = rewardsArray.getMap(i);
+
+                Long transactionId =  (long) rewardMap.getInt("transactionId");
+                Float amount =  (float) rewardMap.getDouble("amount"); // FIXME ugly conversion
+                String currency =  rewardMap.getString("currency");
+                int transactionType =  rewardMap.getInt("transactionType");
+
+                Reward reward = new Reward(transactionId, amount, currency, transactionType);
+                rewards.add(reward);
+            }
+
+            System.out.println("Confirming " + rewards.size() + "rewards");
+            InBrain.getInstance().confirmRewards(rewards);
+            promise.resolve(true);
+
+        } catch(Exception e){
+            promise.reject("E_ERROR_CONFIRM", e);
         }
     }
 }
