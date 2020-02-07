@@ -35,7 +35,7 @@ inbrain.init(clientId: string, secretId: string)
 * clientSecret: The client secret obtained from your account manager.
 
 ```javascript
-inbrain.setAppUserId()
+inbrain.setAppUserId(userId: string)
 ```
 * Set the app user identifier
 * clientId The user identifier (usually an email)

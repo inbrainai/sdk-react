@@ -12,8 +12,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inbrainai/sdk-android.git",
-    "baseUrl": "https://github.com/inbrainai/sdk-android"
+    "url": "https://github.com/inBrainSurveys/sdk-react",
+    "baseUrl": "https://github.com/inBrainSurveys/sdk-react"
   },
   "keywords": [
     "inbrain",
