@@ -1,3 +1,1 @@
-import inbrain from './InBrain';
-
-export default inbrain;
+export * from './InBrain';

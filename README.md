@@ -16,7 +16,7 @@ Run `$ pod install` in the ios/ folder
 Visit your app’s ***Target*** in the Project Settings and Choose the ***General*** tab.
 Scroll down until you hit the ***Frameworks, Libraries, Embedded Contents*** section… 
 1) Press ‘+’, Add Other and Add files...
-2) Select the **InBrainSurveys_SDK_Swift.xcframework** in your project nodes_modules/inbrain-surveys/ios/Frameworks folder
+2) Select the **InBrainSurveys_SDK_Swift.xcframework** in your project 'nodes_modules/inbrain-surveys/ios/Frameworks' folder
 3) Confirm
 
 Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
@@ -31,7 +31,7 @@ Available functions:
 inbrain.init(clientId: string, secretId: string)
 ```
 * Initialise the SDK
-* clientId: The client ID obtained from your account manager (NOT USED ON iOS)
+* clientId: The client ID obtained from your account manager (NOT USED ON iOS, use info.plist instead)
 * clientSecret: The client secret obtained from your account manager.
 
 ```javascript
@@ -46,11 +46,11 @@ inbrain.showSurveys()
 * Show the surveys webview
 
 ```javascript
-getRewards() (Useful for server less app)
+inbrain.getRewards() (Useful for server less app)
 ```
 * Get the rewards
 ```javascript
-confirmRewards(rewards: Reward[]) (Useful for server less app)
+inbrainconfirmRewards(rewards: Reward[]) (Useful for server less app)
 ```
 * Manual confirm a list of rewards
 * rewards: List of rewards to confirm

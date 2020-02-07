@@ -5,7 +5,7 @@ const { InBrainSurveys } = NativeModules;
 /**
  * Reward interface
  */
-export type Reward = {
+export type InBrainReward = {
     transactionId: number;
     amount: number;
     currency: string;
@@ -39,15 +39,15 @@ const showSurveys = (): Promise<void> =>   {
 /**
  * Get the rewards
  */
-const getRewards = (): Promise<Reward[]> =>   {
+const getRewards = (): Promise<InBrainReward[]> =>   {
     return InBrainSurveys.getRewards();
 }
 
 /**
- * Manually confirm a list of rewards
+ * Manual confirm a list of rewards
  * @param rewards The rewards to confirm
  */
-const confirmRewards = (rewards: Reward[]): Promise<void> =>  {
+const confirmRewards = (rewards: InBrainReward[]): Promise<void> =>  {
     return InBrainSurveys.confirmRewards(rewards);
 }
 
