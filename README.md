@@ -34,16 +34,23 @@ inbrain.init(clientId: string, secretId: string)
 * clientId: The client ID obtained from your account manager (NOT USED ON iOS)
 * clientSecret: The client secret obtained from your account manager.
 
-**setAppUserId() **
+```javascript
+inbrain.setAppUserId()
+```
 * Set the app user identifier
 * clientId The user identifier (usually an email)
 
-**showSurveys() **
+```javascript
+inbrain.showSurveys()
+```
 * Show the surveys webview
 
-**getRewards() (Useful for server less app)**
+```javascript
+getRewards() (Useful for server less app)
+```
 * Get the rewards
-
-**confirmRewards = (rewards: Reward[]) (Useful for server less app)**
+```javascript
+confirmRewards(rewards: Reward[]) (Useful for server less app)
+```
 * Manual confirm a list of rewards
 * rewards: List of rewards to confirm
