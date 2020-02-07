@@ -25,10 +25,11 @@ Configure your info.plist as specified [here](https://github.com/inBrainSurveys/
 ## Usage
 ```javascript
 import inbrain from 'inbrain-surveys';
-
+```
 Available functions:
-
-**init(clientId: string, secretId: string)** 
+```javascript
+inbrain.init(clientId: string, secretId: string)
+```
 * Initialise the SDK
 * clientId: The client ID obtained from your account manager (NOT USED ON iOS)
 * clientSecret: The client secret obtained from your account manager.
