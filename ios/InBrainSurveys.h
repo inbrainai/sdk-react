@@ -7,4 +7,7 @@
 @property(nonatomic) NSString* clientId; // InBrain client id
 @property(nonatomic) NSString* clientSecret; // InBrain client secret
 @property(nonatomic) NSString* appUid; // Application unique identifier
+
+@property(nonatomic) RCTPromiseResolveBlock resolve;
+@property(nonatomic) RCTPromiseRejectBlock reject;
 @end

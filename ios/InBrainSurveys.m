@@ -25,10 +25,15 @@
 }
 
 - (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-    
+    NSLog(@"REWARDS CALLBACK");
+    NSLog(@"%@",rewardsArray);
+    self.resolve(rewardsArray);
+    self.resolve = nil;
+    self.reject = nil;
 }
 
 - (void)inBrainWebViewDismissed {
+    self.hasPresented = false;
     [self dismissViewControllerAnimated:true completion:^{}];
 }
 
@@ -54,7 +59,7 @@ RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)cli
         self.clientSecret = clientSecret;
         [[InBrain shared] setAppSecretWithSecret:clientSecret];
 
-        resolve(@[[NSString stringWithFormat: @"Resolve promise clientId: %@ clientSecret: %@", clientId, clientSecret]]);
+        resolve(nil);
 }
 
 
@@ -66,7 +71,7 @@ RCT_EXPORT_METHOD(setAppUserId:(NSString *)userId resolver:(RCTPromiseResolveBlo
 {
     self.appUid = userId;
     [[InBrain shared] setAppUserIdWithAppUID:userId];
-    resolve(@[[NSString stringWithFormat: @"Resolve setAppUserId userId: %@", userId]]);
+    resolve(nil);
 }
 
 // ************************
@@ -78,13 +83,12 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     // This requires the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
     
-
         // Display it using the main view controller
         UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
         [rootViewController presentViewController:self animated:false completion:^{
             
             // When the view controller is displayed, we resolve the promise
-            resolve(@[[NSString stringWithFormat: @"Resolve showSurveys"]]);
+            resolve(nil);
         }];
     });
     
@@ -95,15 +99,23 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 // ************************
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // FIXME: Implement some actually useful functionality
+    NSLog(@"GET REWARDS");
     [[InBrain shared] getRewards];
+    self.resolve = resolve;
+    self.reject = reject;
 
-    resolve(@[@"reward1",@"reward2"]);
 }
 
 // ***************************
 // ***** CONFIRM REWARDS *****
 // ***************************
-// TODO implements
+RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // Mapping to list of ids and forwarding to SDK
+    NSArray* ids = [rewards valueForKey:@"transactionId"];
+    [[InBrain shared] confirmRewardsWithTxIdArray:ids];
 
+    // Resolve the promise
+    resolve(@true);
+}
 @end

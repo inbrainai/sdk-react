@@ -58,7 +58,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
 
             // Everything went well, resolve the promise
-            promise.resolve("CALL SUCCESS init =>  clientId: " + clientId + " clientSecret: " + clientSecret);
+            promise.resolve(null);
         } catch(IllegalArgumentException e){
             promise.reject("E_ERROR_INIT_PARAM", e);
         } catch(Exception e){
@@ -76,7 +76,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             InBrain.getInstance().setAppUserId(userId);
 
             // Everything went well, resolve the promise
-            promise.resolve("CALL SUCCESS user id =>  clientId: " + userId);
+            promise.resolve(null);
         } catch(IllegalArgumentException e){
             promise.reject("E_ERROR_USER_PARAM", e);
         } catch(Exception e){
@@ -91,7 +91,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             // Build the callback
             StartSurveysCallback callback = new StartSurveysCallback(){
                 public void onSuccess() {
-                    promise.resolve("CALL SUCCESS showSurveys");  
+                    promise.resolve(null);
                 };
 
                 public void onFail(String message) {
@@ -126,7 +126,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                     }
 
                     // Resolve promise with the list of rewards
-                    promise.resolve("array");
+                    promise.resolve(true);
 
                     return false; // FIXME false for manual confirm / true for automatic ?
                 }  
@@ -159,7 +159,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                 rewards.add(reward);
             }
 
-            System.out.println("Confirming " + rewards.size() + "rewards");
             InBrain.getInstance().confirmRewards(rewards);
             promise.resolve(true);
 
