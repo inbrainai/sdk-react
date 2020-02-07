@@ -115,7 +115,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                 public boolean handleRewards(List<Reward> rewards) {  
 
                     WritableArray array = Arguments.createArray();
-
                     for(Reward reward: rewards){
                         WritableMap map = Arguments.createMap();
                         map.putInt("transactionId", (int) reward.transactionId); // FIXME possible loss conversion
