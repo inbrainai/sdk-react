@@ -19,22 +19,30 @@ Scroll down until you hit the ***Frameworks, Libraries, Embedded Contents*** sec
 2) Select the **InBrainSurveys_SDK_Swift.xcframework** in your project nodes_modules/inbrain-surveys/ios/Frameworks folder
 3) Confirm
 
+Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
+
 
 ## Usage
 ```javascript
 import inbrain from 'inbrain-surveys';
 
-// TODO: What to do with the module?
-inbrain.init
-inbrain.setAppUserId
-inbrain.showSurveys
-inbrain.getRewards
-```
+Available functions:
 
+**init(clientId: string, secretId: string)** 
+* Initialise the SDK
+* clientId: The client ID obtained from your account manager (NOT USED ON iOS)
+* clientSecret: The client secret obtained from your account manager.
 
-DEV TO DO:
--- Push the example somewhere else
--- Unlin library (react-native unlink)
--- Write READMEs
--- Check the license with InBrain
--- Determine name of npm package. Currently 'inbrain-surveys'
+**setAppUserId() **
+* Set the app user identifier
+* clientId The user identifier (usually an email)
+
+**showSurveys() **
+* Show the surveys webview
+
+**getRewards() (Useful for server less app)**
+* Get the rewards
+
+**confirmRewards = (rewards: Reward[]) (Useful for server less app)**
+* Manual confirm a list of rewards
+* rewards: List of rewards to confirm
