@@ -124,7 +124,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
                     }
 
                     // Resolve promise with the list of rewards
-                    promise.resolve(true);
+                    promise.resolve(array);
 
                     return false; // FIXME false for manual confirm / true for automatic ?
                 }  

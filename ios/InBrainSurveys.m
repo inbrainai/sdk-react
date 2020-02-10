@@ -1,4 +1,5 @@
 #import "InBrainSurveys.h"
+#import "InBrainSurveysViewController.h"
 #import <InBrainSurveys_SDK_Swift-Swift.h>
 
 @implementation InBrainSurveys
@@ -10,30 +11,16 @@
 {
     self = [super init];
     self.inbrain = [InBrain shared];
-    [self.inbrain setInBrainDelegate:self];
     return self;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    // Not sure about that. Seems like a little hack. But we need to dismiss the ViewController as soon as inBrainWebViewDismissed is called.
-    if(!self.hasPresented){
-        self.hasPresented = true;
-        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid];
-    }
+// ********************************
+// ***** EVENTEMITTER methods *****
+// ********************************
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[@"OnClose"];
 }
-
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-    NSLog(@"REWARDS CALLBACK");
-    NSLog(@"%@",rewardsArray);
-}
-
-- (void)inBrainWebViewDismissed {
-    self.hasPresented = false;
-    [self dismissViewControllerAnimated:true completion:^{}];
-}
-
 
 // *********************************
 // ***** RN BRIDGE methods  ********
@@ -58,8 +45,6 @@ RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)cli
         resolve(nil);
 }
 
-
-
 // **************************
 // ***** SET APP USER ID*****
 // **************************
@@ -81,10 +66,14 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     
         // Display it using the main view controller
         UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
-        [rootViewController presentViewController:self animated:false completion:^{
+        InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
+        viewController.clientSecret = self.clientSecret;
+        viewController.appUid = self.appUid;
+        viewController.clientId = self.clientId;
+        [rootViewController presentViewController:viewController animated:false completion:^{
             
             // When the view controller is displayed, we resolve the promise
-            resolve(nil);
+            resolve(@true);
         }];
     });
     
@@ -95,10 +84,20 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 // ************************
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSLog(@"GET REWARDS");
-    [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){
-        NSLog(@"REWARDS CALLBACK");
-        NSLog(@"%@",rewards);
+    [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){        
+        NSMutableArray *rewardList = [NSMutableArray array];
+        for(int i = 0; i < rewards.count; i++) {
+            
+            // ENHANCE
+            // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
+            // The result on the RN side is an array with null elements...
+             NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithLong:rewards[i].amount]};
+           [rewardList addObject:o];
+        }
+        
+       
+        
+        resolve(rewardList);
     } failedToGetRewards:^{
         reject(nil, nil, nil);
     }];

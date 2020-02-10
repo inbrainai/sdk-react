@@ -18,7 +18,6 @@ export type InBrainReward = {
  * @param clientSecret The client secret obtained from your account manager.
  */
 const init = (clientId: string, clientSecret: string): Promise<void> =>   {
-    console.log(NativeModules);
     return InBrainSurveys.init(clientId, clientSecret);
 }
 
@@ -81,7 +80,7 @@ const setButtonColor = (color: string): Promise<void> =>  {
 
 const onlyIOS = () => {
     if(Platform.OS !== 'ios'){
-        throw new Error("Not implemented");
+        throw new Error("Not implemented for Android.");
     }
 }
 

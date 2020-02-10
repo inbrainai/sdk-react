@@ -28,12 +28,13 @@ export default class App extends Component<{},IAppState> {
 
     var userId = "react-testing@inbrain.ai";
 
-    this.callBridge('init', inbrain.init, clientId, clientSecret)();   
-    this.callBridge('setAppUserId', inbrain.setAppUserId, userId)();    
+    this.callBridge('init', inbrain.init,this.void, clientId, clientSecret)();   
+    this.callBridge('setAppUserId', inbrain.setAppUserId, this.void, userId)();    
   }
 
-  callBridge = (name: string, getPromise: (...args: any[]) => Promise<any>, ...params: any[]) => () => {
+  callBridge = (name: string, getPromise: (...args: any[]) => Promise<any>, setResult?: (obj: any) => void, ...params: any[]) => () => {
     getPromise(...params).then((result:any) => {
+      setResult && setResult(result);
       this.setState({
         logs: this.state.logs.concat(`[${name} SUCCESS] => ${result}`)
       });
@@ -44,6 +45,9 @@ export default class App extends Component<{},IAppState> {
     });
   };
 
+  void = (obj:any) => {};
+  setRewards = (rewards: InBrainReward[]) => this.setState({rewards});
+
   render() {
     return (
     <SafeAreaView style={styles.container}>
@@ -52,12 +56,16 @@ export default class App extends Component<{},IAppState> {
         
         <Text style={styles.title}>SDK Methods</Text>
         <View style={styles.buttonsContainer}>
-          <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", inbrain.showSurveys)} />
-          <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", inbrain.getRewards)} />
-          <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", inbrain.confirmRewards, this.state.rewards)} />
-          <BridgeButton name="setTitle" onPress={this.callBridge("setTitle", inbrain.setTitle, "InBrain Example Webview")} />
-          <BridgeButton name="setNavbarColor" onPress={this.callBridge("setNavbarColor", inbrain.setNavbarColor, "#ff0000")} />
-          <BridgeButton name="setButtonColor" onPress={this.callBridge("setButtonColor", inbrain.setButtonColor, "#ffffff")} />
+          <View style={{flexGrow:1, margin: 2}}>
+            <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", inbrain.showSurveys)} />
+            <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", inbrain.getRewards, this.setRewards)} />
+            <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", inbrain.confirmRewards, this.void, this.state.rewards)} />
+          </View>
+          <View style={{flexGrow:1, margin: 2}}>
+            <BridgeButton name="setTitle" onPress={this.callBridge("setTitle", inbrain.setTitle, this.void, "InBrain Example Webview")} />
+            <BridgeButton name="setNavbarColor" onPress={this.callBridge("setNavbarColor", inbrain.setNavbarColor, this.void, "#ff0000")} />
+            <BridgeButton name="setButtonColor" onPress={this.callBridge("setButtonColor", inbrain.setButtonColor, this.void, "#ffffff")} />
+          </View>
         </View>
       </View>
       <View>
@@ -102,7 +110,8 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
   buttonsContainer: {
-    alignContent: 'center'
+    alignContent: 'center',
+    flexDirection: 'row'
   },
   buttonContainer: {
     backgroundColor: '#2196F3',
