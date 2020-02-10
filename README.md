@@ -50,7 +50,26 @@ inbrain.getRewards() (Useful for server less app)
 ```
 * Get the rewards
 ```javascript
-inbrainconfirmRewards(rewards: Reward[]) (Useful for server less app)
+inbrain.inbrainconfirmRewards(rewards: Reward[]) (Useful for server less app)
 ```
 * Manual confirm a list of rewards
 * rewards: List of rewards to confirm
+
+### Only supported on iOS
+```javascript
+inbrain.setTitle(title: string)
+```
+* Set the webview title
+* title: The title to display
+
+```javascript
+inbrain.setNavbarColor(color: string)
+```
+* Set the webview navbar color
+* color: hexadecimal string color (e.g #ff0000)
+
+```javascript
+inbrain.setButtonColor(color: string)
+```
+* Set the webview button color
+* color: hexadecimal string color (e.g #ff0000)

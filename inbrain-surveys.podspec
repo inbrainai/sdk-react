@@ -20,11 +20,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency "React"
   
-  # FIXME when the new version is deployed as a pod, try this
+  # ENHANCE when the new version is deployed as a pod, try this
   # s.dependency "InBrainSurveys_SDK_Swift"
-  
-  #s.ios.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Swift.xcframework"
-  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '${PROJECT_DIR}/../node_modules/inbrain-surveys/ios/Frameworks/' }
 
 end
 

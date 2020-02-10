@@ -24,13 +24,11 @@ export default class App extends Component<{},IAppState> {
 
   componentDidMount() {
     const clientId = 'CLIENT_ID';
-    const clientSecret = 'SECRET_ID'; 
+    const clientSecret = 'SECRET_ID';
 
     var userId = "react-testing@inbrain.ai";
 
-    //@ts-ignore
     this.callBridge('init', inbrain.init, clientId, clientSecret)();   
-    //@ts-ignore 
     this.callBridge('setAppUserId', inbrain.setAppUserId, userId)();    
   }
 
@@ -57,6 +55,9 @@ export default class App extends Component<{},IAppState> {
           <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", inbrain.showSurveys)} />
           <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", inbrain.getRewards)} />
           <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", inbrain.confirmRewards, this.state.rewards)} />
+          <BridgeButton name="setTitle" onPress={this.callBridge("setTitle", inbrain.setTitle, "InBrain Example Webview")} />
+          <BridgeButton name="setNavbarColor" onPress={this.callBridge("setNavbarColor", inbrain.setNavbarColor, "#ff0000")} />
+          <BridgeButton name="setButtonColor" onPress={this.callBridge("setButtonColor", inbrain.setButtonColor, "#ffffff")} />
         </View>
       </View>
       <View>

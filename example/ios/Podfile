@@ -3,6 +3,7 @@ require_relative '../../node_modules/@react-native-community/cli-platform-ios/na
 
 target 'example' do
   # Pods for example
+  pod 'inbrain-surveys', :path => "../../"
   pod 'FBLazyVector', :path => "../../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../../node_modules/react-native/Libraries/RCTRequired"

@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -18,6 +18,7 @@ export type InBrainReward = {
  * @param clientSecret The client secret obtained from your account manager.
  */
 const init = (clientId: string, clientSecret: string): Promise<void> =>   {
+    console.log(NativeModules);
     return InBrainSurveys.init(clientId, clientSecret);
 }
 
@@ -51,4 +52,37 @@ const confirmRewards = (rewards: InBrainReward[]): Promise<void> =>  {
     return InBrainSurveys.confirmRewards(rewards);
 }
 
-export default { init, setAppUserId,  showSurveys, getRewards, confirmRewards };
+/**
+ * Set the webview title
+ * @param title the title to display
+ */
+const setTitle = (title: string): Promise<void> =>  {
+    onlyIOS();
+    return InBrainSurveys.setTitle(title);
+}
+
+/**
+ * Set the webview navbar color
+ * @param color hexadecimal string color (e.g #ff0000)
+ */
+const setNavbarColor = (color: string): Promise<void> =>  {
+    onlyIOS();
+    return InBrainSurveys.setNavbarColor(color);
+}
+
+/**
+ * Set the webview button color
+ * @param color hexadecimal string color (e.g #ff0000)
+ */
+const setButtonColor = (color: string): Promise<void> =>  {
+    onlyIOS();
+    return InBrainSurveys.setButtonColor(color);
+}
+
+const onlyIOS = () => {
+    if(Platform.OS !== 'ios'){
+        throw new Error("Not implemented");
+    }
+}
+
+export default { init, setAppUserId,  showSurveys, getRewards, confirmRewards, setTitle, setNavbarColor, setButtonColor };

@@ -54,7 +54,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             notNull("clientSecret", clientSecret);
             
             // Call Braintree sdk
-            // FIXME: is there any possible failure here or callback ?
             InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
 
             // Everything went well, resolve the promise

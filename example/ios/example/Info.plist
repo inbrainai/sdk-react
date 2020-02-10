@@ -51,6 +51,17 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>InBrain</key>
+	<dict>
+		<key>server</key>
+		<false/>
+		<key>prodEnv</key>
+		<true/>
+		<key>client</key>
+		<string>CLIENT_ID</string>
+	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

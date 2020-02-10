@@ -6,6 +6,9 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "react-native run-android --root example/",
+    "start:ios": "react-native run-ios --project-path example/ios --scheme example",
     "build": "./node_modules/typescript/bin/tsc",
     "watch": "./node_modules/typescript/bin/tsc -w",
     "clean": "rm -r ./lib"
@@ -27,16 +30,19 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^16.8.3",
+    "react": "^16.9",
     "react-native": ">=0.60 <0.62"
   },
   "devDependencies": {
+    "@babel/core": "7.4.5",
+    "@babel/runtime": "7.4.5",
     "@types/react": "16.8.8",
     "@types/react-native": "0.60.11",
     "babel-plugin-module-resolver": "^4.0.0",
-    "react": "^16.8.3",
-    "react-native": "^0.60.0",
-    "typescript": "^3.7.5"
+    "react": "16.9.0",
+    "react-native": "0.61.5",
+    "typescript": "^3.7.5",
+    "metro-react-native-babel-preset": "0.54.1"
   },
   "files": [
     "android",

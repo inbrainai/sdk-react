@@ -10,4 +10,6 @@
 
 @property(nonatomic) RCTPromiseResolveBlock resolve;
 @property(nonatomic) RCTPromiseRejectBlock reject;
+
+
 @end

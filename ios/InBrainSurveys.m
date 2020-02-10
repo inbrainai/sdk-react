@@ -27,9 +27,6 @@
 - (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
     NSLog(@"REWARDS CALLBACK");
     NSLog(@"%@",rewardsArray);
-    self.resolve(rewardsArray);
-    self.resolve = nil;
-    self.reject = nil;
 }
 
 - (void)inBrainWebViewDismissed {
@@ -52,7 +49,6 @@ RCT_EXPORT_MODULE()
 // ****************
 // ***** INIT *****
 // ****************
-// FIXME clientId isn't used for IOS as it's in the info.plist
 RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
         self.clientId = clientId;
@@ -100,9 +96,12 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSLog(@"GET REWARDS");
-    [[InBrain shared] getRewards];
-    self.resolve = resolve;
-    self.reject = reject;
+    [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){
+        NSLog(@"REWARDS CALLBACK");
+        NSLog(@"%@",rewards);
+    } failedToGetRewards:^{
+        reject(nil, nil, nil);
+    }];
 
 }
 
@@ -118,4 +117,62 @@ RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveB
     // Resolve the promise
     resolve(@true);
 }
+
+// **************************
+// ***** SET VIEW TITLE *****
+// **************************
+RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // Forwarding to SDK
+    [[InBrain shared] setInBrainWebViewTitleToString:title];
+
+    // Resolve the promise
+    resolve(@true);
+}
+
+// ********************************
+// ***** SET VIEW NAVBAR COLOR ****
+// ********************************
+RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // Forwarding to SDK
+    UIColor* color = [self colorWithHexString:colorHex];
+    [[InBrain shared] setInBrainWebViewNavBarColorToColor:color];
+
+    // Resolve the promise
+    resolve(@true);
+}
+
+// ********************************
+// ***** SET VIEW NAVBAR COLOR ****
+// ********************************
+RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    // Forwarding to SDK
+    UIColor* color = [self colorWithHexString:colorHex];
+    [[InBrain shared] setInBrainWebViewNavButtonColorToColor:color];
+
+    // Resolve the promise
+    resolve(@true);
+}
+
+/**
+ * Utility method to convert from a hexadecimal color string to UIColor
+ */
+- (UIColor *)colorWithHexString:(NSString *)stringToConvert
+{
+    NSString *noHashString = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""]; // remove the #
+    NSScanner *scanner = [NSScanner scannerWithString:noHashString];
+    [scanner setCharactersToBeSkipped:[NSCharacterSet symbolCharacterSet]]; // remove + and $
+
+    unsigned hex;
+    if (![scanner scanHexInt:&hex]) return nil;
+    int r = (hex >> 16) & 0xFF;
+    int g = (hex >> 8) & 0xFF;
+    int b = (hex) & 0xFF;
+
+    return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
+}
+
 @end
+
