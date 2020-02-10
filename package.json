@@ -48,6 +48,6 @@
     "android",
     "ios",
     "lib",
-    "react-native-webview.podspec"
+    "inbrain-surveys.podspec"
   ]
 }
