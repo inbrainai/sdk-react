@@ -55,6 +55,14 @@ inbrain.inbrainconfirmRewards(rewards: Reward[]) (Useful for server less app)
 * Manual confirm a list of rewards
 * rewards: List of rewards to confirm
 
+```javascript
+inbrain.setOnCloseListener(callback: () => void) 
+```
+* Listener called when the webview is dismissed
+* callback: callback to perform when it happens
+
+
+
 ### Only supported on iOS
 ```javascript
 inbrain.setTitle(title: string)

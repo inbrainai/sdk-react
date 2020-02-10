@@ -26,11 +26,13 @@
 }
 
 - (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
+    [self.listener inBrainRewardsReceivedWithRewardsArray: rewardsArray];
 }
 
 - (void)inBrainWebViewDismissed {
-     self.hasPresented = false;
-     [self dismissViewControllerAnimated:true completion:^{}];
+    self.hasPresented = false;
+    [self dismissViewControllerAnimated:true completion:^{}];
+    [self.listener inBrainWebViewDismissed];
 }
 
 

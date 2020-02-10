@@ -1,6 +1,9 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, Platform, NativeEventEmitter } from 'react-native';
 
 const { InBrainSurveys } = NativeModules;
+
+const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
+
 
 /**
  * Reward interface
@@ -84,4 +87,19 @@ const onlyIOS = () => {
     }
 }
 
-export default { init, setAppUserId,  showSurveys, getRewards, confirmRewards, setTitle, setNavbarColor, setButtonColor };
+var onClose : () => void = () => {};
+const subscription = inbrainEmitter.addListener(
+  'OnClose',
+  () => onClose && onClose()
+);
+
+/**
+ * Set the listener when the webview is dismissed
+ * @param callback callback to execute
+ */
+const setOnCloseListener = (callback: () => void) => {
+    onClose = callback;
+}
+
+
+export default { init, setAppUserId,  showSurveys, getRewards, confirmRewards, setTitle, setNavbarColor, setButtonColor, setOnCloseListener };

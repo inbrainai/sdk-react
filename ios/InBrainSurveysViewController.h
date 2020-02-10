@@ -5,6 +5,7 @@
 
 @interface InBrainSurveysViewController : UIViewController < InBrainDelegate >
 @property(nonatomic) InBrain* inbrain; // InBrain instance
+@property (weak, nonatomic) id <InBrainDelegate> listener; // Delegate listener
 @property(nonatomic) BOOL hasPresented; // Flag to know if we've presented InBrain webview
 
 @property(nonatomic) NSString* clientId; // InBrain client id

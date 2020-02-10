@@ -3,7 +3,7 @@
 #import <React/RCTComponent.h>
 #import <React/RCTEventEmitter.h>
 
-@interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule >
+@interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule, InBrainDelegate>
 @property(nonatomic) InBrain* inbrain; // InBrain instance
 
 @property(nonatomic) NSString* clientId; // InBrain client id

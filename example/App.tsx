@@ -28,8 +28,14 @@ export default class App extends Component<{},IAppState> {
 
     var userId = "react-testing@inbrain.ai";
 
+    // Init and setAppUserId
     this.callBridge('init', inbrain.init,this.void, clientId, clientSecret)();   
-    this.callBridge('setAppUserId', inbrain.setAppUserId, this.void, userId)();    
+    this.callBridge('setAppUserId', inbrain.setAppUserId, this.void, userId)(); 
+    
+    // OnClose listener
+    inbrain.setOnCloseListener(() => this.setState({
+      logs: this.state.logs.concat(`[onClose SUCCESS] => listener`)
+    }));
   }
 
   callBridge = (name: string, getPromise: (...args: any[]) => Promise<any>, setResult?: (obj: any) => void, ...params: any[]) => () => {

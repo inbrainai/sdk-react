@@ -4,6 +4,14 @@
 
 @implementation InBrainSurveys
 
+// ********************************
+// ***** EVENTEMITTER methods *****
+// ********************************
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[@"OnClose"];
+}
+
 // ***********************************
 // ***** UIVIEWCONTROLER methods *****
 // ***********************************
@@ -14,13 +22,14 @@
     return self;
 }
 
-// ********************************
-// ***** EVENTEMITTER methods *****
-// ********************************
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[@"OnClose"];
+- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
 }
+
+- (void)inBrainWebViewDismissed {
+    [self sendEventWithName:@"OnClose" body:@{}];
+}
+
+
 
 // *********************************
 // ***** RN BRIDGE methods  ********
@@ -70,6 +79,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         viewController.clientSecret = self.clientSecret;
         viewController.appUid = self.appUid;
         viewController.clientId = self.clientId;
+        viewController.listener = self;
         [rootViewController presentViewController:viewController animated:false completion:^{
             
             // When the view controller is displayed, we resolve the promise

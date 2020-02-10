@@ -1,6 +1,7 @@
 package com.inbrain;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
@@ -9,7 +10,9 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.inbrain.sdk.InBrain;
+import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.model.Reward;
@@ -18,7 +21,9 @@ import com.facebook.react.bridge.Promise;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InBrainSurveysModule extends ReactContextBaseJavaModule {
+import javax.annotation.Nullable;
+
+public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
 
     private final ReactApplicationContext reactContext;
 
@@ -38,13 +43,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
         }
     }
 
-   /* private <T> void notEmpty(String name, List<T> toCheck) {
-        notNull(toCheck);
 
-        if(toCheck.isEmpty()) {
-            throw new IllegalArgumentException(name + " must not be empty");
-        }
-    }*/
 
     @ReactMethod
     public void init(String clientId, String clientSecret, Promise promise) {
@@ -55,6 +54,9 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
             
             // Call Braintree sdk
             InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+
+            // Set the listener
+            InBrain.getInstance().addCallback(this);
 
             // Everything went well, resolve the promise
             promise.resolve(null);
@@ -163,5 +165,27 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule {
         } catch(Exception e){
             promise.reject("E_ERROR_CONFIRM", e);
         }
+    }
+
+    @Override
+    public void onClosed() {
+        sendEvent( "OnClose", null);
+    }
+
+    @Override
+    public boolean handleRewards(List<Reward> list) {
+        return false;
+    }
+
+    /**
+     * Send an event back to the JS code
+     * @param eventName name of the event (has to be listened on the JS side)
+     * @param params optional parameters
+     */
+    private void sendEvent(String eventName,
+                           @Nullable WritableMap params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
     }
 }
