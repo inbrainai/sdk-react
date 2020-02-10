@@ -29,8 +29,6 @@
     [self sendEventWithName:@"OnClose" body:@{}];
 }
 
-
-
 // *********************************
 // ***** RN BRIDGE methods  ********
 // *********************************
@@ -47,11 +45,17 @@ RCT_EXPORT_MODULE()
 // ****************
 RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
+    @try {
         self.clientId = clientId;
         self.clientSecret = clientSecret;
         [[InBrain shared] setAppSecretWithSecret:clientSecret];
 
+        // Resolve
         resolve(nil);
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_INIT", @"Error while initialising sdk.", nil);
+    }
 }
 
 // **************************
@@ -59,9 +63,14 @@ RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)cli
 // **************************
 RCT_EXPORT_METHOD(setAppUserId:(NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    self.appUid = userId;
-    [[InBrain shared] setAppUserIdWithAppUID:userId];
-    resolve(nil);
+    @try {
+        self.appUid = userId;
+        [[InBrain shared] setAppUserIdWithAppUID:userId];
+        resolve(nil);
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_USER", @"Error while setting app user id.", nil);
+    }
 }
 
 // ************************
@@ -73,18 +82,25 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     // This requires the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
     
-        // Display it using the main view controller
-        UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
-        InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
-        viewController.clientSecret = self.clientSecret;
-        viewController.appUid = self.appUid;
-        viewController.clientId = self.clientId;
-        viewController.listener = self;
-        [rootViewController presentViewController:viewController animated:false completion:^{
-            
-            // When the view controller is displayed, we resolve the promise
-            resolve(@true);
-        }];
+        @try {
+
+            // Display it using the main view controller
+            UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
+            InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
+            viewController.clientSecret = self.clientSecret;
+            viewController.appUid = self.appUid;
+            viewController.clientId = self.clientId;
+            viewController.listener = self;
+            [rootViewController presentViewController:viewController animated:false completion:^{
+                
+                // When the view controller is displayed, we resolve the promise
+                resolve(@true);
+            }];
+        
+        }
+        @catch (NSException *error) {
+            reject(@"E_ERROR_SHOW", @"Error while showing surveys.", nil);
+        }
     });
     
 }
@@ -94,23 +110,29 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 // ************************
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){        
-        NSMutableArray *rewardList = [NSMutableArray array];
-        for(int i = 0; i < rewards.count; i++) {
+    @try {
+        [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){
+            NSMutableArray *rewardList = [NSMutableArray array];
+            for(int i = 0; i < rewards.count; i++) {
+                
+                // ENHANCE
+                // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
+                // The result on the RN side is an array with null elements...
+                 NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithLong:rewards[i].amount]};
+                
+               [rewardList addObject:o];
+            }
             
-            // ENHANCE
-            // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
-            // The result on the RN side is an array with null elements...
-             NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithLong:rewards[i].amount]};
-           [rewardList addObject:o];
-        }
-        
-       
-        
-        resolve(rewardList);
-    } failedToGetRewards:^{
-        reject(nil, nil, nil);
-    }];
+           
+            
+            resolve(rewardList);
+        } failedToGetRewards:^{
+            reject(@"E_ERROR_GET", @"Error while getting rewards.", nil);
+        }];
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_GET", @"Error while getting rewards.", nil);
+    }
 
 }
 
@@ -119,12 +141,18 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 // ***************************
 RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // Mapping to list of ids and forwarding to SDK
-    NSArray* ids = [rewards valueForKey:@"transactionId"];
-    [[InBrain shared] confirmRewardsWithTxIdArray:ids];
+    
+    @try{
+        // Mapping to list of ids and forwarding to SDK
+        NSArray* ids = [rewards valueForKey:@"transactionId"];
+        [[InBrain shared] confirmRewardsWithTxIdArray:ids];
 
-    // Resolve the promise
-    resolve(@true);
+        // Resolve the promise
+        resolve(@true);
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_CONFIRM", @"Error while confirming rewards.", nil);
+    }
 }
 
 // **************************
@@ -132,11 +160,16 @@ RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveB
 // **************************
 RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // Forwarding to SDK
-    [[InBrain shared] setInBrainWebViewTitleToString:title];
+    @try{
+        // Forwarding to SDK
+        [[InBrain shared] setInBrainWebViewTitleToString:title];
 
-    // Resolve the promise
-    resolve(@true);
+        // Resolve the promise
+        resolve(@true);
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_TITLE", @"Error while setting title.", nil);
+    }
 }
 
 // ********************************
@@ -144,12 +177,19 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 // ********************************
 RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // Forwarding to SDK
-    UIColor* color = [self colorWithHexString:colorHex];
-    [[InBrain shared] setInBrainWebViewNavBarColorToColor:color];
+    @try{
+        
+        // Forwarding to SDK
+        UIColor* color = [self colorWithHexString:colorHex];
+        [[InBrain shared] setInBrainWebViewNavBarColorToColor:color];
 
-    // Resolve the promise
-    resolve(@true);
+        // Resolve the promise
+        resolve(@true);
+    
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_NAVBAR_COLOR", @"Error while setting navbar color.", nil);
+    }
 }
 
 // ********************************
@@ -157,12 +197,19 @@ RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolv
 // ********************************
 RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // Forwarding to SDK
-    UIColor* color = [self colorWithHexString:colorHex];
-    [[InBrain shared] setInBrainWebViewNavButtonColorToColor:color];
+    @try{
 
-    // Resolve the promise
-    resolve(@true);
+        // Forwarding to SDK
+        UIColor* color = [self colorWithHexString:colorHex];
+        [[InBrain shared] setInBrainWebViewNavButtonColorToColor:color];
+
+        // Resolve the promise
+        resolve(@true);
+    
+    }
+    @catch (NSException *error) {
+        reject(@"E_ERROR_BUTTON_COLOR", @"Error while setting button color.", nil);
+    }
 }
 
 /**

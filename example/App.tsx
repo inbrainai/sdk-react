@@ -70,7 +70,7 @@ export default class App extends Component<{},IAppState> {
           <View style={{flexGrow:1, margin: 2}}>
             <BridgeButton name="setTitle" onPress={this.callBridge("setTitle", inbrain.setTitle, this.void, "InBrain Example Webview")} />
             <BridgeButton name="setNavbarColor" onPress={this.callBridge("setNavbarColor", inbrain.setNavbarColor, this.void, "#ff0000")} />
-            <BridgeButton name="setButtonColor" onPress={this.callBridge("setButtonColor", inbrain.setButtonColor, this.void, "#ffffff")} />
+            <BridgeButton name="setButtonColor" onPress={this.callBridge("setButtonColor", inbrain.setButtonColor, this.void, "#ffff00")} />
           </View>
         </View>
       </View>

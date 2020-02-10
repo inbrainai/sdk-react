@@ -63,7 +63,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         } catch(IllegalArgumentException e){
             promise.reject("E_ERROR_INIT_PARAM", e);
         } catch(Exception e){
-            promise.reject("E_ERROR_INIT", e);
+            promise.reject("E_ERROR_INIT","Error while initialising sdk.",  e);
         }
     }
 
