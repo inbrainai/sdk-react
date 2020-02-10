@@ -50,7 +50,7 @@ inbrain.getRewards() (Useful for server less app)
 ```
 * Get the rewards
 ```javascript
-inbrain.inbrainconfirmRewards(rewards: Reward[]) (Useful for server less app)
+inbrain.inbrainconfirmRewards(rewards: InBrainReward[]) (Useful for server less app)
 ```
 * Manual confirm a list of rewards
 * rewards: List of rewards to confirm

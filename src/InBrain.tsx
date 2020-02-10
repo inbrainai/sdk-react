@@ -88,7 +88,7 @@ const onlyIOS = () => {
 }
 
 var onClose : () => void = () => {};
-const subscription = inbrainEmitter.addListener(
+inbrainEmitter.addListener(
   'OnClose',
   () => onClose && onClose()
 );
