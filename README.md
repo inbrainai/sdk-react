@@ -81,3 +81,26 @@ inbrain.setButtonColor(color: string)
 ```
 * Set the webview button color
 * color: hexadecimal string color (e.g #ff0000)
+
+## Development
+To install and build locally, pull the repository.
+Run 
+```
+npm install 
+npm run build 
+npm run start 
+```
+
+Modify the example/App.tsx and set your credentials in the componentDidMount did mount method.
+
+#To run the ios example
+Modify the info.plist with your credentials (see installation above)
+```
+npm run ios:dev
+```
+
+#To run the ios example
+```
+npm run ios:android
+```
+
