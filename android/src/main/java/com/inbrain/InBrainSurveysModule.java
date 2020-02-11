@@ -118,7 +118,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                     WritableArray array = Arguments.createArray();
                     for(Reward reward: rewards){
                         WritableMap map = Arguments.createMap();
-                        map.putInt("transactionId", (int) reward.transactionId); // FIXME possible loss conversion
+                        map.putInt("transactionId", (int) reward.transactionId); // ENHANCE possible loss conversion
                         map.putDouble("amount", reward.amount);
                         map.putString("currency", reward.currency);
                         map.putInt("transactionType", reward.transactionType);
@@ -128,12 +128,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                     // Resolve promise with the list of rewards
                     promise.resolve(array);
 
-                    return false; // FIXME false for manual confirm / true for automatic ?
+                    return false;
                 }  
             
                 @Override  
                 public void onFailToLoadRewards(int errorCode) {  
-                    promise.reject("E_ERROR_GET", "" +errorCode); // FIXME handle error code  
+                    promise.reject("E_ERROR_GET", "Failed with errorCode: " +errorCode);
                 }  
             });
 
@@ -151,7 +151,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 ReadableMap rewardMap = rewardsArray.getMap(i);
 
                 Long transactionId =  (long) rewardMap.getInt("transactionId");
-                Float amount =  (float) rewardMap.getDouble("amount"); // FIXME ugly conversion
+                Float amount =  (float) rewardMap.getDouble("amount"); // ENHANCE another way to do conversion ?
                 String currency =  rewardMap.getString("currency");
                 int transactionType =  rewardMap.getInt("transactionType");
 
