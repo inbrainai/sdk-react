@@ -27,59 +27,58 @@ Configure your info.plist as specified [here](https://github.com/inBrainSurveys/
 import inbrain from 'inbrain-surveys';
 ```
 Available functions:
+### Initialise the SDK
 ```javascript
 inbrain.init(clientId: string, secretId: string)
 ```
-* Initialise the SDK
 * clientId: The client ID obtained from your account manager (NOT USED ON iOS, use info.plist instead)
 * clientSecret: The client secret obtained from your account manager.
 
+### Set the app user identifier
 ```javascript
 inbrain.setAppUserId(userId: string)
 ```
-* Set the app user identifier
 * clientId The user identifier (usually an email)
 
+### Show the surveys webview
 ```javascript
 inbrain.showSurveys()
 ```
-* Show the surveys webview
 
+### Get the rewards
 ```javascript
 inbrain.getRewards() (Useful for server less app)
 ```
-* Get the rewards
+
+### Confirm a list of rewards
 ```javascript
-inbrain.inbrainconfirmRewards(rewards: InBrainReward[]) (Useful for server less app)
+inbrain.confirmRewards(rewards: InBrainReward[]) (Useful for server less app)
 ```
-* Manual confirm a list of rewards
 * rewards: List of rewards to confirm
 
+### On webview dismissed
 ```javascript
 inbrain.setOnCloseListener(callback: () => void) 
 ```
-* Listener called when the webview is dismissed
 * callback: callback to perform when it happens
 
-
-
 ### Only supported on iOS
+### Set the webview title
 ```javascript
 inbrain.setTitle(title: string)
 ```
-* Set the webview title
 * title: The title to display
 
+### Set the webview navbar color
 ```javascript
 inbrain.setNavbarColor(color: string)
 ```
-* Set the webview navbar color
 * color: hexadecimal string color (e.g #ff0000)
 
+### Set the webview button color
 ```javascript
 inbrain.setButtonColor(color: string)
 ```
-* Set the webview button color
 * color: hexadecimal string color (e.g #ff0000)
 
 ## Development
