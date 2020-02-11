@@ -91,15 +91,17 @@ npm run build
 npm run start 
 ```
 
+You can alternatively run 'npm run watch' instead of 'npm run build' if you want live reload.
+
 Modify the example/App.tsx and set your credentials in the componentDidMount did mount method.
 
-#To run the ios example
+### To run the ios example
 Modify the info.plist with your credentials (see installation above)
 ```
 npm run ios:dev
 ```
 
-#To run the ios example
+### To run the ios example
 ```
 npm run ios:android
 ```
