@@ -43,11 +43,12 @@ RCT_EXPORT_MODULE()
 // ****************
 // ***** INIT *****
 // ****************
-RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret sessionUID:(NSString *)sessionUID resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         self.clientId = clientId;
         self.clientSecret = clientSecret;
+        self.sessionUID = sessionUID;
         [[InBrain shared] setAppSecretWithSecret:clientSecret];
 
         // Resolve
@@ -90,6 +91,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             viewController.clientSecret = self.clientSecret;
             viewController.appUid = self.appUid;
             viewController.clientId = self.clientId;
+            viewController.sessionUID = self.sessionUID;
             viewController.listener = self;
             [rootViewController presentViewController:viewController animated:false completion:^{
                 
