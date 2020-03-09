@@ -19,9 +19,10 @@ export type InBrainReward = {
  * Init the SDK.
  * @param clientId The client ID obtained from your account manager
  * @param clientSecret The client secret obtained from your account manager.
+ * @param sessionId [Optional] The session id obtained from your account manager.
  */
-const init = (clientId: string, clientSecret: string): Promise<void> =>   {
-    return InBrainSurveys.init(clientId, clientSecret);
+const init = (clientId: string, clientSecret: string, sessionUID?: String): Promise<void> =>   {
+    return InBrainSurveys.init(clientId, clientSecret, sessionUID);
 }
 
 /**

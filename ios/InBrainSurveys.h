@@ -8,6 +8,7 @@
 
 @property(nonatomic) NSString* clientId; // InBrain client id
 @property(nonatomic) NSString* clientSecret; // InBrain client secret
+@property(nonatomic) NSString* sessionUID; // InBrain session uid
 @property(nonatomic) NSString* appUid; // Application unique identifier
  
 @end

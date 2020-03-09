@@ -21,7 +21,7 @@
     // Not sure about that. Seems like a little hack. But we need to dismiss the ViewController as soon as inBrainWebViewDismissed is called.
     if(!self.hasPresented){
         self.hasPresented = true;
-        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid];
+        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid withSessionUID:self.sessionUID];
     }
 }
 

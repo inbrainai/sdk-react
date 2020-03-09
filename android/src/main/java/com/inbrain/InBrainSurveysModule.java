@@ -46,14 +46,14 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
 
     @ReactMethod
-    public void init(String clientId, String clientSecret, Promise promise) {
+    public void init(String clientId, String clientSecret, String sessionUID, Promise promise) {
         try {
             // Validate parameters
             notNull("clientId", clientId);
             notNull("clientSecret", clientSecret);
             
             // Call Braintree sdk
-            InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+            InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret, sessionUID);
 
             // Set the listener
             InBrain.getInstance().addCallback(this);

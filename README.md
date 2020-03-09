@@ -29,10 +29,11 @@ import inbrain from 'inbrain-surveys';
 Available functions:
 ### Initialise the SDK
 ```javascript
-inbrain.init(clientId: string, secretId: string)
+inbrain.init(clientId: string, secretId: string, sessionUID?: string)
 ```
 * clientId: The client ID obtained from your account manager (NOT USED ON iOS, use info.plist instead)
 * clientSecret: The client secret obtained from your account manager.
+* sessionUID: [Optional] The session uid obtained from your account manager.
 
 ### Set the app user identifier
 ```javascript
