@@ -42,3 +42,8 @@ buck-out/
 *.keystore
 
 lib/
+
+scripts/*.vars
+scripts/APP
+scripts/cli/package*
+APP*.tar.gz

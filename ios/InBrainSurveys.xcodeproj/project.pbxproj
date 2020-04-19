@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3670D586240A88EF0014C178 /* InBrainSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3670D585240A88EF0014C178 /* InBrainSurveysViewController.m */; };
-		36DF5BF6240DD0D500904E48 /* InBrainSurveys_SDK_Legacy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DF5BF5240DD0D500904E48 /* InBrainSurveys_SDK_Legacy.framework */; };
+		3671DC3F240E5466000F74A9 /* InBrainSurveys_SDK_Legacy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3671DC3E240E5466000F74A9 /* InBrainSurveys_SDK_Legacy.framework */; };
 		B3E7B58A1CC2AC0600A0062D /* InBrainSurveys.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* InBrainSurveys.m */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +28,7 @@
 		134814201AA4EA6300B7C361 /* libInBrainSurveys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libInBrainSurveys.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3670D584240A88EF0014C178 /* InBrainSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InBrainSurveysViewController.h; sourceTree = "<group>"; };
 		3670D585240A88EF0014C178 /* InBrainSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InBrainSurveysViewController.m; sourceTree = "<group>"; };
-		36DF5BF5240DD0D500904E48 /* InBrainSurveys_SDK_Legacy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = InBrainSurveys_SDK_Legacy.framework; sourceTree = "<group>"; };
+		3671DC3E240E5466000F74A9 /* InBrainSurveys_SDK_Legacy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = InBrainSurveys_SDK_Legacy.framework; path = Frameworks/InBrainSurveys_SDK_Legacy.framework; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* InBrainSurveys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InBrainSurveys.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* InBrainSurveys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InBrainSurveys.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36DF5BF6240DD0D500904E48 /* InBrainSurveys_SDK_Legacy.framework in Frameworks */,
+				3671DC3F240E5466000F74A9 /* InBrainSurveys_SDK_Legacy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				36DF5BF5240DD0D500904E48 /* InBrainSurveys_SDK_Legacy.framework */,
+				3671DC3E240E5466000F74A9 /* InBrainSurveys_SDK_Legacy.framework */,
 				B3E7B5881CC2AC0600A0062D /* InBrainSurveys.h */,
 				B3E7B5891CC2AC0600A0062D /* InBrainSurveys.m */,
 				3670D584240A88EF0014C178 /* InBrainSurveysViewController.h */,
@@ -133,6 +133,7 @@
 		58B511ED1A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -158,6 +159,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../node_modules/inbrain-surveys-legacy/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -183,6 +185,7 @@
 		58B511EE1A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -208,6 +211,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../node_modules/inbrain-surveys-legacy/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -228,7 +232,8 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../node_modules/inbrain-surveys-legacy/**",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -248,7 +253,8 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../node_modules/inbrain-surveys-legacy/**",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

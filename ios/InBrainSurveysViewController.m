@@ -1,6 +1,6 @@
 #import "InBrainSurveys.h"
 #import "InBrainSurveysViewController.h"
-#import <InBrainSurveys_SDK_Swift-Swift.h>
+#import <InBrainSurveys_SDK_Legacy-Swift.h>
 
 @implementation InBrainSurveysViewController
 
@@ -21,7 +21,7 @@
     // Not sure about that. Seems like a little hack. But we need to dismiss the ViewController as soon as inBrainWebViewDismissed is called.
     if(!self.hasPresented){
         self.hasPresented = true;
-        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid withSessionUID:self.sessionUID];
+        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid withSessionUID:self.sessionUid withDataPoints:self.dataPoints];
     }
 }
 
@@ -30,12 +30,19 @@
 }
 
 - (void)inBrainWebViewDismissed {
-    self.hasPresented = false;
-    [self dismissViewControllerAnimated:true completion:^{}];
+    [self dismiss];
     [self.listener inBrainWebViewDismissed];
 }
 
+- (void)inBrainWebViewDismissedFromPage {
+    [self dismiss];
+    [self.listener inBrainWebViewDismissedFromPage];
+}
 
+- (void)dismiss {
+    self.hasPresented = false;
+    [self dismissViewControllerAnimated:true completion:^{}];
+}
 
 @end
 
