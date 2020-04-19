@@ -16,3 +16,5 @@ sed -i '' "s/GCC_C_LANGUAGE_STANDARD/FRAMEWORK_SEARCH_PATHS=\"\$(SRCROOT)\/\.\.\
 
 #$RNCLI_DIR/react-native run-ios
 
+cd ios && pod install
+
