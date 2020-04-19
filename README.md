@@ -110,3 +110,7 @@ This problem also consistently appears when usinx XCode10
 This problem can happen if you didn't configure the info.plist correctly. See above for set up.
 Clean and build the project after changes.
 
+## Code improvements / TODO
+- vendored_framework in podspec
+
+
