@@ -33,7 +33,7 @@ export default class App extends Component {
     });
   };
 
-  // Convenient 'setRetults' callbacks for 'callBridge'
+  // Convenient 'setResults' callbacks for 'callBridge'
   void = (obj) => {};
   setRewards = (rewards) => this.setState({rewards});
   appendLog = (log) => this.setState({ logs: this.state.logs.concat(log)});
@@ -58,8 +58,6 @@ export default class App extends Component {
     inbrain.setOnCloseListener(() => this.appendLog(`[onClose SUCCESS] => `));
     inbrain.setOnCloseListenerFromPage(() => this.appendLog(`[onCloseFromPage SUCCESS] => `));
   }
-
-  appendLog = (log) => this.setState({ logs: this.state.logs.concat(log)});
 
   render() {
     return (
