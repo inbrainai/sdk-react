@@ -1,5 +1,5 @@
 #import <React/RCTBridgeModule.h>
-#import <InBrainSurveys_SDK_Swift-Swift.h>
+#import <InBrainSurveys_SDK_Legacy-Swift.h>
 #import <React/RCTComponent.h>
 #import <React/RCTEventEmitter.h>
 
@@ -10,6 +10,8 @@
 
 @property(nonatomic) NSString* clientId; // InBrain client id
 @property(nonatomic) NSString* clientSecret; // InBrain client secret
+@property(nonatomic) NSString* sessionUid; // InBrain session uid
 @property(nonatomic) NSString* appUid; // Application unique identifier
+@property(nonatomic) NSArray<NSDictionary<NSString *, id> *>* dataPoints; // Data points
 
 @end

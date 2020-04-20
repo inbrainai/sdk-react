@@ -1,16 +1,8 @@
 #import "InBrainSurveys.h"
 #import "InBrainSurveysViewController.h"
-#import <InBrainSurveys_SDK_Swift-Swift.h>
+#import <InBrainSurveys_SDK_Legacy-Swift.h>
 
 @implementation InBrainSurveys
-
-// ********************************
-// ***** EVENTEMITTER methods *****
-// ********************************
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[@"OnClose"];
-}
 
 // ***********************************
 // ***** UIVIEWCONTROLER methods *****
@@ -23,10 +15,6 @@
 }
 
 - (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-}
-
-- (void)inBrainWebViewDismissed {
-    [self sendEventWithName:@"OnClose" body:@{}];
 }
 
 // *********************************
@@ -46,6 +34,16 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
+        
+        [self notNull:@"clientId" toCheck:clientId];
+        [self notNull:@"clientSecret" toCheck:clientSecret];
+
+        NSDictionary* dict = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"InBrain"];
+        [self notNull:@"Info.plist InBrain" toCheck:dict];
+        [self notNull:@"Info.plist InBrain.prodEnv" toCheck:dict[@"prodEnv"]];
+        [self notNull:@"Info.plist InBrain.client" toCheck:dict[@"client"]];
+        [self notNull:@"Info.plist InBrain.server" toCheck:dict[@"server"]];
+
         self.clientId = clientId;
         self.clientSecret = clientSecret;
         [[InBrain shared] setAppSecretWithSecret:clientSecret];
@@ -54,7 +52,47 @@ RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)cli
         resolve(nil);
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_INIT", @"Error while initialising sdk.", nil);
+        reject(@"ERR_INIT", error.description, nil);
+    }
+}
+
+// **************************
+// ***** SET PRODUCTION *****
+// **************************
+RCT_EXPORT_METHOD(setProduction:(BOOL)production resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        // Dummy method as this is not supported on iOS (use pList instead)
+        resolve(nil);
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SET_PRODUCTION", error.description, nil);
+    }
+}
+
+// ***************************
+// ***** SET DATA POINTS *****
+// ***************************
+RCT_EXPORT_METHOD(setDataPoints:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+
+        // Convert map to array of single entry maps
+        // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
+        NSArray* keys=[data allKeys];
+        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
+
+        [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [mapped addObject:@{ obj : [data objectForKey:obj]}];
+        }];
+        
+        self.dataPoints = mapped;
+
+        // Resolve
+        resolve(nil);
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SET_DATA_POINTS", error.description, nil);
     }
 }
 
@@ -69,7 +107,21 @@ RCT_EXPORT_METHOD(setAppUserId:(NSString *)userId resolver:(RCTPromiseResolveBlo
         resolve(nil);
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_USER", @"Error while setting app user id.", nil);
+        reject(@"ERR_SET_USER_ID", error.description, nil);
+    }
+}
+
+// ***************************
+// ***** SET SESSION UID *****
+// ***************************
+RCT_EXPORT_METHOD(setSessionUid:(NSString *)sessionUid resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        self.sessionUid = sessionUid;
+        resolve(nil);
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SET_SESSION_ID", error.description, nil);
     }
 }
 
@@ -90,6 +142,8 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             viewController.clientSecret = self.clientSecret;
             viewController.appUid = self.appUid;
             viewController.clientId = self.clientId;
+            viewController.sessionUid = self.sessionUid;
+            viewController.dataPoints = self.dataPoints;
             viewController.listener = self;
             [rootViewController presentViewController:viewController animated:false completion:^{
                 
@@ -99,7 +153,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         
         }
         @catch (NSException *error) {
-            reject(@"E_ERROR_SHOW", @"Error while showing surveys.", nil);
+            reject(@"ERR_SHOW_SURVEYS", error.description, nil);
         }
     });
     
@@ -123,15 +177,14 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
                [rewardList addObject:o];
             }
             
-           
-            
+
             resolve(rewardList);
         } failedToGetRewards:^{
-            reject(@"E_ERROR_GET", @"Error while getting rewards.", nil);
+            reject(@"ERR_GET_REWARDS", @"Failed to get rewards", nil);
         }];
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_GET", @"Error while getting rewards.", nil);
+        reject(@"ERR_GET", error.description, nil);
     }
 
 }
@@ -151,7 +204,7 @@ RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveB
         resolve(@true);
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_CONFIRM", @"Error while confirming rewards.", nil);
+        reject(@"ERR_CONFIRM_REWARDS", error.description, nil);
     }
 }
 
@@ -168,7 +221,7 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
         resolve(@true);
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_TITLE", @"Error while setting title.", nil);
+        reject(@"ERR_SET_TITLE", error.description, nil);
     }
 }
 
@@ -188,13 +241,13 @@ RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_NAVBAR_COLOR", @"Error while setting navbar color.", nil);
+        reject(@"ERR_SET_NAVBAR_COLOR", error.description, nil);
     }
 }
 
-// ********************************
-// ***** SET VIEW NAVBAR COLOR ****
-// ********************************
+// ***************************
+// ***** SET BUTTON COLOR ****
+// ***************************
 RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
@@ -208,12 +261,33 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     
     }
     @catch (NSException *error) {
-        reject(@"E_ERROR_BUTTON_COLOR", @"Error while setting button color.", nil);
+        reject(@"ERR_BUTTON_COLOR", error.description, nil);
     }
 }
 
+// ********************
+// ***** LISTENERS ****
+// ********************
+
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[@"OnClose", @"OnCloseFromPage"];
+}
+
+- (void)inBrainWebViewDismissed {
+    [self sendEventWithName:@"OnClose" body:@{}];
+}
+
+- (void)inBrainWebViewDismissedFromPage {
+    [self sendEventWithName:@"OnCloseFromPage" body:@{}];
+}
+
+// ***************************
+// ***** UTILITY METHODS *****
+// ***************************
+
 /**
- * Utility method to convert from a hexadecimal color string to UIColor
+ * Convert from a hexadecimal color string to UIColor
  */
 - (UIColor *)colorWithHexString:(NSString *)stringToConvert
 {
@@ -228,6 +302,12 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     int b = (hex) & 0xFF;
 
     return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
+}
+
+- (void) notNull:(NSString* )name toCheck:(id)toCheck {
+    if( !toCheck ){
+        [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
+    }
 }
 
 @end

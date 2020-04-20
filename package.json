@@ -1,22 +1,21 @@
 {
   "name": "inbrain-surveys",
-  "title": "Inbrain Surveys",
-  "version": "1.0.0",
+  "title": "Inbrain Survey",
+  "version": "1.0.1",
   "description": "Survey library to monetize your mobile app, provided by inBrain.ai",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:android": "react-native run-android --root example/",
-    "start:ios": "react-native run-ios --project-path example/ios --scheme example",
     "build": "./node_modules/typescript/bin/tsc",
     "watch": "./node_modules/typescript/bin/tsc -w",
-    "clean": "rm -r ./lib"
+    "clean": "rm -rf lib/ && cd ios && rm -rf build && cd .. && cd android && ./gradlew clean && rm -rf android/.idea && cd ..",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inBrainSurveys/sdk-react",
-    "baseUrl": "https://github.com/inBrainSurveys/sdk-react"
+    "url": "https://github.com/inbrainai/sdk-react",
+    "baseUrl": "https://github.com/inbrainai/sdk-react"
   },
   "keywords": [
     "inbrain",
@@ -30,17 +29,17 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^16.9",
-    "react-native": ">=0.60 <0.62"
+    "react": "16.11.0",
+    "react-native": "0.62.0"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
-    "@babel/runtime": "7.4.5",
-    "@types/react": "16.8.8",
-    "@types/react-native": "0.60.11",
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@types/react": "16.9.34",
+    "@types/react-native": "0.62.0",
     "babel-plugin-module-resolver": "^4.0.0",
-    "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react": "16.11.0",
+    "react-native": "0.62.0",
     "typescript": "^3.7.5",
     "metro-react-native-babel-preset": "0.54.1"
   },
