@@ -7,8 +7,6 @@ This SDK is targeted to the following tools:
 - Swift 5
 - React Native >=0.60.0
 
-If you are using newer versions of these tools, please refer to the 'inbrain-surveys' npm package.
-
 ## Installation
 
 Install and link the module:
