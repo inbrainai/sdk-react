@@ -1,11 +1,12 @@
 #!/bin/sh
 
-RNVERSION=0.62.0
+RNVERSION=0.62.2
+echo 'Building RN app '$RNVERSION
 
 RELATIVEPATH=$(dirname "$0")
 source $RELATIVEPATH/common.sh
 
-# Install RN cli 0.59
+# Install 
 cd cli && npm install && cd ..
 
 # Init RN app

@@ -1,5 +1,5 @@
 #import <React/RCTBridgeModule.h>
-#import <InBrainSurveys_SDK_Legacy-Swift.h>
+#import "InBrainSurveys_SDK_Legacy-Swift.h"
 #import <React/RCTComponent.h>
 #import <React/RCTEventEmitter.h>
 
