@@ -1,6 +1,6 @@
 #import "InBrainSurveys.h"
 #import "InBrainSurveysViewController.h"
-#import "InBrainSurveys_SDK_Legacy-Swift.h"
+#import <InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h>
 
 @implementation InBrainSurveysViewController
 

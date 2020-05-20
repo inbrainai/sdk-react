@@ -6,7 +6,7 @@ source $RELATIVEPATH/common.sh
 cd $BASEDIR/APP
 
 # Add FRAMEWORK_SEARCH_PATHS
-sed -i '' "s/GCC_C_LANGUAGE_STANDARD/FRAMEWORK_SEARCH_PATHS=\"\$(SRCROOT)\/\.\.\/node_modules\/$PKGNAME\/**\";GCC_C_LANGUAGE_STANDARD/g" ios/APP.xcodeproj/project.pbxproj 
+#sed -i '' "s/GCC_C_LANGUAGE_STANDARD/FRAMEWORK_SEARCH_PATHS=\"\$(SRCROOT)\/\.\.\/node_modules\/$PKGNAME\/**\";GCC_C_LANGUAGE_STANDARD/g" ios/APP.xcodeproj/project.pbxproj 
 
 # Add Inbrain properties in Info.plist
 /usr/libexec/PlistBuddy -c "Add :InBrain dict" ios/APP/Info.plist

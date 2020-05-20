@@ -16,12 +16,11 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "9.0" }
   s.source       = { :git => "https://github.com/github_account/inbrain-surveys.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,swift}"
+  s.source_files = "ios/*.{h,m,swift}"
   s.requires_arc = true
   s.dependency "React"
   
   # ENHANCE when the new version is deployed as a pod, try this
-  # s.dependency "InBrainSurveys_SDK_Swift"
+  #s.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Legacy.xcframework"
 
 end
-

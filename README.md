@@ -15,11 +15,13 @@ Install and link the module:
 
 ### Extra steps iOS
 
+Drop the framework `nodes_modules/inbrain-surveys/ios/Frameworks/InBrainSurveys_SDK_Legacy.xcframework` under the `Pods/Frameworks` folder in XCode
+On drop, XCode will ask you if you want to 'Add to targets'. Unselect all and only select 'inbrain-surveys' 
+
 Visit your app’s ***Target*** in the Project Settings and Choose the ***General*** tab.
 Scroll down until you hit the ***Embedded Binaries*** section… 
-1) Press ‘+’, Add Other...
-2) Select the **InBrainSurveys_SDK_Legacy.framework** in your project `nodes_modules/inbrain-surveys/ios/Frameworks` folder and select 'Embed and Sign' 
-4) Search for `Framework Search Paths` in your Target and add a recursive entry `$(SRCROOT)/../node_modules/inbrain-surveys`
+1) Press ‘+’
+2) You should see the previously added **InBrainSurveys_SDK_Legacy.xcframework** in the list. Select it.
 3) Confirm
 
 Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
@@ -92,11 +94,7 @@ You can alternatively run 'npm run watch' instead of 'npm run build' if you want
 
 ## Troubleshoots
 ### [BUILD TIME] 'InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h' file not found
-This problem usually happens if the framework is not set in the Embedded Binaries. See above for set up.
-Clean and build the project after changes.
-
-### [BUILD TIME] framework not found InBrainSurveys_SDK_Legacy
-This problem usually happens if the 'Framework Search Path' is not set correctly or the framework is not Embedded with the app. See above for set up.
+This problem usually happens if the framework is not set in the Embedded Binaries, or if the framework doesn't have the target set to `inbrain-surveys` See above for set up.
 Clean and build the project after changes.
 
 ### [RUNTIME] Library not loaded: @rpath/libswiftCore.dylib
