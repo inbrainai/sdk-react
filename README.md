@@ -4,6 +4,7 @@ Survey library to monetize your mobile app, provided by inBrain.ai
 ## Requirements
 This SDK is targeted to the following tools:
 - XCode 11.4
+- CocoaPods 1.9
 - Swift 5
 - React Native >=0.60.0
 
@@ -14,20 +15,13 @@ Install and link the module:
 `$ npm install inbrain-surveys --save`
 
 ### Extra steps iOS
+Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't supported in the previous versions. 
 
-Drop the framework `nodes_modules/inbrain-surveys/ios/Frameworks/InBrainSurveys_SDK_Legacy.xcframework` under the `Pods/Frameworks` folder in XCode
-On drop, XCode will ask you if you want to 'Add to targets'. Unselect all and only select 'inbrain-surveys' 
+Set the framework 'Target Membership' to `inbrain-surveys` as below:
 
-Visit your app’s ***Target*** in the Project Settings and Choose the ***General*** tab.
-Scroll down until you hit the ***Embedded Binaries*** section… 
-1) Press ‘+’
-2) You should see the previously added **InBrainSurveys_SDK_Legacy.xcframework** in the list. Select it.
-3) Confirm
-
-Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
+![Framework Target Membership](screenshots/target-membership.png)
 
 ### Extra steps Android
-
 Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories
     `maven { 
         // Inbrain
@@ -106,7 +100,5 @@ This problem also consistently appears when usinx XCode10
 This problem can happen if you didn't configure the info.plist correctly. See above for set up.
 Clean and build the project after changes.
 
-## Code improvements / TODO
-- vendored_framework in podspec
 
 

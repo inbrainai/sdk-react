@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.dependency "React"
   
   # ENHANCE when the new version is deployed as a pod, try this
-  #s.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Legacy.xcframework"
+  s.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Legacy.xcframework"
 
 end
