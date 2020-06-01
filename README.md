@@ -15,11 +15,11 @@ Install and link the module:
 `$ npm install inbrain-surveys --save`
 
 ### Extra steps iOS
-Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't supported in the previous versions. 
+Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't well supported in the previous versions. 
 
 Set the framework 'Target Membership' to `inbrain-surveys` as below:
 
-![Framework Target Membership](screenshots/target-membership.png)
+![Framework Target Membership](https://i.ibb.co/N2ntq0P/target-membership.png)
 
 ### Extra steps Android
 Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories
