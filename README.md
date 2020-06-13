@@ -23,10 +23,12 @@ Set the framework 'Target Membership' to `inbrain-surveys` as below:
 
 ### Extra steps Android
 Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories
-    `maven { 
-        // Inbrain
-        url 'https://jitpack.io' 
-    }`
+
+```
+maven { 
+    url 'https://jitpack.io' 
+}
+```
 
 ## Usage
 ```javascript
