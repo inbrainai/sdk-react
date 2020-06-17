@@ -1,6 +1,8 @@
 package com.inbrain;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -45,14 +47,19 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** INIT *****
     // ****************
     @ReactMethod
-    public void init(String clientId, String clientSecret, Promise promise) {
+    public void init(final String clientId, final String clientSecret, Promise promise) {
         try {
             // Validate parameters
             notNull("clientId", clientId);
             notNull("clientSecret", clientSecret);
 
             // Call Braintree sdk
-            InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+                }
+            });
 
             // Set the listener
             InBrain.getInstance().addCallback(this);
