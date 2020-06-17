@@ -15,6 +15,8 @@ Install and link the module:
 `$ npm install inbrain-surveys --save`
 
 ### Extra steps iOS
+Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
+
 Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't well supported in the previous versions. 
 
 Set the framework 'Target Membership' to `inbrain-surveys` as below:
