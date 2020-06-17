@@ -1,6 +1,8 @@
 package com.inbrain;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -17,6 +19,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.inbrain.sdk.InBrain;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
+import com.inbrain.sdk.callback.NewRewardsCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.model.Reward;
 
@@ -26,7 +29,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
+public class InBrainSurveysModule extends ReactContextBaseJavaModule implements NewRewardsCallback, InBrainCallback {
 
     private final ReactApplicationContext reactContext;
 
@@ -44,17 +47,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** INIT *****
     // ****************
     @ReactMethod
-    public void init(String clientId, String clientSecret, Promise promise) {
+    public void init(final String clientId, final String clientSecret, Promise promise) {
         try {
             // Validate parameters
             notNull("clientId", clientId);
             notNull("clientSecret", clientSecret);
 
             // Call Braintree sdk
-            InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+                }
+            });
 
             // Set the listener
             InBrain.getInstance().addCallback(this);
+            InBrain.getInstance().addNewRewardsCallback(this);
 
             // Everything went well, resolve the promise
             promise.resolve(null);
@@ -273,9 +282,10 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
     @Override
-    public boolean handleRewards(List<Reward> list) {
+    public boolean handleRewards(List<Reward> rewards) {
         return false;
     }
+
 
     /**
      * Send an event back to the JS code
@@ -288,6 +298,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
+
+
 
     // ***************************
     // ***** UTILITY METHODS *****
@@ -312,7 +324,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         return datMap;
     }
 
-    private abstract class ParamSeter<T> {
+    protected abstract class ParamSeter<T> {
 
         public abstract void setParam(T param);
 
