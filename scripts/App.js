@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import inbrain from 'inbrain-surveys';
-import { CLIENT_ID, CLIENT_SECRET, USER_ID, SESSION_UID } from 'react-native-dotenv';
+import { CLIENT_ID, CLIENT_SECRET, USER_ID, SESSION_UID } from '@env';
 
 const BridgeButton = (props) => {
   return <TouchableOpacity style={styles.buttonContainer} onPress={props.onPress}>
@@ -50,7 +50,7 @@ export default class App extends Component {
       dataPoints: { gender: 'male', age: '25'},
       title: "NEW TITLE",
       navbarColor: "#ff0000",
-      production: false
+      isS2S: false
     };
     this.callBridge('init', () => inbrain.init(clientId, clientSecret, options) )();   
 

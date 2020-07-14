@@ -26,9 +26,9 @@ cp App.js APP/App.js && cd APP
 npm install inbrain-surveys@$VERSION --save
 
 # Install react-native-dotenv
-npm install react-native-dotenv --save-dev
+npm install babel-plugin-dotenv-import --save-dev
 
-echo "module.exports = { presets: ['module:metro-react-native-babel-preset', 'module:react-native-dotenv']}" > $BASEDIR/APP/babel.config.js;
+cp $BASEDIR/.babelrc $BASEDIR/APP/.babelrc
 cp $BASEDIR/env.vars $BASEDIR/APP/.env
 
 

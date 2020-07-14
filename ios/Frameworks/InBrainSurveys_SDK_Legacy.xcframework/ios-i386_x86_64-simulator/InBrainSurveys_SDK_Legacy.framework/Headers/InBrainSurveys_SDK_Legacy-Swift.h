@@ -227,15 +227,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) InBrain * _Nonnull sha
 - (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString;
 - (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor;
 - (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor;
-- (void)setAppUserIdWithAppUID:(NSString * _Nonnull)appUID;
-- (void)setAppSecretWithSecret:(NSString * _Nonnull)secret;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID withSessionUID:(NSString * _Nonnull)withSessionUID;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID withSessionUID:(NSString * _Nonnull)withSessionUID withDataPoints:(NSArray<NSDictionary<NSString *, id> *> * _Nonnull)withDataPoints;
+- (void)setInBrainWithApiClientID:(NSString * _Nonnull)apiClientID apiSecret:(NSString * _Nonnull)apiSecret isS2S:(BOOL)isS2S userID:(NSString * _Nonnull)userID;
+- (void)setInBrainValuesForSessionID:(NSString * _Nullable)sessionID dataOptions:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)dataOptions;
+- (NSString * _Nullable)getClientID SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nullable)getUserID SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getIsS2S SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nullable)getSessionID SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<NSDictionary<NSString *, id> *> * _Nullable)getDataOptions SWIFT_WARN_UNUSED_RESULT;
+- (void)setAPIClientIDWithValue:(NSString * _Nonnull)value;
+- (void)setAPISecretWithValue:(NSString * _Nonnull)value;
+- (void)setServerSettingWithIsS2S:(BOOL)isS2S;
+- (void)setUserIDWithValue:(NSString * _Nonnull)value;
+- (void)setSessionIDWithValue:(NSString * _Nonnull)value;
+- (void)setDataOptionsWithValue:(NSArray<NSDictionary<NSString *, id> *> * _Nonnull)value;
+- (void)showSurveys;
 - (void)getRewardsWithRewardsReceived:(void (^ _Nonnull)(NSArray<InBrainReward *> * _Nonnull))rewardsReceived failedToGetRewards:(void (^ _Nonnull)(void))failedToGetRewards;
 - (void)getRewards;
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
-- (void)dismissFromPage:(BOOL)fromPage;
+- (void)closeSurveysFromPage:(BOOL)fromPage;
 @end
 
 
@@ -243,29 +252,29 @@ SWIFT_PROTOCOL("_TtP25InBrainSurveys_SDK_Legacy15InBrainDelegate_")
 @protocol InBrainDelegate
 /// <ul>
 ///   <li>
-///     @method inBrainRewardsReceived
+///     @method didReceiveInBrainRewards
 ///     @abstract Delegate function that allows your app to receive InBrainRewards from InBrain service
 ///     @param rewardsArray -> function receives an array of InBrainReward structs to be processed in your app
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
+- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
 /// <ul>
 ///   <li>
-///     @method inBrainWebViewDismissed(
+///     @method surveysClosed
 ///     @abstract Delegate function is called upon dismissal of inBrainWebView from UINavigationButton
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainWebViewDismissed;
+- (void)surveysClosed;
 /// <ul>
 ///   <li>
-///     @method inBrainWebViewDismissedFromPage(
+///     @method surveysClosedFromPage
 ///     @abstract Delegate function is called upon dismissal of inBrainWebView from within the webview
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainWebViewDismissedFromPage;
+- (void)surveysClosedFromPage;
 @end
 
 
@@ -512,15 +521,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, strong) InBrain * _Nonnull sha
 - (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString;
 - (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor;
 - (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor;
-- (void)setAppUserIdWithAppUID:(NSString * _Nonnull)appUID;
-- (void)setAppSecretWithSecret:(NSString * _Nonnull)secret;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID withSessionUID:(NSString * _Nonnull)withSessionUID;
-- (void)presentInBrainWebViewWithSecret:(NSString * _Nonnull)withSecret withAppUID:(NSString * _Nonnull)withAppUID withSessionUID:(NSString * _Nonnull)withSessionUID withDataPoints:(NSArray<NSDictionary<NSString *, id> *> * _Nonnull)withDataPoints;
+- (void)setInBrainWithApiClientID:(NSString * _Nonnull)apiClientID apiSecret:(NSString * _Nonnull)apiSecret isS2S:(BOOL)isS2S userID:(NSString * _Nonnull)userID;
+- (void)setInBrainValuesForSessionID:(NSString * _Nullable)sessionID dataOptions:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)dataOptions;
+- (NSString * _Nullable)getClientID SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nullable)getUserID SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)getIsS2S SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nullable)getSessionID SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<NSDictionary<NSString *, id> *> * _Nullable)getDataOptions SWIFT_WARN_UNUSED_RESULT;
+- (void)setAPIClientIDWithValue:(NSString * _Nonnull)value;
+- (void)setAPISecretWithValue:(NSString * _Nonnull)value;
+- (void)setServerSettingWithIsS2S:(BOOL)isS2S;
+- (void)setUserIDWithValue:(NSString * _Nonnull)value;
+- (void)setSessionIDWithValue:(NSString * _Nonnull)value;
+- (void)setDataOptionsWithValue:(NSArray<NSDictionary<NSString *, id> *> * _Nonnull)value;
+- (void)showSurveys;
 - (void)getRewardsWithRewardsReceived:(void (^ _Nonnull)(NSArray<InBrainReward *> * _Nonnull))rewardsReceived failedToGetRewards:(void (^ _Nonnull)(void))failedToGetRewards;
 - (void)getRewards;
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
-- (void)dismissFromPage:(BOOL)fromPage;
+- (void)closeSurveysFromPage:(BOOL)fromPage;
 @end
 
 
@@ -528,29 +546,29 @@ SWIFT_PROTOCOL("_TtP25InBrainSurveys_SDK_Legacy15InBrainDelegate_")
 @protocol InBrainDelegate
 /// <ul>
 ///   <li>
-///     @method inBrainRewardsReceived
+///     @method didReceiveInBrainRewards
 ///     @abstract Delegate function that allows your app to receive InBrainRewards from InBrain service
 ///     @param rewardsArray -> function receives an array of InBrainReward structs to be processed in your app
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
+- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
 /// <ul>
 ///   <li>
-///     @method inBrainWebViewDismissed(
+///     @method surveysClosed
 ///     @abstract Delegate function is called upon dismissal of inBrainWebView from UINavigationButton
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainWebViewDismissed;
+- (void)surveysClosed;
 /// <ul>
 ///   <li>
-///     @method inBrainWebViewDismissedFromPage(
+///     @method surveysClosedFromPage
 ///     @abstract Delegate function is called upon dismissal of inBrainWebView from within the webview
 ///     **
 ///   </li>
 /// </ul>
-- (void)inBrainWebViewDismissedFromPage;
+- (void)surveysClosedFromPage;
 @end
 
 

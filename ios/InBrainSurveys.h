@@ -9,6 +9,8 @@
 // -- Mandatory parameters
 @property(nonatomic) NSString* clientId; // InBrain client id
 @property(nonatomic) NSString* clientSecret; // InBrain client secret
+@property(nonatomic) BOOL* isS2S; // Is Server to Server
+@property(nonatomic) NSString* userId; // InBrain user identifier
 
 // -- Optional parameters
 @property(nonatomic) NSString* sessionUid; // InBrain session uid

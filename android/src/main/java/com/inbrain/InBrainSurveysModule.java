@@ -19,7 +19,6 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.inbrain.sdk.InBrain;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
-import com.inbrain.sdk.callback.NewRewardsCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.model.Reward;
 
@@ -29,7 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class InBrainSurveysModule extends ReactContextBaseJavaModule implements NewRewardsCallback, InBrainCallback {
+public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
 
     private final ReactApplicationContext reactContext;
 
@@ -43,11 +42,11 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         return "InBrainSurveys";
     }
 
-    // ****************
-    // ***** INIT *****
-    // ****************
+    // ***********************
+    // ***** SET INBRAIN *****
+    // ***********************
     @ReactMethod
-    public void init(final String clientId, final String clientSecret, Promise promise) {
+    public void setInBrain(final String clientId, final String clientSecret, final boolean isS2S, final String userId, Promise promise) {
         try {
             // Validate parameters
             notNull("clientId", clientId);
@@ -57,78 +56,32 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    InBrain.getInstance().init(getCurrentActivity(), clientId, clientSecret);
+                    InBrain.getInstance().setInBrain(getCurrentActivity(), clientId, clientSecret, isS2S, userId);
                 }
             });
 
             // Set the listener
             InBrain.getInstance().addCallback(this);
-            InBrain.getInstance().addNewRewardsCallback(this);
 
             // Everything went well, resolve the promise
             promise.resolve(null);
         } catch (Exception e) {
-            promise.reject("ERR_INIT", e.getMessage(), e);
+            promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
         }
     }
 
-    // **************************
-    // ***** SET PRODUCTION *****
-    // **************************
+    // **********************************
+    // ***** SET INBRAIN VALUES FOR *****
+    // **********************************
     @ReactMethod
-    public void setProduction(final Boolean production, Promise promise) {
-
-        new ParamSeter<Boolean>() {
-            @Override
-            public void setParam(Boolean param) {
-                InBrain.getInstance().setStagingMode(!production);
-            }
-        }.apply(promise, "production", production, "ERR_SET_PRODUCTION");
-
-    }
-
-    // ***************************
-    // ***** SET DATA POINTS *****
-    // ***************************
-    @ReactMethod
-    public void setDataPoints(ReadableMap data, Promise promise) {
+    public void setInBrainValuesFor(final String sessionId, final ReadableMap data, Promise promise) {
 
         new ParamSeter<HashMap<String, String>>() {
             @Override
             public void setParam(HashMap<String, String> param) {
-                InBrain.getInstance().setDataPoints(param);
+                InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
             }
-        }.apply(promise, "dataPoints", toHashMap(data), "ERR_SET_DATA_POINTS");
-
-    }
-
-    // ***************************
-    // ***** SET APP USER ID *****
-    // ***************************
-    @ReactMethod
-    public void setAppUserId(String userId, Promise promise) {
-
-        new ParamSeter<String>() {
-            @Override
-            public void setParam(String param) {
-                InBrain.getInstance().setAppUserId(param);
-            }
-        }.apply(promise, "userId", userId, "ERR_SET_USER_ID");
-
-    }
-
-    // ***************************
-    // ***** SET SESSION UID *****
-    // ***************************
-    @ReactMethod
-    public void setSessionUid(String sessionUid, Promise promise) {
-
-        new ParamSeter<String>() {
-            @Override
-            public void setParam(String param) {
-                InBrain.getInstance().setSessionUid(param);
-            }
-        }.apply(promise, "sessionUid", sessionUid, "ERR_SET_SESSION_ID");
+        }.apply(promise, "values", toHashMap(data), "ERR_SET_INBRAIN_VALUES");
 
     }
 
@@ -272,20 +225,19 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** LISTENERS ****
     // ********************
     @Override
-    public void onClosed() {
+    public void surveysClosed() {
         sendEvent("OnClose", null);
     }
 
     @Override
-    public void onClosedFromPage() {
+    public void surveysClosedFromPage() {
         sendEvent( "OnCloseFromPage", null);
     }
 
     @Override
-    public boolean handleRewards(List<Reward> rewards) {
+    public boolean didReceiveInBrainRewards(List<Reward> rewards) {
         return false;
     }
-
 
     /**
      * Send an event back to the JS code
@@ -298,8 +250,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
-
-
 
     // ***************************
     // ***** UTILITY METHODS *****

@@ -21,23 +21,24 @@
     // Not sure about that. Seems like a little hack. But we need to dismiss the ViewController as soon as inBrainWebViewDismissed is called.
     if(!self.hasPresented){
         self.hasPresented = true;
-        [self.inbrain presentInBrainWebViewWithSecret:self.clientSecret withAppUID:self.appUid withSessionUID:self.sessionUid withDataPoints:self.dataPoints];
+        [self.inbrain showSurveys];
     }
 }
 
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-    [self.listener inBrainRewardsReceivedWithRewardsArray: rewardsArray];
+- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
+   [self.listener didReceiveInBrainRewardsWithRewardsArray: rewardsArray];
 }
 
-- (void)inBrainWebViewDismissed {
+- (void)surveysClosed {
     [self dismiss];
-    [self.listener inBrainWebViewDismissed];
+    [self.listener surveysClosed];
 }
 
-- (void)inBrainWebViewDismissedFromPage {
+- (void)surveysClosedFromPage {
     [self dismiss];
-    [self.listener inBrainWebViewDismissedFromPage];
+    [self.listener surveysClosedFromPage];
 }
+
 
 - (void)dismiss {
     self.hasPresented = false;

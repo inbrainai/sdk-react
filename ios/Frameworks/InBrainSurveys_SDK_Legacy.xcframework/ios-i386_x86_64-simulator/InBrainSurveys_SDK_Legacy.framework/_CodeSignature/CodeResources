@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/InBrainSurveys_SDK_Legacy-Swift.h</key>
 		<data>
-		QybfCJyPU3mpehmpryjJBAOrxQA=
+		sx7ufdmuBs1nG/IJZ4IcPgSGxP0=
 		</data>
 		<key>Headers/InBrainSurveys_SDK_Legacy.h</key>
 		<data>
@@ -14,55 +14,55 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		CekN/kURKSUGCeIwdL2ypUO+eRg=
+		hcfypiPMMcrk1mZKyQq7Ohmu/E8=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386-apple-ios-simulator.swiftdoc</key>
 		<data>
-		f8NlnLUZIZnYh8RQpOtiEaaF3WM=
+		idtQpB9nYEwZnAJNYGo7G4RIYEY=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386-apple-ios-simulator.swiftinterface</key>
 		<data>
-		Ul3L6wUsbzLjz/zNvd7ZZjYoSXk=
+		6ahrdNwPvCbWuNaJX/j7VEILNt0=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386-apple-ios-simulator.swiftmodule</key>
 		<data>
-		IXnfRpbORt7FcmpSyS1fBg0/4yk=
+		t/U6x1T7LTfF4bRq1WQbd30GYpg=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftdoc</key>
 		<data>
-		f8NlnLUZIZnYh8RQpOtiEaaF3WM=
+		idtQpB9nYEwZnAJNYGo7G4RIYEY=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftinterface</key>
 		<data>
-		Ul3L6wUsbzLjz/zNvd7ZZjYoSXk=
+		6ahrdNwPvCbWuNaJX/j7VEILNt0=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftmodule</key>
 		<data>
-		IXnfRpbORt7FcmpSyS1fBg0/4yk=
+		t/U6x1T7LTfF4bRq1WQbd30GYpg=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		NL6h98S8CRizKUwUsvBkdeFOmXs=
+		hTRcs2HFb8BrGqINqejoj3ncbD0=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		n5Zcnqidjw1HMx1G9oRcHEdh/zk=
+		n2OW5rRGbZajiNbdFjkvPngqw7o=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		DQFys4xz3rhjOZWjgbHJ5L9arBw=
+		eDWcQgvnTx2uyTn8IQMxNm+CybU=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		NL6h98S8CRizKUwUsvBkdeFOmXs=
+		hTRcs2HFb8BrGqINqejoj3ncbD0=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftinterface</key>
 		<data>
-		n5Zcnqidjw1HMx1G9oRcHEdh/zk=
+		n2OW5rRGbZajiNbdFjkvPngqw7o=
 		</data>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		DQFys4xz3rhjOZWjgbHJ5L9arBw=
+		eDWcQgvnTx2uyTn8IQMxNm+CybU=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -75,11 +75,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QybfCJyPU3mpehmpryjJBAOrxQA=
+			sx7ufdmuBs1nG/IJZ4IcPgSGxP0=
 			</data>
 			<key>hash2</key>
 			<data>
-			iTjKrd8SZJw6Z84M8dH361m2frdwALkkCAwO7ISswgM=
+			/vMXG7XE5uSkzBX/B0ftUz7QaIu05xm5W6PRDoggU4o=
 			</data>
 		</dict>
 		<key>Headers/InBrainSurveys_SDK_Legacy.h</key>
@@ -97,132 +97,132 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			f8NlnLUZIZnYh8RQpOtiEaaF3WM=
+			idtQpB9nYEwZnAJNYGo7G4RIYEY=
 			</data>
 			<key>hash2</key>
 			<data>
-			30vpPsazcSIPIkPtEiOZQMFi7EIjiL+7dGKSka+NuJk=
+			WP5s+51OaTI1lsUBEBhUjDks4CJYDd3NziT1OJa+TlQ=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Ul3L6wUsbzLjz/zNvd7ZZjYoSXk=
+			6ahrdNwPvCbWuNaJX/j7VEILNt0=
 			</data>
 			<key>hash2</key>
 			<data>
-			EvGu8oewiRpb9KICTPLjcg1HPEFIm8RRCtEFsupPGOc=
+			ZmvfDDZMxdfsnvCk3+y5ZrgRuYbN/HMeAUZXhHIzD9A=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			IXnfRpbORt7FcmpSyS1fBg0/4yk=
+			t/U6x1T7LTfF4bRq1WQbd30GYpg=
 			</data>
 			<key>hash2</key>
 			<data>
-			X/iryfWtomUwTFx5P1/glTfwSTUEU7MR2hEEk2l1aAw=
+			U5lddtd49c7qZGh49f1laTEHjue9w9kMK0olFElvlEo=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			f8NlnLUZIZnYh8RQpOtiEaaF3WM=
+			idtQpB9nYEwZnAJNYGo7G4RIYEY=
 			</data>
 			<key>hash2</key>
 			<data>
-			30vpPsazcSIPIkPtEiOZQMFi7EIjiL+7dGKSka+NuJk=
+			WP5s+51OaTI1lsUBEBhUjDks4CJYDd3NziT1OJa+TlQ=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Ul3L6wUsbzLjz/zNvd7ZZjYoSXk=
+			6ahrdNwPvCbWuNaJX/j7VEILNt0=
 			</data>
 			<key>hash2</key>
 			<data>
-			EvGu8oewiRpb9KICTPLjcg1HPEFIm8RRCtEFsupPGOc=
+			ZmvfDDZMxdfsnvCk3+y5ZrgRuYbN/HMeAUZXhHIzD9A=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/i386.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			IXnfRpbORt7FcmpSyS1fBg0/4yk=
+			t/U6x1T7LTfF4bRq1WQbd30GYpg=
 			</data>
 			<key>hash2</key>
 			<data>
-			X/iryfWtomUwTFx5P1/glTfwSTUEU7MR2hEEk2l1aAw=
+			U5lddtd49c7qZGh49f1laTEHjue9w9kMK0olFElvlEo=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			NL6h98S8CRizKUwUsvBkdeFOmXs=
+			hTRcs2HFb8BrGqINqejoj3ncbD0=
 			</data>
 			<key>hash2</key>
 			<data>
-			FUH+tZBQl4LlQklHxmRs16VQe36DZpCEWOuQVqU4XhE=
+			kx63ZpGbQvbMrXxc2ZHRbFsxb1xfv614We0Q2pk6EJw=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			n5Zcnqidjw1HMx1G9oRcHEdh/zk=
+			n2OW5rRGbZajiNbdFjkvPngqw7o=
 			</data>
 			<key>hash2</key>
 			<data>
-			vKC1IkWkz/Rfe92S5V/Bd806nCBXytwB6DtAdFMid44=
+			tAoOttg+X5dHzL5e9a4OsQcPaK+xekewVFoZU9Iy7bs=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			DQFys4xz3rhjOZWjgbHJ5L9arBw=
+			eDWcQgvnTx2uyTn8IQMxNm+CybU=
 			</data>
 			<key>hash2</key>
 			<data>
-			zJybzZr8UD8C++9URhwYhynjmIfUGMtQ0YAzOARgeT8=
+			cnMQ2oIZMzdMdUH4W10sEbMWN/rCJ39IHqVE5t9yigg=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			NL6h98S8CRizKUwUsvBkdeFOmXs=
+			hTRcs2HFb8BrGqINqejoj3ncbD0=
 			</data>
 			<key>hash2</key>
 			<data>
-			FUH+tZBQl4LlQklHxmRs16VQe36DZpCEWOuQVqU4XhE=
+			kx63ZpGbQvbMrXxc2ZHRbFsxb1xfv614We0Q2pk6EJw=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftinterface</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			n5Zcnqidjw1HMx1G9oRcHEdh/zk=
+			n2OW5rRGbZajiNbdFjkvPngqw7o=
 			</data>
 			<key>hash2</key>
 			<data>
-			vKC1IkWkz/Rfe92S5V/Bd806nCBXytwB6DtAdFMid44=
+			tAoOttg+X5dHzL5e9a4OsQcPaK+xekewVFoZU9Iy7bs=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Legacy.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			DQFys4xz3rhjOZWjgbHJ5L9arBw=
+			eDWcQgvnTx2uyTn8IQMxNm+CybU=
 			</data>
 			<key>hash2</key>
 			<data>
-			zJybzZr8UD8C++9URhwYhynjmIfUGMtQ0YAzOARgeT8=
+			cnMQ2oIZMzdMdUH4W10sEbMWN/rCJ39IHqVE5t9yigg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

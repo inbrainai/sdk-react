@@ -1,13 +1,13 @@
 /**
  * SDK OPTIONS
  */
-export type ConfigOptionName = "production" | "sessionUid" | "userId" | "dataPoints";
+export type ConfigOptionName = "isS2S" | "userId" | "sessionUid" | "dataPoints";
 export type StylingOptionName = "title" | "navbarColor";
 export type InitOptionName = ConfigOptionName | StylingOptionName;
 
 // *** CONFIG OPTION TYPES
 export type ConfigOptionTypes = {
-    production: boolean, 
+    isS2S: boolean, 
     sessionUid: string, 
     userId: string, 
     dataPoints: DataPoints
