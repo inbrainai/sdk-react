@@ -1,7 +1,7 @@
 {
   "name": "inbrain-surveys",
   "title": "Inbrain Survey",
-  "version": "1.100.13",
+  "version": "1.0.7",
   "description": "Survey library to monetize your mobile app, provided by inBrain.ai",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
