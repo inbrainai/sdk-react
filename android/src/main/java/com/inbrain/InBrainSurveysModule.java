@@ -46,21 +46,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN *****
     // ***********************
     @ReactMethod
-    public void setInBrain(final String clientId, final String clientSecret, final boolean isS2S, final String userId, Promise promise) {
+    public void setInBrain(final String apiClientId, final String clientSecret, final boolean isS2S, final String userId, Promise promise) {
         try {
             // Validate parameters
-            notNull("clientId", clientId);
+            notNull("apiClientId", apiClientId);
             notNull("clientSecret", clientSecret);
+            notNull("userId", userId);
 
             // Call Braintree sdk
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    InBrain.getInstance().setInBrain(getCurrentActivity(), clientId, clientSecret, isS2S, userId);
+                    InBrain.getInstance().setInBrain(getCurrentActivity(), apiClientId, clientSecret, isS2S, userId);
                 }
             });
 
             // Set the listener
+            InBrain.getInstance().removeCallback(this);
             InBrain.getInstance().addCallback(this);
 
             // Everything went well, resolve the promise
@@ -191,9 +193,9 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
     }
 
-    // ********************************
-    // ***** SET VIEW NAVBAR COLOR ****
-    // ********************************
+    // ***************************
+    // ***** SET NAVBAR COLOR ****
+    // ***************************
     @ReactMethod
     public void setNavbarColor(final String colorHex, Promise promise) {
 
@@ -206,18 +208,48 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
     }
 
-    // ********************************
+    // ***************************
     // ***** SET BUTTON COLOR ****
-    // ********************************
+    // ***************************
     @ReactMethod
     public void setButtonColor(final String colorHex, Promise promise) {
 
         new ParamSeter<String>() {
             @Override
             public void setParam(String param) {
-                InBrain.getInstance().setTitleTextColor(Color.parseColor(colorHex));
+                // Nothing for now
             }
         }.apply(promise, "buttonColor", colorHex, "ERR_SET_BUTTON_COLOR");
+
+    }
+
+    // **************************
+    // ***** SET TITLE COLOR ****
+    // **************************
+    @ReactMethod
+    public void setTitleColor(final String colorHex, Promise promise) {
+
+        new ParamSeter<String>() {
+            @Override
+            public void setParam(String param) {
+                InBrain.getInstance().setTitleTextColor(Color.parseColor(colorHex));
+            }
+        }.apply(promise, "titleColor", colorHex, "ERR_SET_TITLE_COLOR");
+
+    }
+
+    // ***********************
+    // ***** SET LANGUAGE ****
+    // ***********************
+    @ReactMethod
+    public void setLanguage(final String language, Promise promise) {
+
+        new ParamSeter<String>() {
+            @Override
+            public void setParam(String param) {
+                InBrain.getInstance().setLanguage(language);
+            }
+        }.apply(promise, "language", language, "ERR_SET_LANGUAGE");
 
     }
 

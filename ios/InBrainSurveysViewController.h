@@ -8,8 +8,8 @@
 @property (weak, nonatomic) id <InBrainDelegate> listener; // Delegate listener
 @property(nonatomic) BOOL hasPresented; // Flag to know if we've presented InBrain webview
 
-@property(nonatomic) NSString* clientId; // InBrain client id
-@property(nonatomic) NSString* clientSecret; // InBrain client secret
+@property(nonatomic) NSString* apiClientId; // InBrain client id
+@property(nonatomic) NSString* apiSecret; // InBrain client secret
 @property(nonatomic) BOOL* isS2S; // Is Server to Server
 @property(nonatomic) NSString* userId; // InBrain user identifier
 
