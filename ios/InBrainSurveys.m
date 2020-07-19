@@ -14,9 +14,6 @@
     return self;
 }
 
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-}
-
 // *********************************
 // ***** RN BRIDGE methods  ********
 // *********************************
@@ -31,19 +28,20 @@ RCT_EXPORT_MODULE()
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret isS2S:(BOOL*)isS2S userId:(NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL*)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         
-        [self notNull:@"clientId" toCheck:clientId];
-        [self notNull:@"clientSecret" toCheck:clientSecret];
+        [self notNull:@"apiClientId" toCheck:apiClientId];
+        [self notNull:@"apiSecret" toCheck:apiSecret];
+        [self notNull:@"userId" toCheck:userId];
 
-        self.clientId = clientId;
-        self.clientSecret = clientSecret;
+        self.apiClientId = apiClientId;
+        self.apiSecret = apiSecret;
         self.isS2S = isS2S;
         self.userId = userId;
 
-        [self.inbrain setInBrainValuesForSessionID:self.sessionUid dataOptions:self.dataPoints];
+        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
 
         // Resolve
         resolve(nil);
@@ -72,7 +70,7 @@ RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *
         self.sessionUid = sessionId;
         self.dataPoints = mapped;
 
-        [self.inbrain setInBrainWithApiClientID:@"AAAA" apiSecret:@"BBBB" isS2S:true userID:@"CCC"];
+        [self.inbrain setInBrainValuesForSessionID:sessionId dataOptions:mapped];
 
         // Resolve
         resolve(nil);
@@ -96,14 +94,15 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             // Display it using the main view controller
             UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
             InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
-            viewController.clientId = self.clientId;
-            viewController.clientSecret = self.clientSecret;
+            
+            viewController.apiClientId = self.apiClientId;
+            viewController.apiSecret = self.apiSecret;
             viewController.userId = self.userId;
             viewController.isS2S = self.isS2S;
-            viewController.clientId = self.clientId;
-            viewController.appUid = self.appUid;
+            
             viewController.sessionUid = self.sessionUid;
             viewController.dataPoints = self.dataPoints;
+            
             viewController.listener = self;
             [rootViewController presentViewController:viewController animated:false completion:^{
                 
@@ -225,6 +224,7 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     }
 }
 
+
 // ********************
 // ***** LISTENERS ****
 // ********************
@@ -234,12 +234,15 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
   return @[@"OnClose", @"OnCloseFromPage"];
 }
 
-- (void)inBrainWebViewDismissed {
+- (void)surveysClosed {
     [self sendEventWithName:@"OnClose" body:@{}];
 }
 
-- (void)inBrainWebViewDismissedFromPage {
+- (void)surveysClosedFromPage {
     [self sendEventWithName:@"OnCloseFromPage" body:@{}];
+}
+
+- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
 }
 
 // ***************************

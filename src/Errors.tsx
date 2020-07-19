@@ -2,28 +2,28 @@
  * Known error codes
  */
 export type ErrorCode =
-    "ERR_INIT" |
+    "ERR_SET_INBRAIN" |
+    "ERR_SET_INBRAIN_VALUES" |
     "ERR_GET_REWARDS" |
     "ERR_CONFIRM_REWARDS" |
     "ERR_SHOW_SURVEYS" |
-    "ERR_SET_DATA_POINTS" |
-    "ERR_SET_USER_ID" |
-    "ERR_SET_SESSION_ID" |
+    "ERR_SET_LANGUAGE" |
     "ERR_SET_TITLE" |
+    "ERR_SET_TITLE_COLOR" |
     "ERR_SET_NAVBAR_COLOR" |
     "ERR_SET_BUTTON_COLOR";
   
  type IErrorMessages = {[key in ErrorCode] : string}
 
  const errorMessages: IErrorMessages = {
-    ERR_INIT: "Error while initialising sdk",
-    ERR_SET_DATA_POINTS: "Error while setting data points",
-    ERR_SET_TITLE: "Error while setting title",
-    ERR_SET_USER_ID: "Error while setting app user id",
-    ERR_SET_SESSION_ID: "Error while setting session id",
-    ERR_SHOW_SURVEYS: "Error while showing surveys",
+    ERR_SET_INBRAIN: "Error while initialising sdk",
+    ERR_SET_INBRAIN_VALUES: "Error while initialising sdk",
     ERR_GET_REWARDS: "Error while getting rewards",
     ERR_CONFIRM_REWARDS: "Error while confirming rewards",
+    ERR_SHOW_SURVEYS: "Error while showing surveys",
+    ERR_SET_TITLE: "Error while setting title",
+    ERR_SET_LANGUAGE: "Error while setting language",
+    ERR_SET_TITLE_COLOR: "Error while setting title color",
     ERR_SET_NAVBAR_COLOR: "Error while setting navbar color",
     ERR_SET_BUTTON_COLOR: "Error while setting button color",
  }

@@ -39,7 +39,6 @@
     [self.listener surveysClosedFromPage];
 }
 
-
 - (void)dismiss {
     self.hasPresented = false;
     [self dismissViewControllerAnimated:true completion:^{}];
