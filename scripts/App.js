@@ -50,6 +50,7 @@ export default class App extends Component {
       dataPoints: { gender: 'male', age: '25'},
       title: "NEW TITLE",
       navbarColor: "#ff0000",
+      language: 'fr-FR',
       isS2S: false
     };
     this.callBridge('init', () => inbrain.init(clientId, clientSecret, options) )();   
