@@ -128,6 +128,7 @@ const wrapPromise = async <T extends {} | void>(promise: Promise<T>) => {
 
 const optionsActions : { [key in StylingOptionName] : ((params: any) => Promise<any>) | null} = {
     "title" : InBrainSurveys.setTitle,
+    "language" : InBrainSurveys.setLanguage,
     "navbarColor" : setNavbarColor,
 }
 

@@ -1,6 +1,6 @@
 #import "InBrainSurveys.h"
 #import "InBrainSurveysViewController.h"
-#import <InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h>
+#import <InBrainSurveys_SDK_Swift/InBrainSurveys_SDK_Swift-Swift.h>
 
 @implementation InBrainSurveys
 
@@ -221,6 +221,25 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     }
     @catch (NSException *error) {
         reject(@"ERR_BUTTON_COLOR", error.description, nil);
+    }
+}
+
+// ***********************
+// ***** SET LANGUAGE ****
+// ***********************
+RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try{
+
+        // Forwarding to SDK
+        [[InBrain shared] setLanguageWithValue:language];
+
+        // Resolve the promise
+        resolve(@true);
+    
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SET_LANGUAGE", error.description, nil);
     }
 }
 
