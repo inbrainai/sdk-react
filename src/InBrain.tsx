@@ -1,7 +1,7 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { assertIsColor } from './Utils';
 import { enhanceError } from './Errors';
-import { InitOptions, InitOptionName } from './Options';
+import { InitOptions, InitOptionName, StylingOptionName } from './Options';
 
 const { InBrainSurveys  } = NativeModules;
 
@@ -19,26 +19,31 @@ export type InBrainReward = {
 
 /*
  * Init the SDK.
- * @param clientId The client ID obtained from your account manager
- * @param clientSecret The client secret obtained from your account manager.
- * @param sessionId [Optional] The session id obtained from your account manager.
+ * @param apiClientId Provided in inBrain.ai dashboard
+ * @param apiSecret Provided in inBrain.ai dashboard
+ * @param options Additional optional options
  */
-const init = async (clientId: string, clientSecret: string, options: InitOptions): Promise<void> => {
+const init = async (apiClientId: string, apiSecret: string, options?: InitOptions): Promise<void> => {
 
     // Null safe options
     options = options || {};
 
+
     // set defaults
     options.title = options.title || 'inBrain Surveys'
-    if(options.production == null || options.production == undefined){
-        options.production = true
-    }
- 
+    options.userId = options.userId || ''
+    options.isS2S = options.isS2S || false
+
     // Call all options bridge methodes
+
+    // -- this method is apart as these two properties can't be set individually
+    await wrapPromise(InBrainSurveys.setInBrainValuesFor(options.sessionUid, options.dataPoints));
+
+    // -- call all the other properties one by one (styling options)
     await callOptionSetters(options)
 
     // return promise for init
-    return wrapPromise(InBrainSurveys.init(clientId, clientSecret));
+    return wrapPromise(InBrainSurveys.setInBrain(apiClientId, apiSecret, options.isS2S, options.userId));
 }
 
 const callOptionSetters = (options: InitOptions) => {
@@ -48,7 +53,7 @@ const callOptionSetters = (options: InitOptions) => {
         // From the options, extract the appropriate methodhandler, and the parameterof this method
         .map( (opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }) )
         // Then just call the method against the parameter
-        .map(pair => pair.method(pair.param));
+        .map(pair => pair.method && pair.method(pair.param));
         
     // Return all promises
     return wrapPromise(Promise.all(optionPromises));
@@ -121,12 +126,9 @@ const wrapPromise = async <T extends {} | void>(promise: Promise<T>) => {
     }
 }
 
-const optionsActions : { [key in InitOptionName] : (params: any) => Promise<any>} = {
-    "production" : InBrainSurveys.setProduction,
-    "userId" : InBrainSurveys.setAppUserId,
-    "sessionUid" : InBrainSurveys.setSessionUid,
-    "dataPoints" : InBrainSurveys.setDataPoints,
+const optionsActions : { [key in StylingOptionName] : ((params: any) => Promise<any>) | null} = {
     "title" : InBrainSurveys.setTitle,
+    "language" : InBrainSurveys.setLanguage,
     "navbarColor" : setNavbarColor,
 }
 

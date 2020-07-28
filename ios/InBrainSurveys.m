@@ -1,6 +1,6 @@
 #import "InBrainSurveys.h"
 #import "InBrainSurveysViewController.h"
-#import <InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h>
+#import <InBrainSurveys_SDK_Swift/InBrainSurveys_SDK_Swift-Swift.h>
 
 @implementation InBrainSurveys
 
@@ -14,9 +14,6 @@
     return self;
 }
 
-- (void)inBrainRewardsReceivedWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-}
-
 // *********************************
 // ***** RN BRIDGE methods  ********
 // *********************************
@@ -28,52 +25,36 @@ RCT_EXPORT_MODULE()
   return YES;  // only do this if your module initialization relies on calling UIKit!
 }
 
-// ****************
-// ***** INIT *****
-// ****************
-RCT_EXPORT_METHOD(init:(NSString *)clientId clientSecret:(nonnull NSString *)clientSecret resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// ***********************
+// ***** SET INBRAIN *****
+// ***********************
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL*)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         
-        [self notNull:@"clientId" toCheck:clientId];
-        [self notNull:@"clientSecret" toCheck:clientSecret];
+        [self notNull:@"apiClientId" toCheck:apiClientId];
+        [self notNull:@"apiSecret" toCheck:apiSecret];
+        [self notNull:@"userId" toCheck:userId];
 
-        NSDictionary* dict = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"InBrain"];
-        [self notNull:@"Info.plist InBrain" toCheck:dict];
-        [self notNull:@"Info.plist InBrain.prodEnv" toCheck:dict[@"prodEnv"]];
-        [self notNull:@"Info.plist InBrain.client" toCheck:dict[@"client"]];
-        [self notNull:@"Info.plist InBrain.server" toCheck:dict[@"server"]];
+        self.apiClientId = apiClientId;
+        self.apiSecret = apiSecret;
+        self.isS2S = isS2S;
+        self.userId = userId;
 
-        self.clientId = clientId;
-        self.clientSecret = clientSecret;
-        [[InBrain shared] setAppSecretWithSecret:clientSecret];
+        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
 
         // Resolve
         resolve(nil);
     }
     @catch (NSException *error) {
-        reject(@"ERR_INIT", error.description, nil);
+        reject(@"ERR_SET_INBRAIN", error.description, nil);
     }
 }
 
-// **************************
-// ***** SET PRODUCTION *****
-// **************************
-RCT_EXPORT_METHOD(setProduction:(BOOL)production resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        // Dummy method as this is not supported on iOS (use pList instead)
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_PRODUCTION", error.description, nil);
-    }
-}
-
-// ***************************
-// ***** SET DATA POINTS *****
-// ***************************
-RCT_EXPORT_METHOD(setDataPoints:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// **********************************
+// ***** SET INBRAIN VALUES FOR *****
+// **********************************
+RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
 
@@ -86,42 +67,16 @@ RCT_EXPORT_METHOD(setDataPoints:(NSDictionary *)data resolver:(RCTPromiseResolve
             [mapped addObject:@{ obj : [data objectForKey:obj]}];
         }];
         
+        self.sessionUid = sessionId;
         self.dataPoints = mapped;
+
+        [self.inbrain setInBrainValuesForSessionID:sessionId dataOptions:mapped];
 
         // Resolve
         resolve(nil);
     }
     @catch (NSException *error) {
-        reject(@"ERR_SET_DATA_POINTS", error.description, nil);
-    }
-}
-
-// **************************
-// ***** SET APP USER ID*****
-// **************************
-RCT_EXPORT_METHOD(setAppUserId:(NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        self.appUid = userId;
-        [[InBrain shared] setAppUserIdWithAppUID:userId];
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_USER_ID", error.description, nil);
-    }
-}
-
-// ***************************
-// ***** SET SESSION UID *****
-// ***************************
-RCT_EXPORT_METHOD(setSessionUid:(NSString *)sessionUid resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        self.sessionUid = sessionUid;
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_SESSION_ID", error.description, nil);
+        reject(@"ERR_SET_INBRAIN_VALUES", error.description, nil);
     }
 }
 
@@ -139,11 +94,15 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             // Display it using the main view controller
             UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
             InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
-            viewController.clientSecret = self.clientSecret;
-            viewController.appUid = self.appUid;
-            viewController.clientId = self.clientId;
+            
+            viewController.apiClientId = self.apiClientId;
+            viewController.apiSecret = self.apiSecret;
+            viewController.userId = self.userId;
+            viewController.isS2S = self.isS2S;
+            
             viewController.sessionUid = self.sessionUid;
             viewController.dataPoints = self.dataPoints;
+            
             viewController.listener = self;
             [rootViewController presentViewController:viewController animated:false completion:^{
                 
@@ -265,6 +224,26 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     }
 }
 
+// ***********************
+// ***** SET LANGUAGE ****
+// ***********************
+RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try{
+
+        // Forwarding to SDK
+        [[InBrain shared] setLanguageWithValue:language];
+
+        // Resolve the promise
+        resolve(@true);
+    
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SET_LANGUAGE", error.description, nil);
+    }
+}
+
+
 // ********************
 // ***** LISTENERS ****
 // ********************
@@ -274,12 +253,15 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
   return @[@"OnClose", @"OnCloseFromPage"];
 }
 
-- (void)inBrainWebViewDismissed {
+- (void)surveysClosed {
     [self sendEventWithName:@"OnClose" body:@{}];
 }
 
-- (void)inBrainWebViewDismissedFromPage {
+- (void)surveysClosedFromPage {
     [self sendEventWithName:@"OnCloseFromPage" body:@{}];
+}
+
+- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
 }
 
 // ***************************

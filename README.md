@@ -15,7 +15,6 @@ Install and link the module:
 `$ npm install inbrain-surveys --save`
 
 ### Extra steps iOS
-Configure your info.plist as specified [here](https://github.com/inBrainSurveys/InBrainSurveys_SDK_Swift/blob/master/README.md#configuration)
 
 Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't well supported in the previous versions. 
 
@@ -24,7 +23,7 @@ Set the framework 'Target Membership' to `inbrain-surveys` as below:
 ![Framework Target Membership](https://i.ibb.co/N2ntq0P/target-membership.png)
 
 ### Extra steps Android
-Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories
+Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories`
 
 ```
 maven { 
@@ -39,33 +38,36 @@ import inbrain from 'inbrain-surveys';
 Available functions:
 ### Initialise the SDK
 ```javascript
-inbrain.init(clientId: string, secretId: string, options?: InitOptions)
+inbrain.init(apiClientId: string, apiSecret: string, options?: InitOptions)
 ```
-* clientId: The client ID obtained from your account manager (NOT USED ON iOS, use info.plist instead)
-* clientSecret: The client secret obtained from your account manager.
-* options: [Optional] Options. Possible optional options:
-    * production: true for production environment, false for staging. Default 'true'. [ONLY FOR ANDROID / IGNORED ON IOS, use Info.plist instead]
+* apiClientId: The client ID obtained from your account manager
+* apiSecret: The client secret obtained from your account manager.
+* options: [Optional] Options. Possible options:
     * title: The surveys view title. Default 'inBrain Surveys'
     * navbarColor: The surveys view navigation barcolor (hexadecimal string color, e.g #ff0000)
-    * sessionUid: The session uid obtained from your account manager.
-    * userId: The user identifier (usually an email)
-    * dataPoints: Dictionnary containing data points. e.g: { gender: "male", age: "25"}
+    * language: By default, device's locale's language will be used. Accepted languages: `en-us`, `fr-fr`, `en-gb`, `en-ca`, `en-au`, `en-in` (case sensitive)
+    * sessionUid: Value to track each session of inBrain use from a specific userID
+    * isS2S: If the SDK runs in Server To Server mode. Default `false`
+    * userId: The unique string value that differentiates each user within their app when initializing inBrain (Example: an email, a username). Default `''`
+    * dataPoints: A dictionary of keys and values to provide inBrain profiler data for custom profiler user experience (Example: `{ age : “23”, gender : “female” }`)
 
 ### Show the surveys webview
 ```javascript
 inbrain.showSurveys()
 ```
 
-### Get the rewards
+### Get the rewards (Useful for server less app)
 ```javascript
-inbrain.getRewards() (Useful for server less app)
+inbrain.getRewards() 
 ```
 
-### Confirm a list of rewards
+### Confirm a list of rewards (Useful for server less app)
 ```javascript
-inbrain.confirmRewards(rewards: InBrainReward[]) (Useful for server less app)
+inbrain.confirmRewards(rewards: InBrainReward[]) 
 ```
 * rewards: List of rewards to confirm
+
+Note: Calling this method multiple times will override the previous listener.
 
 ### On webview dismissed
 ```javascript
@@ -73,22 +75,15 @@ inbrain.setOnCloseListener(callback: () => void)
 ```
 * callback: callback to perform when it happens
 
+Note: Calling this method multiple times will override the previous listener.
+
 ### On webview dismissed from page
 ```javascript
 inbrain.setOnCloseListenerFromPage(callback: () => void) 
 ```
 * callback: callback to perform when it happens
 
-## Development
-To install and build locally, pull the repository.
-Run 
-```
-npm install 
-npm run build 
-npm run start 
-```
-
-You can alternatively run 'npm run watch' instead of 'npm run build' if you want live reload.
+Note: Calling this method multiple times will override the previous listener.
 
 ## Troubleshoots
 ### [BUILD TIME] 'InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h' file not found
@@ -99,10 +94,3 @@ Clean and build the project after changes.
 This problem can happen if your project doesn't have the Swift standard libraries included. Set the 'Always Embed Swift Standard Libraries' to yes in your target to fix it.
 Clean and build the project after changes.
 This problem also consistently appears when usinx XCode10
-
-### [RUNTIME] Application crashing without obvious reasons
-This problem can happen if you didn't configure the info.plist correctly. See above for set up.
-Clean and build the project after changes.
-
-
-
