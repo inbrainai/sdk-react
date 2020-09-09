@@ -1,6 +1,9 @@
-## [Unreleased]
+## [1.0.9 Unreleased]
 ### Added
 - Added CHANGELOG.md
+
+### Changed
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.5` (from `1.0.3`)
 
 ## [1.0.8] - 2020-09-02
 ### Changed
@@ -9,18 +12,20 @@
 ## [1.0.7] - 2020-07-28
 ### Added
 - Added attribute `userId`  in `InitOptions` with default value `''`
+- Added attribute `isS2S`  in `InitOptions` with default value `false`
 
 ### Changed
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.3` (from `0.1.25`)
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to `InBrainSurveys_SDK_Swift.xcframework`
-- Changed bridge method names and prototypes
-- Set default value for `isS2S` attribute in `InitOptions` to `false` 
+- Changed bridge internal method names and prototypes
+- Set default value for `userId` attribute in `InitOptions` to `` 
 
 ### Removed
 - Removed attribute `production` in `InitOptions`
 
 ## [1.0.6] - 2020-06-17
 ### Changed
-- Updated Android framework `com.github.inbrainai:sdk-android` to version `0.1.25` (from `0.1.1`9)
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `0.1.25` (from `0.1.9`)
 
 ## [1.0.5] - 2020-06-01
 
