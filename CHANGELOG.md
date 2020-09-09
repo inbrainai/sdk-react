@@ -11,14 +11,13 @@
 
 ## [1.0.7] - 2020-07-28
 ### Added
-- Added attribute `userId`  in `InitOptions` with default value `''`
 - Added attribute `isS2S`  in `InitOptions` with default value `false`
 
 ### Changed
 - Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.3` (from `0.1.25`)
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to `InBrainSurveys_SDK_Swift.xcframework`
 - Changed bridge internal method names and prototypes
-- Set default value for `userId` attribute in `InitOptions` to `` 
+- Set default value for `userId` attribute in `InitOptions` to `''` 
 
 ### Removed
 - Removed attribute `production` in `InitOptions`
