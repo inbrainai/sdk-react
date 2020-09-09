@@ -40,16 +40,16 @@ Available functions:
 ```javascript
 inbrain.init(apiClientId: string, apiSecret: string, options?: InitOptions)
 ```
-* apiClientId: The client ID obtained from your account manager
-* apiSecret: The client secret obtained from your account manager.
-* options: [Optional] Options. Possible options:
-    * title: The surveys view title. Default 'inBrain Surveys'
-    * navbarColor: The surveys view navigation barcolor (hexadecimal string color, e.g #ff0000)
-    * language: By default, device's locale's language will be used. Accepted languages: `en-us`, `fr-fr`, `en-gb`, `en-ca`, `en-au`, `en-in` (case sensitive)
-    * sessionUid: Value to track each session of inBrain use from a specific userID
-    * isS2S: If the SDK runs in Server To Server mode. Default `false`
-    * userId: The unique string value that differentiates each user within their app when initializing inBrain (Example: an email, a username). Default `''`
-    * dataPoints: A dictionary of keys and values to provide inBrain profiler data for custom profiler user experience (Example: `{ age : “23”, gender : “female” }`)
+* `apiClientId`: The client ID obtained from your account manager
+* `apiSecret`: The client secret obtained from your account manager.
+* `options`: [Optional] Options. Possible options:
+    * `title`: The surveys view title. Default 'inBrain Surveys'
+    * `navbarColor`: The surveys view navigation barcolor (hexadecimal string color, e.g #ff0000)
+    * `language`: By default, device's locale's language will be used. Accepted languages: `en-us`, `fr-fr`, `en-gb`, `en-ca`, `en-au`, `en-in` (case sensitive)
+    * `sessionUid`: Value to track each session of inBrain use from a specific userID
+    * `isS2S`: If the SDK runs in Server To Server mode. Default `false`
+    * `userId`: The unique string value that differentiates each user within their app when initializing inBrain (Example: an email, a username). Default `''`
+    * `dataPoints`: A dictionary of keys and values to provide inBrain profiler data for custom profiler user experience (Example: `{ age : “23”, gender : “female” }`)
 
 ### Show the surveys webview
 ```javascript
