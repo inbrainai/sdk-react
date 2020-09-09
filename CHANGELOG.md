@@ -1,6 +1,4 @@
 ## [Unreleased]
-
-## [1.0.8] - In progress
 ### Added
 - Added CHANGELOG.md
 
