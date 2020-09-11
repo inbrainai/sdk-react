@@ -3,7 +3,7 @@ Survey library to monetize your mobile app, provided by inBrain.ai
 
 ## Requirements
 This SDK is targeted to the following tools:
-- XCode 11.4
+- XCode 11.4+
 - CocoaPods 1.9
 - Swift 5
 - React Native >=0.60.0
