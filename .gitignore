@@ -45,5 +45,5 @@ lib/
 
 scripts/*.vars
 scripts/APP
-scripts/cli/package*
+scripts/cli/package-lock.json
 APP*.tar.gz
