@@ -17,6 +17,16 @@ export type InBrainReward = {
     transactionType: number;
 }
 
+/**
+ * Native Surveys interface
+ */
+export type InBrainNativeSurveys = {
+    id: string;
+    rank: number;
+    time: number;
+    value: number;
+}
+
 /*
  * Init the SDK.
  * @param apiClientId Provided in inBrain.ai dashboard
@@ -93,10 +103,13 @@ const setNavbarColor = async (color: string): Promise<void> => {
 //}
 
 var onClose : () => void = () => {};
-inbrainEmitter.addListener('OnClose',() => onClose && onClose());
+inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
 var onCloseFromPage : () => void = () => {};
-inbrainEmitter.addListener('OnCloseFromPage',() => onCloseFromPage && onCloseFromPage());
+inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
+
+var onNativeSurveysLoadingStarted : () => void = () => {};
+inbrainEmitter.addListener('OnNativeSurveysLoadingStarted', () => onNativeSurveysLoadingStarted && onNativeSurveysLoadingStarted());
 
 /**
  * Set the listener when the webview is dismissed
@@ -113,6 +126,26 @@ const setOnCloseListener = (callback: () => void) => {
 const setOnCloseListenerFromPage = (callback: () => void) => {
     onCloseFromPage = callback;
 }
+
+/**
+ * Set the listener when the native surveys started being loaded
+ * @param callback callback to execute
+ */
+const setOnNativeSurveysLoadingStarted = (callback: () => void) => {
+    onCloseFromPage = callback;
+}
+
+/**
+ * Check if surveys are available to show
+ */
+const checkSurveysAvailable = async (): Promise<Boolean> => {
+    return InBrainSurveys.checkSurveysAvailable();
+}
+
+/**
+ * Get Native Surveys
+ */
+const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
 
 /**
  * Wrap a promise call to add common functionnalities
@@ -138,6 +171,9 @@ export default {
     getRewards, 
     confirmRewards, 
     /* setButtonColor, */ 
+    checkSurveysAvailable,
+    getNativeSurveys,
     setOnCloseListener,
-    setOnCloseListenerFromPage
+    setOnCloseListenerFromPage,
+    setOnNativeSurveysLoadingStarted
 };

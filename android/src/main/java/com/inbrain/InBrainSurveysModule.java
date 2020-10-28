@@ -20,6 +20,7 @@ import com.inbrain.sdk.InBrain;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
+import com.inbrain.sdk.callback.SurveysAvailableCallback;
 import com.inbrain.sdk.model.Reward;
 
 import java.util.ArrayList;
@@ -175,6 +176,25 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
         } catch (Exception e) {
             promise.reject("ERR_CONFIRM_REWARDS", e.getMessage(), e);
+        }
+    }
+
+    // ***********************************
+    // ***** CHECK SURVEYS AVAILABLE *****
+    // ***********************************
+    @ReactMethod
+    public void checkSurveysAvailable(final Promise promise) {
+        try {
+
+            InBrain.getInstance().areSurveysAvailable(this.getReactApplicationContext(), new SurveysAvailableCallback() {
+                @Override
+                public void onSurveysAvailable(boolean available) {
+                    promise.resolve(available);
+                }
+            });
+
+        } catch (Exception e) {
+            promise.reject("ERR_CHECK_SURVEYS_AVAILABLE", e.getMessage(), e);
         }
     }
 

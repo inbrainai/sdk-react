@@ -25,8 +25,15 @@
     }
 }
 
+// ***********************************
+// ***** InBrainDelegate methods *****
+// ***********************************
+
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
    [self.listener didReceiveInBrainRewardsWithRewardsArray: rewardsArray];
+}
+
+- (void)didFailToReceiveRewardsWithError:(NSError * _Nonnull)error {
 }
 
 - (void)surveysClosed {

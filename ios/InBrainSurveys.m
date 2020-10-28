@@ -11,6 +11,7 @@
 {
     self = [super init];
     self.inbrain = [InBrain shared];
+    [self.inbrain setNativeSurveysDelegate:self];
     return self;
 }
 
@@ -106,8 +107,9 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             viewController.listener = self;
             [rootViewController presentViewController:viewController animated:false completion:^{
                 
-                // When the view controller is displayed, we resolve the promise
-                resolve(@true);
+            // When the view controller is displayed, we resolve the promise
+            resolve(@true);
+                
             }];
         
         }
@@ -124,28 +126,90 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[InBrain shared] getRewardsWithRewardsReceived:^(NSArray<InBrainReward *> * rewards){
+        [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
             NSMutableArray *rewardList = [NSMutableArray array];
             for(int i = 0; i < rewards.count; i++) {
-                
+
                 // ENHANCE
                 // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
                 // The result on the RN side is an array with null elements...
                  NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
-                
+
                [rewardList addObject:o];
             }
-            
+
 
             resolve(rewardList);
-        } failedToGetRewards:^{
-            reject(@"ERR_GET_REWARDS", @"Failed to get rewards", nil);
+        } failed:^(NSError * failed){
+            reject(@"ERR_GET_REWARDS", @"Failed to get rewards", failed);
         }];
     }
     @catch (NSException *error) {
         reject(@"ERR_GET", error.description, nil);
     }
 
+}
+
+// ***********************************
+// ***** CHECK SURVEYS AVAILABLE *****
+// ***********************************
+RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    @try{
+
+        [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * err) {
+            if(err) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", @"Failed to get rewards", nil);
+            else resolve(@(available));
+        }];
+
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.description, nil);
+    }
+}
+
+// *******************************
+// ***** GET NATIVE SURVEYS ******
+// *******************************
+RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+
+        self.getNativeSurveysResolve = resolve;
+        self.getNativeSurveysReject = reject;
+        [[InBrain shared] getNativeSurveys];
+
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
+    }
+}
+
+- (void)nativeSurveysLoadingStarted {
+    [self sendEventWithName:@"OnNativeSurveysLoadingStarted" body:@{}];
+}
+
+- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys {
+    
+    NSMutableArray *surveyList = [NSMutableArray array];
+    for(int i = 0; i < surveys.count; i++) {
+
+        // ENHANCE
+        // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
+        // The result on the RN side is an array with null elements...
+         NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value]};
+
+       [surveyList addObject:o];
+    }
+    
+    self.getNativeSurveysResolve(surveyList);
+    self.getNativeSurveysResolve = nil;
+}
+
+- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error {
+    self.getNativeSurveysReject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
+    self.getNativeSurveysReject = nil;
 }
 
 // ***************************
@@ -174,7 +238,7 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 {
     @try{
         // Forwarding to SDK
-        [[InBrain shared] setInBrainWebViewTitleToString:title];
+        [[InBrain shared] setNavigationBarTitle:title];
 
         // Resolve the promise
         resolve(@true);
@@ -193,7 +257,7 @@ RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolv
         
         // Forwarding to SDK
         UIColor* color = [self colorWithHexString:colorHex];
-        [[InBrain shared] setInBrainWebViewNavBarColorToColor:color];
+        [[InBrain shared] setNavigationBarBackgroundColor:color];
 
         // Resolve the promise
         resolve(@true);
@@ -213,7 +277,7 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
 
         // Forwarding to SDK
         UIColor* color = [self colorWithHexString:colorHex];
-        [[InBrain shared] setInBrainWebViewNavButtonColorToColor:color];
+        [[InBrain shared] setNavigationBarTitleColor:color];
 
         // Resolve the promise
         resolve(@true);
@@ -250,7 +314,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"OnClose", @"OnCloseFromPage"];
+  return @[@"OnClose", @"OnCloseFromPage", @"OnNativeSurveysLoadingStarted"];
 }
 
 - (void)surveysClosed {
@@ -262,6 +326,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 }
 
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
+    // Never used, we use getRewardsWithSuccess which has callbacks. This method is only used when getRewards is called.
 }
 
 // ***************************
