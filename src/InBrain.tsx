@@ -38,7 +38,6 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
     // Null safe options
     options = options || {};
 
-
     // set defaults
     options.title = options.title || 'inBrain Surveys'
     options.userId = options.userId || ''
@@ -80,6 +79,22 @@ const showSurveys = () => wrapPromise<void>(InBrainSurveys.showSurveys())
 const getRewards = () => wrapPromise<InBrainReward[]>(InBrainSurveys.getRewards())
 
 /**
+ * Check if surveys are available to show
+ */
+const checkSurveysAvailable = async () => wrapPromise(InBrainSurveys.checkSurveysAvailable())
+
+/**
+ * Get Native Surveys
+ */
+const getNativeSurveys = async () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
+
+/**
+ * Show a specific native survey
+ * @param id the survey's identifier
+ */
+const showNativeSurvey = async (id: Number) => wrapPromise(InBrainSurveys.showNativeSurvey(id))
+
+/**
  * Manual confirm a list of rewards
  * @param rewards The rewards to confirm
  */
@@ -109,7 +124,8 @@ var onCloseFromPage : () => void = () => {};
 inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 
 var onNativeSurveysLoadingStarted : () => void = () => {};
-inbrainEmitter.addListener('OnNativeSurveysLoadingStarted', () => onNativeSurveysLoadingStarted && onNativeSurveysLoadingStarted());
+// Disabled for now as not implemented on Android
+// inbrainEmitter.addListener('OnNativeSurveysLoadingStarted', () => onNativeSurveysLoadingStarted && onNativeSurveysLoadingStarted());
 
 /**
  * Set the listener when the webview is dismissed
@@ -134,18 +150,6 @@ const setOnCloseListenerFromPage = (callback: () => void) => {
 const setOnNativeSurveysLoadingStarted = (callback: () => void) => {
     onCloseFromPage = callback;
 }
-
-/**
- * Check if surveys are available to show
- */
-const checkSurveysAvailable = async (): Promise<Boolean> => {
-    return InBrainSurveys.checkSurveysAvailable();
-}
-
-/**
- * Get Native Surveys
- */
-const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
 
 /**
  * Wrap a promise call to add common functionnalities
@@ -173,6 +177,7 @@ export default {
     /* setButtonColor, */ 
     checkSurveysAvailable,
     getNativeSurveys,
+    showNativeSurvey,
     setOnCloseListener,
     setOnCloseListenerFromPage,
     setOnNativeSurveysLoadingStarted

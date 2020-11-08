@@ -23,7 +23,7 @@ RCT_EXPORT_MODULE()
 
 + (BOOL)requiresMainQueueSetup
 {
-  return YES;  // only do this if your module initialization relies on calling UIKit!
+  return NO;  // only do this if your module initialization relies on calling UIKit!
 }
 
 // ***********************
@@ -203,13 +203,33 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
        [surveyList addObject:o];
     }
     
-    self.getNativeSurveysResolve(surveyList);
-    self.getNativeSurveysResolve = nil;
+    if(self.getNativeSurveysResolve) {
+        self.getNativeSurveysResolve(surveyList);
+        self.getNativeSurveysResolve = nil;
+    }
+
 }
 
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error {
     self.getNativeSurveysReject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
     self.getNativeSurveysReject = nil;
+}
+
+// *******************************
+// ***** SHOW NATIVE SURVEY ******
+// *******************************
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        // This requires the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[InBrain shared] showNativeSurveyWithId:id];
+            resolve(@true);
+        });
+    }
+    @catch (NSException *error) {
+        reject(@"ERR_SHOW_NATIVE_SURVEY", error.description, nil);
+    }
 }
 
 // ***************************
