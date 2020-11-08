@@ -123,8 +123,8 @@ inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 var onCloseFromPage : () => void = () => {};
 inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 
-var onNativeSurveysLoadingStarted : () => void = () => {};
 // Disabled for now as not implemented on Android
+//var onNativeSurveysLoadingStarted : () => void = () => {};
 // inbrainEmitter.addListener('OnNativeSurveysLoadingStarted', () => onNativeSurveysLoadingStarted && onNativeSurveysLoadingStarted());
 
 /**
@@ -147,9 +147,10 @@ const setOnCloseListenerFromPage = (callback: () => void) => {
  * Set the listener when the native surveys started being loaded
  * @param callback callback to execute
  */
-const setOnNativeSurveysLoadingStarted = (callback: () => void) => {
-    onCloseFromPage = callback;
-}
+// Disabled for now as not implemented on Android
+//const setOnNativeSurveysLoadingStarted = (callback: () => void) => {
+//    onCloseFromPage = callback;
+///}
 
 /**
  * Wrap a promise call to add common functionnalities
@@ -179,6 +180,5 @@ export default {
     getNativeSurveys,
     showNativeSurvey,
     setOnCloseListener,
-    setOnCloseListenerFromPage,
-    setOnNativeSurveysLoadingStarted
+    setOnCloseListenerFromPage
 };
