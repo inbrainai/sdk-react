@@ -79,32 +79,32 @@ const showSurveys = () => wrapPromise<void>(InBrainSurveys.showSurveys())
 const getRewards = () => wrapPromise<InBrainReward[]>(InBrainSurveys.getRewards())
 
 /**
- * Check if surveys are available to show
- */
-const checkSurveysAvailable = async () => wrapPromise(InBrainSurveys.checkSurveysAvailable())
-
-/**
- * Get Native Surveys
- */
-const getNativeSurveys = async () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
-
-/**
- * Show a specific native survey
- * @param id the survey's identifier
- */
-const showNativeSurvey = async (id: Number) => wrapPromise(InBrainSurveys.showNativeSurvey(id))
-
-/**
- * Manual confirm a list of rewards
+ * Manually confirm a list of rewards
  * @param rewards The rewards to confirm
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(InBrainSurveys.confirmRewards(rewards))
 
 /**
+ * Check if surveys are available to show
+ */
+const checkSurveysAvailable = () => wrapPromise<boolean>(InBrainSurveys.checkSurveysAvailable())
+
+/**
+ * Get Native Surveys
+ */
+const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
+
+/**
+ * Show a specific native survey
+ * @param id the survey's identifier
+ */
+const showNativeSurvey = (id: string) => wrapPromise<void>(InBrainSurveys.showNativeSurvey(id))
+
+/**
  * Set the webview navbar color
  * @param color hexadecimal string color (e.g #ff0000)
  */
-const setNavbarColor = async (color: string): Promise<void> => {
+const setNavbarColor = (color: string): Promise<void> => {
     assertIsColor(color);
     return InBrainSurveys.setNavbarColor(color);
 }
