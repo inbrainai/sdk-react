@@ -187,7 +187,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 }
 
 - (void)nativeSurveysLoadingStarted {
-    [self sendEventWithName:@"OnNativeSurveysLoadingStarted" body:@{}];
+    // Do nothing
 }
 
 - (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys {
@@ -336,7 +336,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"OnClose", @"OnCloseFromPage", @"OnNativeSurveysLoadingStarted"];
+  return @[@"OnClose", @"OnCloseFromPage"];
 }
 
 - (void)surveysClosed {
