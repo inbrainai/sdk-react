@@ -59,7 +59,6 @@ export default class App extends Component {
     // OnClose listener
     inbrain.setOnCloseListener(() => this.appendLog(`[onClose SUCCESS] => `));
     inbrain.setOnCloseListenerFromPage(() => this.appendLog(`[onCloseFromPage SUCCESS] => `));
-    //inbrain.setOnNativeSurveysLoadingStarted(() => this.appendLog(`[onNativeSurveysLoadingStarted]`));
   }
 
   render() {
