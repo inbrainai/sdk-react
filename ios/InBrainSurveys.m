@@ -211,8 +211,10 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 }
 
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error {
-    self.getNativeSurveysReject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
-    self.getNativeSurveysReject = nil;
+    if(self.getNativeSurveysReject) {
+        self.getNativeSurveysReject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
+        self.getNativeSurveysReject = nil;
+    }
 }
 
 // *******************************
