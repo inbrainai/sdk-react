@@ -109,14 +109,6 @@ const setNavbarColor = (color: string): Promise<void> => {
     return InBrainSurveys.setNavbarColor(color);
 }
 
-/**
- * Set the webview button color
- * @param color hexadecimal string color (e.g #ff0000)
- */
-//const setButtonColor = (color: string): Promise<void> => {
-//    return InBrainSurveys.setButtonColor(color);
-//}
-
 var onClose : () => void = () => {};
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
@@ -162,7 +154,6 @@ export default {
     showSurveys, 
     getRewards, 
     confirmRewards, 
-    /* setButtonColor, */ 
     checkSurveysAvailable,
     getNativeSurveys,
     showNativeSurvey,
