@@ -52,6 +52,7 @@ import WebKit
   @objc final public func getRewards()
   @objc final public func confirmRewards(txIdArray: [Swift.Int])
   @objc final public func getNativeSurveys()
+  @objc final public func getNativeSurveys(success: @escaping ([InBrainSurveys_SDK_Swift.InBrainNativeSurvey]) -> (), failed: @escaping (Swift.Error) -> ())
   @objc deinit
 }
 @objc public class InBrainNativeSurvey : ObjectiveC.NSObject, Swift.Decodable {

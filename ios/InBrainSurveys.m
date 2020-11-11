@@ -176,9 +176,22 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 {
     @try {
 
-        self.getNativeSurveysResolve = resolve;
-        self.getNativeSurveysReject = reject;
-        [[InBrain shared] getNativeSurveys];
+        [[InBrain shared] getNativeSurveysWithSuccess:^(NSArray<InBrainNativeSurvey *> * surveys){
+            NSMutableArray *surveyList = [NSMutableArray array];
+            for(int i = 0; i < surveys.count; i++) {
+
+                // ENHANCE
+                // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
+                // The result on the RN side is an array with null elements...
+                 NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value]};
+
+                   [surveyList addObject:o];
+            }
+
+            resolve(surveyList);
+        } failed:^(NSError * failed){
+            reject(@"ERR_GET_NATIVE_SURVEYS", @"Failed to get native surveys", failed);
+        }];
 
     }
     @catch (NSException *error) {
@@ -191,30 +204,11 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 }
 
 - (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys {
-    
-    NSMutableArray *surveyList = [NSMutableArray array];
-    for(int i = 0; i < surveys.count; i++) {
-
-        // ENHANCE
-        // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-        // The result on the RN side is an array with null elements...
-         NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value]};
-
-       [surveyList addObject:o];
-    }
-    
-    if(self.getNativeSurveysResolve) {
-        self.getNativeSurveysResolve(surveyList);
-        self.getNativeSurveysResolve = nil;
-    }
-
+   // Do nothing. Not used for RN
 }
 
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error {
-    if(self.getNativeSurveysReject) {
-        self.getNativeSurveysReject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
-        self.getNativeSurveysReject = nil;
-    }
+    // Do nothing. Not used for RN
 }
 
 // *******************************

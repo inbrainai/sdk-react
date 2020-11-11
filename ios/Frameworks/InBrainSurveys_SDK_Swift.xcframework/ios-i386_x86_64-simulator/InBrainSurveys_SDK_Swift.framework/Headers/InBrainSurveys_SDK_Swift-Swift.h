@@ -206,6 +206,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @class UIColor;
 @class UIViewController;
 @class InBrainReward;
+@class InBrainNativeSurvey;
 
 /// Main interface to communicate with the InBrain service.
 SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift7InBrain")
@@ -314,9 +315,14 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Please, note: Available native surveys will be chenged after user complete some.
-/// In order to keep you with up-to-date surveys - SDK will
+/// Please, note: Available native surveys will be changed after user complete some.
+/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
 - (void)getNativeSurveys;
+/// Get native surveys just once.
+/// <em>Note</em>: After survey completed - some Native Surveys may became invalid.
+/// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
+/// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
+- (void)getNativeSurveysWithSuccess:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
 @end
 
 
@@ -610,6 +616,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @class UIColor;
 @class UIViewController;
 @class InBrainReward;
+@class InBrainNativeSurvey;
 
 /// Main interface to communicate with the InBrain service.
 SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift7InBrain")
@@ -718,9 +725,14 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Please, note: Available native surveys will be chenged after user complete some.
-/// In order to keep you with up-to-date surveys - SDK will
+/// Please, note: Available native surveys will be changed after user complete some.
+/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
 - (void)getNativeSurveys;
+/// Get native surveys just once.
+/// <em>Note</em>: After survey completed - some Native Surveys may became invalid.
+/// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
+/// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
+- (void)getNativeSurveysWithSuccess:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
 @end
 
 

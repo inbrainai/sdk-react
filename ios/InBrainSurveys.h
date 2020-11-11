@@ -6,10 +6,6 @@
 @interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule, InBrainDelegate, NativeSurveyDelegate>
 @property(nonatomic) InBrain* inbrain; // InBrain instance
 
-// -- Temporary resolver/rejecter
-@property(nonatomic) RCTPromiseResolveBlock getNativeSurveysResolve; // Resolver for getNativeSurveys
-@property(nonatomic) RCTPromiseRejectBlock getNativeSurveysReject; // Rejecter for getNativeSurveys
-
 // -- Mandatory parameters
 @property(nonatomic) NSString* apiClientId; // InBrain client id
 @property(nonatomic) NSString* apiSecret; // InBrain client secret
