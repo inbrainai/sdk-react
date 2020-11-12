@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)
+// swift-compiler-version: Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)
 // swift-module-flags: -target armv7-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name InBrainSurveys_SDK_Swift
 import Foundation
 @_exported import InBrainSurveys_SDK_Swift
@@ -7,131 +7,68 @@ import Swift
 import SystemConfiguration
 import UIKit
 import WebKit
-public enum ReachabilityError : Swift.Error {
-  case failedToCreateWithAddress(Darwin.sockaddr, Swift.Int32)
-  case failedToCreateWithHostname(Swift.String, Swift.Int32)
-  case unableToSetCallback(Swift.Int32)
-  case unableToSetDispatchQueue(Swift.Int32)
-  case unableToGetFlags(Swift.Int32)
-}
-@available(*, unavailable, renamed: "Notification.Name.reachabilityChanged")
-public let ReachabilityChangedNotification: Foundation.NSNotification.Name
-extension NSNotification.Name {
-  public static let reachabilityChanged: Foundation.Notification.Name
-}
-public class Reachability {
-  public typealias NetworkReachable = (InBrainSurveys_SDK_Swift.Reachability) -> ()
-  public typealias NetworkUnreachable = (InBrainSurveys_SDK_Swift.Reachability) -> ()
-  @available(*, unavailable, renamed: "Connection")
-  public enum NetworkStatus : Swift.CustomStringConvertible {
-    case notReachable, reachableViaWiFi, reachableViaWWAN
-    public var description: Swift.String {
-      get
-    }
-    public static func == (a: InBrainSurveys_SDK_Swift.Reachability.NetworkStatus, b: InBrainSurveys_SDK_Swift.Reachability.NetworkStatus) -> Swift.Bool
-    public var hashValue: Swift.Int {
-      get
-    }
-    public func hash(into hasher: inout Swift.Hasher)
-  }
-  public enum Connection : Swift.CustomStringConvertible {
-    @available(*, deprecated, renamed: "unavailable")
-    case none
-    case unavailable, wifi, cellular
-    public var description: Swift.String {
-      get
-    }
-    public static func == (a: InBrainSurveys_SDK_Swift.Reachability.Connection, b: InBrainSurveys_SDK_Swift.Reachability.Connection) -> Swift.Bool
-    public var hashValue: Swift.Int {
-      get
-    }
-    public func hash(into hasher: inout Swift.Hasher)
-  }
-  public var whenReachable: InBrainSurveys_SDK_Swift.Reachability.NetworkReachable?
-  public var whenUnreachable: InBrainSurveys_SDK_Swift.Reachability.NetworkUnreachable?
-  @available(*, deprecated, renamed: "allowsCellularConnection")
-  final public let reachableOnWWAN: Swift.Bool
-  public var allowsCellularConnection: Swift.Bool
-  public var notificationCenter: Foundation.NotificationCenter
-  @available(*, deprecated, renamed: "connection.description")
-  public var currentReachabilityString: Swift.String {
-    get
-  }
-  @available(*, unavailable, renamed: "connection")
-  public var currentReachabilityStatus: InBrainSurveys_SDK_Swift.Reachability.Connection {
-    get
-  }
-  public var connection: InBrainSurveys_SDK_Swift.Reachability.Connection {
-    get
-  }
-  required public init(reachabilityRef: SystemConfiguration.SCNetworkReachability, queueQoS: Dispatch.DispatchQoS = .default, targetQueue: Dispatch.DispatchQueue? = nil, notificationQueue: Dispatch.DispatchQueue? = .main)
-  convenience public init(hostname: Swift.String, queueQoS: Dispatch.DispatchQoS = .default, targetQueue: Dispatch.DispatchQueue? = nil, notificationQueue: Dispatch.DispatchQueue? = .main) throws
-  convenience public init(queueQoS: Dispatch.DispatchQoS = .default, targetQueue: Dispatch.DispatchQueue? = nil, notificationQueue: Dispatch.DispatchQueue? = .main) throws
-  @objc deinit
-}
-extension Reachability {
-  public func startNotifier() throws
-  public func stopNotifier()
-  @available(*, deprecated, message: "Please use `connection != .none`")
-  public var isReachable: Swift.Bool {
-    get
-  }
-  @available(*, deprecated, message: "Please use `connection == .cellular`")
-  public var isReachableViaWWAN: Swift.Bool {
-    get
-  }
-  @available(*, deprecated, message: "Please use `connection == .wifi`")
-  public var isReachableViaWiFi: Swift.Bool {
-    get
-  }
-  public var description: Swift.String {
-    get
-  }
-}
 @objc public protocol InBrainDelegate : AnyObject {
-  @objc func didReceiveInBrainRewards(rewardsArray: [InBrainSurveys_SDK_Swift.InBrainReward])
-  @objc func surveysClosed()
-  @objc func surveysClosedFromPage()
+  @objc optional func didReceiveInBrainRewards(rewardsArray: [InBrainSurveys_SDK_Swift.InBrainReward])
+  @objc optional func didFailToReceiveRewards(error: Swift.Error)
+  @objc optional func surveysClosedFromPage()
+  @objc optional func surveysClosed()
 }
-@_inheritsConvenienceInitializers @objc public class InBrain : ObjectiveC.NSObject {
-  @objc public static var shared: InBrainSurveys_SDK_Swift.InBrain
-  @objc weak public var inBrainDelegate: InBrainSurveys_SDK_Swift.InBrainDelegate?
-  @objc public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool)
-  @objc public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool, userID: Swift.String?)
-  @objc public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool, userID: Swift.String?, language: Swift.String)
-  @objc public func set(userID: Swift.String?)
-  @objc public func setInBrainWebViewTitle(toString: Swift.String)
-  @objc public func setInBrainWebViewNavBarColor(toColor: UIKit.UIColor)
-  @objc public func setInBrainWebViewNavButtonColor(toColor: UIKit.UIColor)
-  @objc public func setInBrainValuesFor(sessionID: Swift.String?, dataOptions: [[Swift.String : Any]]?)
-  @objc public func setLanguage(value: Swift.String)
-  @objc public func showSurveys()
-  @objc public func getRewards(rewardsReceived: @escaping ([InBrainSurveys_SDK_Swift.InBrainReward]) -> (), failedToGetRewards: @escaping () -> ())
-  @objc public func getRewards()
-  @objc public func confirmRewards(txIdArray: [Swift.Int])
+@objc public protocol NativeSurveyDelegate : AnyObject {
+  @objc func nativeSurveysLoadingStarted()
+  @objc func nativeSurveysReceived(_ surveys: [InBrainSurveys_SDK_Swift.InBrainNativeSurvey])
+  @objc func failedToReceiveNativeSurveys(error: Swift.Error)
+}
+@objc final public class InBrain : ObjectiveC.NSObject {
+  @objc public static let shared: InBrainSurveys_SDK_Swift.InBrain
+  @objc weak final public var inBrainDelegate: InBrainSurveys_SDK_Swift.InBrainDelegate?
+  @objc weak final public var nativeSurveysDelegate: InBrainSurveys_SDK_Swift.NativeSurveyDelegate?
+  @objc final public var isOnScreen: Swift.Bool {
+    @objc get
+  }
+  @objc final public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool)
+  @objc final public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool, userID: Swift.String?)
+  @objc final public func setInBrain(apiClientID: Swift.String, apiSecret: Swift.String, isS2S: Swift.Bool, userID: Swift.String?, language: Swift.String)
+  @objc final public func set(userID: Swift.String?)
+  @available(*, deprecated, renamed: "setNavigationBarTitle")
+  @objc final public func setInBrainWebViewTitle(toString: Swift.String)
+  @available(*, deprecated, renamed: "setNavigationBarBackgroundColor")
+  @objc final public func setInBrainWebViewNavBarColor(toColor: UIKit.UIColor)
+  @available(*, deprecated, renamed: "setNavigationBarTitleColor")
+  @objc final public func setInBrainWebViewNavButtonColor(toColor: UIKit.UIColor)
+  @objc final public func setNavigationBarTitle(_ title: Swift.String)
+  @objc final public func setNavigationBarBackgroundColor(_ color: UIKit.UIColor)
+  @objc final public func setNavigationBarTitleColor(_ color: UIKit.UIColor)
+  @objc final public func setNavigationBarButtonColor(_ color: UIKit.UIColor)
+  @objc final public func setInBrainValuesFor(sessionID: Swift.String?, dataOptions: [[Swift.String : Any]]?)
+  @objc final public func setLanguage(value: Swift.String)
+  @objc final public func checkForAvailableSurveys(completion: @escaping ((Swift.Bool, Swift.Error?) -> (Swift.Void)))
+  @objc final public func showSurveys()
+  @objc final public func showSurveys(from viewController: UIKit.UIViewController)
+  @objc final public func showNativeSurveyWith(id: Swift.String)
+  @objc final public func showNativeSurveyWith(id: Swift.String, from viewController: UIKit.UIViewController)
+  @available(*, deprecated, renamed: "getRewards(success:failed:)")
+  @objc final public func getRewards(rewardsReceived: @escaping ([InBrainSurveys_SDK_Swift.InBrainReward]) -> (), failedToGetRewards: @escaping () -> ())
+  @objc final public func getRewards(success: @escaping ([InBrainSurveys_SDK_Swift.InBrainReward]) -> (), failed: @escaping (Swift.Error) -> ())
+  @objc final public func getRewards()
+  @objc final public func confirmRewards(txIdArray: [Swift.Int])
+  @objc final public func getNativeSurveys()
+  @objc final public func getNativeSurveys(success: @escaping ([InBrainSurveys_SDK_Swift.InBrainNativeSurvey]) -> (), failed: @escaping (Swift.Error) -> ())
   @objc deinit
-  @objc override dynamic public init()
 }
-public typealias ErrorCallback = () -> ()
-public struct InBrainToken : Swift.Codable {
-  public let access_token: Swift.String
-  public let expires_in: Swift.Int
-  public let token_type: Swift.String
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+@objc public class InBrainNativeSurvey : ObjectiveC.NSObject, Swift.Decodable {
+  @objc final public let id: Swift.String
+  @objc final public let rank: Swift.Int
+  @objc final public let time: Swift.Int
+  @objc final public let value: Swift.Double
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
 }
-@objc public class InBrainReward : ObjectiveC.NSObject, Swift.Codable {
+@objc final public class InBrainReward : ObjectiveC.NSObject, Swift.Decodable {
   @objc final public let transactionId: Swift.Int
   @objc final public let amount: Swift.Float
   @objc final public let currency: Swift.String
   @objc final public let transactionType: Swift.Int
+  public init(from decoder: Swift.Decoder) throws
+  @objc override dynamic public init()
   @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
 }
-@available(*, unavailable, renamed: "Connection")
-extension InBrainSurveys_SDK_Swift.Reachability.NetworkStatus : Swift.Equatable {}
-@available(*, unavailable, renamed: "Connection")
-extension InBrainSurveys_SDK_Swift.Reachability.NetworkStatus : Swift.Hashable {}
-extension InBrainSurveys_SDK_Swift.Reachability.Connection : Swift.Equatable {}
-extension InBrainSurveys_SDK_Swift.Reachability.Connection : Swift.Hashable {}

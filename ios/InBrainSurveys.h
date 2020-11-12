@@ -3,7 +3,7 @@
 #import <React/RCTComponent.h>
 #import <React/RCTEventEmitter.h>
 
-@interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule, InBrainDelegate>
+@interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule, InBrainDelegate, NativeSurveyDelegate>
 @property(nonatomic) InBrain* inbrain; // InBrain instance
 
 // -- Mandatory parameters

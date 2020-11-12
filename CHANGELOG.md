@@ -1,9 +1,13 @@
+
+
 ## [1.0.9 Unreleased]
 ### Added
 - Added CHANGELOG.md
+- Added methods `checkSurveysAvailable`, `getNativeSurveys`, and `showNativeSurvey` methods
 
 ### Changed
-- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.5` (from `1.0.3`)
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.9` (from `1.0.3`)
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.4.6`
 
 ## [1.0.8] - 2020-09-02
 ### Changed

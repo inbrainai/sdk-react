@@ -17,10 +17,13 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.inbrain.sdk.InBrain;
+import com.inbrain.sdk.callback.GetNativeSurveysCallback;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
+import com.inbrain.sdk.callback.SurveysAvailableCallback;
 import com.inbrain.sdk.model.Reward;
+import com.inbrain.sdk.model.Survey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,6 +178,81 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
         } catch (Exception e) {
             promise.reject("ERR_CONFIRM_REWARDS", e.getMessage(), e);
+        }
+    }
+
+    // ***********************************
+    // ***** CHECK SURVEYS AVAILABLE *****
+    // ***********************************
+    @ReactMethod
+    public void checkSurveysAvailable(final Promise promise) {
+        try {
+
+            InBrain.getInstance().areSurveysAvailable(this.getReactApplicationContext(), new SurveysAvailableCallback() {
+                @Override
+                public void onSurveysAvailable(boolean available) {
+                    promise.resolve(available);
+                }
+            });
+
+        } catch (Exception e) {
+            promise.reject("ERR_CHECK_SURVEYS_AVAILABLE", e.getMessage(), e);
+        }
+    }
+
+    // *******************************
+    // ***** GET NATIVE SURVEYS ******
+    // *******************************
+    @ReactMethod
+    public void getNativeSurveys(final Promise promise) {
+        try {
+
+            InBrain.getInstance().getNativeSurveys(new GetNativeSurveysCallback() {
+                @Override
+                public void nativeSurveysReceived(List<Survey> surveys) {
+
+                    WritableArray array = Arguments.createArray();
+                    for (Survey survey : surveys) {
+                        WritableMap map = Arguments.createMap();
+                        map.putString("id", survey.id);
+                        map.putInt("rank", (int) survey.rank);
+                        map.putInt("time", (int) survey.time);
+                        map.putDouble("value", survey.value);
+                        array.pushMap(map);
+                    }
+
+                    // Resolve promise with the list of surveys
+                    promise.resolve(array);
+
+                }
+            });
+
+        } catch (Exception e) {
+            promise.reject("ERR_GET_NATIVE_SURVEYS", e.getMessage(), e);
+        }
+    }
+
+    // *******************************
+    // ***** SHOW NATIVE SURVEY ******
+    // *******************************
+    @ReactMethod
+    public void showNativeSurvey(final String id, final Promise promise) {
+        try {
+
+            InBrain.getInstance().showNativeSurveyWith(getCurrentActivity(), id, new StartSurveysCallback() {
+                @Override
+                public void onSuccess() {
+                    promise.resolve(true);
+                }
+
+                @Override
+                public void onFail(String s) {
+                    promise.reject("ERR_SHOW_NATIVE_SURVEY", s);
+                }
+            });
+
+        } catch (Exception e) {
+            promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
         }
     }
 

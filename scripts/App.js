@@ -21,21 +21,22 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {rewards: [], logs: []};
+    this.state = {rewards: [], nativeSurveys: [], logs: []};
   }
 
   callBridge = (name, sdkMethod, successCallback) => () => {
     sdkMethod().then((result) => {
       successCallback && successCallback(result);
+      console.log(result);
       this.appendLog(`[${name} SUCCESS] => ${result}`);
     }).catch( (err) => {
       this.appendLog(`[${name} ERROR] => ${err.message || err}`);
     });
   };
 
-  // Convenient 'setResults' callbacks for 'callBridge'
-  void = (obj) => {};
+  // Convenient callback methods
   setRewards = (rewards) => this.setState({rewards});
+  setNativeSurveys = (nativeSurveys) => this.setState({nativeSurveys});
   appendLog = (log) => this.setState({ logs: this.state.logs.concat(log)});
 
   componentDidMount = () => {
@@ -50,7 +51,7 @@ export default class App extends Component {
       dataPoints: { gender: 'male', age: '25'},
       title: "NEW TITLE",
       navbarColor: "#ff0000",
-      language: 'fr-FR',
+      language: 'fr-fr',
       isS2S: false
     };
     this.callBridge('init', () => inbrain.init(clientId, clientSecret, options) )();   
@@ -71,18 +72,29 @@ export default class App extends Component {
             <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", () => inbrain.getRewards(), this.setRewards)} />
             <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", () => inbrain.confirmRewards(this.state.rewards) )} />
             <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", () => inbrain.showSurveys() )} />
+            <BridgeButton name="checkSurveysAvailable" onPress={this.callBridge("checkSurveysAvailable", () => inbrain.checkSurveysAvailable() )} />
+            <BridgeButton name="getNativeSurveys" onPress={this.callBridge("getNativeSurveys", () => inbrain.getNativeSurveys(), this.setNativeSurveys)} />
+            <BridgeButton name="showNativeSurvey" onPress={this.callBridge("showNativeSurvey", () => inbrain.showNativeSurvey(this.state.nativeSurveys[3].id))} />
           </View>
         </View>
       </View>
       <View>
         <Text style={styles.title}>Rewards</Text>
-
         {this.state.rewards.map((r,i) => (
           <Text style={styles.message} key={r.transactionId}>
             [ Reward {i} ] id={r.transactionId} / amount={r.amount} / currency={r.currency} / transactionType={r.transactionType}
           </Text>
         ))}
       </View>
+
+      <ScrollView style={{ flexGrow: 1 }}>
+        <Text style={styles.title}>Native Surveys</Text>
+        {this.state.nativeSurveys.map((s,i) => (
+          <Text style={styles.message} key={s.id}>
+            [ Native Survey {i} ] id={s.id} / rank={s.rank} / time={s.time} / value={s.value}
+          </Text>
+        ))}
+      </ScrollView>
 
       <Text style={styles.title}>Logs</Text>
       <ScrollView style={{ flexGrow: 1 }}>

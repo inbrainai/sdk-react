@@ -17,6 +17,16 @@ export type InBrainReward = {
     transactionType: number;
 }
 
+/**
+ * Native Surveys interface
+ */
+export type InBrainNativeSurveys = {
+    id: string;
+    rank: number;
+    time: number;
+    value: number;
+}
+
 /*
  * Init the SDK.
  * @param apiClientId Provided in inBrain.ai dashboard
@@ -27,7 +37,6 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
 
     // Null safe options
     options = options || {};
-
 
     // set defaults
     options.title = options.title || 'inBrain Surveys'
@@ -70,33 +79,41 @@ const showSurveys = () => wrapPromise<void>(InBrainSurveys.showSurveys())
 const getRewards = () => wrapPromise<InBrainReward[]>(InBrainSurveys.getRewards())
 
 /**
- * Manual confirm a list of rewards
+ * Manually confirm a list of rewards
  * @param rewards The rewards to confirm
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(InBrainSurveys.confirmRewards(rewards))
 
 /**
+ * Check if surveys are available to show
+ */
+const checkSurveysAvailable = () => wrapPromise<boolean>(InBrainSurveys.checkSurveysAvailable())
+
+/**
+ * Get Native Surveys
+ */
+const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
+
+/**
+ * Show a specific native survey
+ * @param id the survey's identifier
+ */
+const showNativeSurvey = (id: string) => wrapPromise<void>(InBrainSurveys.showNativeSurvey(id))
+
+/**
  * Set the webview navbar color
  * @param color hexadecimal string color (e.g #ff0000)
  */
-const setNavbarColor = async (color: string): Promise<void> => {
+const setNavbarColor = (color: string): Promise<void> => {
     assertIsColor(color);
     return InBrainSurveys.setNavbarColor(color);
 }
 
-/**
- * Set the webview button color
- * @param color hexadecimal string color (e.g #ff0000)
- */
-//const setButtonColor = (color: string): Promise<void> => {
-//    return InBrainSurveys.setButtonColor(color);
-//}
-
 var onClose : () => void = () => {};
-inbrainEmitter.addListener('OnClose',() => onClose && onClose());
+inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
 var onCloseFromPage : () => void = () => {};
-inbrainEmitter.addListener('OnCloseFromPage',() => onCloseFromPage && onCloseFromPage());
+inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 
 /**
  * Set the listener when the webview is dismissed
@@ -137,7 +154,9 @@ export default {
     showSurveys, 
     getRewards, 
     confirmRewards, 
-    /* setButtonColor, */ 
+    checkSurveysAvailable,
+    getNativeSurveys,
+    showNativeSurvey,
     setOnCloseListener,
     setOnCloseListenerFromPage
 };
