@@ -1,6 +1,10 @@
+## [1.1.1] 2020-11-19
+### Bug Fix
+- Fix onClose listener not triggered when closing the webview displaying a native survey
+### Changed
+- Simplified ObjC code and removed unnecessary view controller 
 
-
-## [1.0.9 Unreleased]
+## [1.1.0] 2020-11-13
 ### Added
 - Added CHANGELOG.md
 - Added methods `checkSurveysAvailable`, `getNativeSurveys`, and `showNativeSurvey` methods

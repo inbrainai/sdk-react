@@ -1,5 +1,4 @@
 #import "InBrainSurveys.h"
-#import "InBrainSurveysViewController.h"
 #import <InBrainSurveys_SDK_Swift/InBrainSurveys_SDK_Swift-Swift.h>
 
 @implementation InBrainSurveys
@@ -12,6 +11,7 @@
     self = [super init];
     self.inbrain = [InBrain shared];
     [self.inbrain setNativeSurveysDelegate:self];
+    [self.inbrain setInBrainDelegate:self];
     return self;
 }
 
@@ -91,27 +91,8 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     dispatch_async(dispatch_get_main_queue(), ^{
     
         @try {
-
-            // Display it using the main view controller
-            UIViewController* rootViewController = [[UIApplication sharedApplication] delegate].window.rootViewController;
-            InBrainSurveysViewController* viewController = [[InBrainSurveysViewController alloc] init];
-            
-            viewController.apiClientId = self.apiClientId;
-            viewController.apiSecret = self.apiSecret;
-            viewController.userId = self.userId;
-            viewController.isS2S = self.isS2S;
-            
-            viewController.sessionUid = self.sessionUid;
-            viewController.dataPoints = self.dataPoints;
-            
-            viewController.listener = self;
-            [rootViewController presentViewController:viewController animated:false completion:^{
-                
-            // When the view controller is displayed, we resolve the promise
-            resolve(@true);
-                
-            }];
-        
+            [self.inbrain showSurveys];
+            resolve(nil);
         }
         @catch (NSException *error) {
             reject(@"ERR_SHOW_SURVEYS", error.description, nil);
