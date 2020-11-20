@@ -2,7 +2,7 @@
  * SDK OPTIONS
  */
 export type ConfigOptionName = "isS2S" | "userId" | "sessionUid" | "dataPoints";
-export type StylingOptionName = "title" | "navbarColor" | "language";
+export type StylingOptionName = "title" | "titleColor" | "navbarColor" | "language";
 export type InitOptionName = ConfigOptionName | StylingOptionName;
 
 // *** CONFIG OPTION TYPES
@@ -18,6 +18,7 @@ export type ConfigOptions = {[opt in ConfigOptionName]?: ConfigOptionTypes[opt] 
 export type StylingOptionType = {
     title: string, 
     navbarColor: string,
+    titleColor: string,
     language: string
 };
 export type StylingOptions = {[opt in StylingOptionName]?: StylingOptionType[opt] }

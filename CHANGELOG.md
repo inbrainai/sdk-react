@@ -1,3 +1,7 @@
+## [1.1.2] 2020-11-20
+### Added
+- Added option 'titleColor' which allows to modify the webview title color
+
 ## [1.1.1] 2020-11-19
 ### Bug Fix
 - Fix onClose listener not triggered when closing the webview displaying a native survey

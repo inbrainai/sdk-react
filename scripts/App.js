@@ -51,6 +51,7 @@ export default class App extends Component {
       dataPoints: { gender: 'male', age: '25'},
       title: "NEW TITLE",
       navbarColor: "#ff0000",
+      titleColor: "#fff000",
       language: 'fr-fr',
       isS2S: false
     };

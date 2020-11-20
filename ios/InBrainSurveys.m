@@ -266,9 +266,9 @@ RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolv
 }
 
 // ***************************
-// ***** SET BUTTON COLOR ****
+// ***** SET TITLE COLOR *****
 // ***************************
-RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setTitleColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
 
@@ -281,7 +281,7 @@ RCT_EXPORT_METHOD(setButtonColor:(NSString *)colorHex resolver:(RCTPromiseResolv
     
     }
     @catch (NSException *error) {
-        reject(@"ERR_BUTTON_COLOR", error.description, nil);
+        reject(@"ERR_SET_TITLE_COLOR", error.description, nil);
     }
 }
 

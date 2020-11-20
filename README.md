@@ -47,6 +47,7 @@ inbrain.init(apiClientId: string, apiSecret: string, options?: InitOptions) : Pr
 * `apiSecret`: The client secret obtained from your account manager.
 * `options`: [Optional] Options. Possible options:
     * `title`: The surveys view title. Default 'inBrain Surveys'
+    * `titleColor`: The surveys view title color (hexadecimal string color, e.g #ff0000)
     * `navbarColor`: The surveys view navigation barcolor (hexadecimal string color, e.g #ff0000)
     * `language`: By default, device's locale's language will be used. Accepted languages: `de-de`, `en-au`, `en-ca`, `en-gb`, `en-in`, `en-us`, `es-es`, `es-mx`, `es-us`, `fr-ca`, `fr-fr`, `fr-br` (case sensitive)
     * `sessionUid`: Value to track each session of inBrain use from a specific userID
