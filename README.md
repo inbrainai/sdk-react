@@ -4,7 +4,7 @@ Survey library to monetize your mobile app, provided by inBrain.ai
 ## Requirements
 This SDK is targeted to the following tools:
 - XCode 11.4+
-- CocoaPods 1.9
+- CocoaPods 1.10+
 - Swift 5
 - React Native >=0.60.0
 
@@ -46,13 +46,18 @@ inbrain.init(apiClientId: string, apiSecret: string, options?: InitOptions) : Pr
 * `apiClientId`: The client ID obtained from your account manager
 * `apiSecret`: The client secret obtained from your account manager.
 * `options`: [Optional] Options. Possible options:
-    * `title`: The surveys view title. Default 'inBrain Surveys'
-    * `titleColor`: The surveys view title color (hexadecimal string color, e.g #ff0000)
-    * `navbarColor`: The surveys view navigation barcolor (hexadecimal string color, e.g #ff0000)
-    * `language`: By default, device's locale's language will be used. Accepted languages: `de-de`, `en-au`, `en-ca`, `en-gb`, `en-in`, `en-us`, `es-es`, `es-mx`, `es-us`, `fr-ca`, `fr-fr`, `fr-br` (case sensitive)
+    * `language`: Accepted languages: `de-de`, `en-au`, `en-ca`, `en-gb`, `en-in`, `en-us`, `es-es`, `es-mx`, `es-us`, `fr-ca`, `fr-fr`, `fr-br` (case sensitive). Default to the device's locale language.
     * `sessionUid`: Value to track each session of inBrain use from a specific userID
     * `isS2S`: If the SDK runs in Server To Server mode. Default `false`
     * `userId`: The unique string value that differentiates each user within their app when initializing inBrain (Example: an email, a username). Default `''`
+    * `title`: The surveys view title. Default 'inBrain.ai Surveys'
+    * `navigationBar`: The navigation bar configuration
+        * `backgroundColor`: The navigation bar background color (hexadecimal string color, e.g #FF0000)
+        * `buttonsColor`: The navigation bar buttons color (hexadecimal string color, e.g #E7F722)
+        * `titleColor`: The navigation bar title color (hexadecimal string color, e.g #FF0404)
+        * `hasShadow`: The navigation bar bottom border (boolean)
+    * `statusBar`: The status bar configuration (boolean)
+        * `lightStatusBar`: The status bar text and icons color (true for white, false for black). On iOS, you'll need to set `View controller-based status bar appearance` bar appearance to YES for this option to work.
     * `dataPoints`: A dictionary of keys and values to provide inBrain profiler data for custom profiler user experience (Example: `{ age : “23”, gender : “female” }`)
 
 Note: This method need to be called prior calling all the other methods. 
@@ -113,3 +118,6 @@ Clean and build the project after changes.
 This problem can happen if your project doesn't have the Swift standard libraries included. Set the 'Always Embed Swift Standard Libraries' to yes in your target to fix it.
 Clean and build the project after changes.
 This problem also consistently appears when usinx XCode10
+
+### [RUNTIME - Release scheme] dependent dylib '@rpath/InBrainSurveys_SDK_Swift.framework/InBrainSurveys_SDK_Swift' not found 
+This problem happen with previous version of Cocoapods and XCode. Try updating to Cocoapods 1.10.x, and if it still doesn't work, also upgrade to XCode12

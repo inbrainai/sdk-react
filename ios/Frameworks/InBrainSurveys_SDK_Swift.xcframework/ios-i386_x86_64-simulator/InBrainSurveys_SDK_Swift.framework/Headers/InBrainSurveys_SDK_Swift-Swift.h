@@ -184,6 +184,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
 @import ObjectiveC;
+@import UIKit;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -204,6 +205,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @protocol InBrainDelegate;
 @protocol NativeSurveyDelegate;
 @class UIColor;
+@class InBrainNavBarConfig;
+@class InBrainStatusBarConfig;
 @class UIViewController;
 @class InBrainReward;
 @class InBrainNativeSurvey;
@@ -246,19 +249,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 /// </ul>
 - (void)setWithUserID:(NSString * _Nullable)userID;
 /// Set title before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString SWIFT_DEPRECATED_MSG("", "setNavigationBarTitle:");
+- (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set color before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("", "setNavigationBarBackgroundColor:");
+- (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set color before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("", "setNavigationBarTitleColor:");
+- (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarBackgroundColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarButtonColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarTitleColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set title before calling <code>showSurveys()</code>
 - (void)setNavigationBarTitle:(NSString * _Nonnull)title;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarBackgroundColor:(UIColor * _Nonnull)color;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarTitleColor:(UIColor * _Nonnull)color;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarButtonColor:(UIColor * _Nonnull)color;
+/// Customize Navigation Bar before calling <code>showSurveys()</code>
+- (void)setNavigationBarConfig:(InBrainNavBarConfig * _Nonnull)config;
+/// Customize Status Bar before calling <code>showSurveys()</code>
+/// In order to customize status bar - needs to set <code>View controller-based status bar appearance</code> to <code>YES</code>
+- (void)setStatusBarConfig:(InBrainStatusBarConfig * _Nonnull)config;
 /// Set values before calling <code>showSurveys()</code>
 - (void)setInBrainValuesForSessionID:(NSString * _Nullable)sessionID dataOptions:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)dataOptions;
 /// Set language to be used. If not set - device language will be used.
@@ -315,11 +323,11 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Please, note: Available native surveys will be changed after user complete some.
+/// Available native surveys will be changed after user complete some.
 /// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
 - (void)getNativeSurveys;
 /// Get native surveys just once.
-/// <em>Note</em>: After survey completed - some Native Surveys may became invalid.
+/// After survey completed - some Native Surveys may became invalid.
 /// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
 /// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
 - (void)getNativeSurveysWithSuccess:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
@@ -359,12 +367,52 @@ SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift19InBrainNativeSurvey")
 @end
 
 
+SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift19InBrainNavBarConfig")
+@interface InBrainNavBarConfig : NSObject
+/// Config to customize Navigation Bar.
+/// <ul>
+///   <li>
+///     Color values should be in sRGB (Device RGB) profile;
+///   </li>
+///   <li>
+///     Pass nil to use default color.
+///   </li>
+/// </ul>
+/// \param backgroundColor Background color of navigation bar
+///
+/// \param buttonsColor Back/Close buttons color
+///
+/// \param titleColor Navigation bar title color
+///
+/// \param isTranslucent Translucent navigation bar. Default value is false
+///
+/// \param hasShadow Show/hide defualt navigation bar shadow. Default value is false
+///
+- (nonnull instancetype)initWithBackgroundColor:(UIColor * _Nullable)backgroundColor buttonsColor:(UIColor * _Nullable)buttonsColor titleColor:(UIColor * _Nullable)titleColor isTranslucent:(BOOL)isTranslucent hasShadow:(BOOL)hasShadow OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift13InBrainReward")
 @interface InBrainReward : NSObject
 @property (nonatomic, readonly) NSInteger transactionId;
 @property (nonatomic, readonly) float amount;
 @property (nonatomic, readonly, copy) NSString * _Nonnull currency;
 @property (nonatomic, readonly) NSInteger transactionType;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift22InBrainStatusBarConfig")
+@interface InBrainStatusBarConfig : NSObject
+/// Config to customize Status Bar.
+/// \param statusBarStyle UIStatusBarStyle to be used
+///
+/// \param hideStatusBar Hide status bar if true
+///
+- (nonnull instancetype)initWithStatusBarStyle:(UIStatusBarStyle)statusBarStyle hideStatusBar:(BOOL)hideStatusBar OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -403,6 +451,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 /// *
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error;
 @end
+
+
 
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop
@@ -594,6 +644,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
 @import ObjectiveC;
+@import UIKit;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -614,6 +665,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @protocol InBrainDelegate;
 @protocol NativeSurveyDelegate;
 @class UIColor;
+@class InBrainNavBarConfig;
+@class InBrainStatusBarConfig;
 @class UIViewController;
 @class InBrainReward;
 @class InBrainNativeSurvey;
@@ -656,19 +709,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 /// </ul>
 - (void)setWithUserID:(NSString * _Nullable)userID;
 /// Set title before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString SWIFT_DEPRECATED_MSG("", "setNavigationBarTitle:");
+- (void)setInBrainWebViewTitleToString:(NSString * _Nonnull)toString SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set color before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("", "setNavigationBarBackgroundColor:");
+- (void)setInBrainWebViewNavBarColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set color before calling <code>showSurveys()</code>
-- (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("", "setNavigationBarTitleColor:");
+- (void)setInBrainWebViewNavButtonColorToColor:(UIColor * _Nonnull)toColor SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarBackgroundColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarButtonColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
+/// Set color before calling <code>showSurveys()</code>
+- (void)setNavigationBarTitleColor:(UIColor * _Nonnull)color SWIFT_DEPRECATED_MSG("Please, use setNavigationBarConfig instead");
 /// Set title before calling <code>showSurveys()</code>
 - (void)setNavigationBarTitle:(NSString * _Nonnull)title;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarBackgroundColor:(UIColor * _Nonnull)color;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarTitleColor:(UIColor * _Nonnull)color;
-/// Set color before calling <code>showSurveys()</code>
-- (void)setNavigationBarButtonColor:(UIColor * _Nonnull)color;
+/// Customize Navigation Bar before calling <code>showSurveys()</code>
+- (void)setNavigationBarConfig:(InBrainNavBarConfig * _Nonnull)config;
+/// Customize Status Bar before calling <code>showSurveys()</code>
+/// In order to customize status bar - needs to set <code>View controller-based status bar appearance</code> to <code>YES</code>
+- (void)setStatusBarConfig:(InBrainStatusBarConfig * _Nonnull)config;
 /// Set values before calling <code>showSurveys()</code>
 - (void)setInBrainValuesForSessionID:(NSString * _Nullable)sessionID dataOptions:(NSArray<NSDictionary<NSString *, id> *> * _Nullable)dataOptions;
 /// Set language to be used. If not set - device language will be used.
@@ -725,11 +783,11 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Please, note: Available native surveys will be changed after user complete some.
+/// Available native surveys will be changed after user complete some.
 /// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
 - (void)getNativeSurveys;
 /// Get native surveys just once.
-/// <em>Note</em>: After survey completed - some Native Surveys may became invalid.
+/// After survey completed - some Native Surveys may became invalid.
 /// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
 /// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
 - (void)getNativeSurveysWithSuccess:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
@@ -769,12 +827,52 @@ SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift19InBrainNativeSurvey")
 @end
 
 
+SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift19InBrainNavBarConfig")
+@interface InBrainNavBarConfig : NSObject
+/// Config to customize Navigation Bar.
+/// <ul>
+///   <li>
+///     Color values should be in sRGB (Device RGB) profile;
+///   </li>
+///   <li>
+///     Pass nil to use default color.
+///   </li>
+/// </ul>
+/// \param backgroundColor Background color of navigation bar
+///
+/// \param buttonsColor Back/Close buttons color
+///
+/// \param titleColor Navigation bar title color
+///
+/// \param isTranslucent Translucent navigation bar. Default value is false
+///
+/// \param hasShadow Show/hide defualt navigation bar shadow. Default value is false
+///
+- (nonnull instancetype)initWithBackgroundColor:(UIColor * _Nullable)backgroundColor buttonsColor:(UIColor * _Nullable)buttonsColor titleColor:(UIColor * _Nullable)titleColor isTranslucent:(BOOL)isTranslucent hasShadow:(BOOL)hasShadow OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift13InBrainReward")
 @interface InBrainReward : NSObject
 @property (nonatomic, readonly) NSInteger transactionId;
 @property (nonatomic, readonly) float amount;
 @property (nonatomic, readonly, copy) NSString * _Nonnull currency;
 @property (nonatomic, readonly) NSInteger transactionType;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift22InBrainStatusBarConfig")
+@interface InBrainStatusBarConfig : NSObject
+/// Config to customize Status Bar.
+/// \param statusBarStyle UIStatusBarStyle to be used
+///
+/// \param hideStatusBar Hide status bar if true
+///
+- (nonnull instancetype)initWithStatusBarStyle:(UIStatusBarStyle)statusBarStyle hideStatusBar:(BOOL)hideStatusBar OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -813,6 +911,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 /// *
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error;
 @end
+
+
 
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop

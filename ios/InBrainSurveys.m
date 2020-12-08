@@ -29,18 +29,13 @@ RCT_EXPORT_MODULE()
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL*)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         
         [self notNull:@"apiClientId" toCheck:apiClientId];
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
-
-        self.apiClientId = apiClientId;
-        self.apiSecret = apiSecret;
-        self.isS2S = isS2S;
-        self.userId = userId;
 
         [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
 
@@ -67,9 +62,6 @@ RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *
         [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [mapped addObject:@{ obj : [data objectForKey:obj]}];
         }];
-        
-        self.sessionUid = sessionId;
-        self.dataPoints = mapped;
 
         [self.inbrain setInBrainValuesForSessionID:sessionId dataOptions:mapped];
 
@@ -245,43 +237,70 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
     }
 }
 
-// ********************************
-// ***** SET VIEW NAVBAR COLOR ****
-// ********************************
-RCT_EXPORT_METHOD(setNavbarColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// *************************************
+// ***** SET NAVIGATION BAR CONFIG *****
+// *************************************
+RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
         
+        // Extract parameters
+        NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
+        UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
+
+        NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
+        UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
+        
+        NSString* titleColorString = [data objectForKey:@"titleColor"];
+        UIColor* titleColor = [self colorWithHexString:titleColorString];
+        
+        BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
+        
+        // Instantiate config object
+        InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
+
         // Forwarding to SDK
-        UIColor* color = [self colorWithHexString:colorHex];
-        [[InBrain shared] setNavigationBarBackgroundColor:color];
+        [[InBrain shared] setNavigationBarConfig:config];
 
         // Resolve the promise
         resolve(@true);
     
     }
     @catch (NSException *error) {
-        reject(@"ERR_SET_NAVBAR_COLOR", error.description, nil);
+        reject(@"ERR_SET_NAVIGATION_BAR_CONFIG", error.description, nil);
     }
 }
 
-// ***************************
-// ***** SET TITLE COLOR *****
-// ***************************
-RCT_EXPORT_METHOD(setTitleColor:(NSString *)colorHex resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// *********************************
+// ***** SET STATUS BAR CONFIG *****
+// *********************************
+RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
 
+        // Extract parameters
+        BOOL lighStatusBar = [[data objectForKey:@"lightStatusBar"] boolValue];
+        
+        UIStatusBarStyle style = 1;
+        if(!lighStatusBar) {
+            if(@available(iOS 13, *))
+                style = 3; // UIStatusBarStyleDarkContent
+            else
+                style = 0; // UIStatusBarStyleDefault
+        }
+        
+       // Instantiate config object
+       InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
+        
         // Forwarding to SDK
-        UIColor* color = [self colorWithHexString:colorHex];
-        [[InBrain shared] setNavigationBarTitleColor:color];
+        [[InBrain shared] setStatusBarConfig:config];
 
         // Resolve the promise
         resolve(@true);
     
     }
     @catch (NSException *error) {
-        reject(@"ERR_SET_TITLE_COLOR", error.description, nil);
+        reject(@"ERR_SET_STATUS_BAR_CONFIG", error.description, nil);
     }
 }
 

@@ -1,3 +1,12 @@
+## [2.0.0] 2020-12-12
+### Changed
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.4.12`
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.14` (from `1.0.9`)
+
+### Changed
+- Moved options `titleColor` and `navbarColor`
+- Added two different kind of options `navigationBar` and `statusBar` to have more fine-grained control over navigation and status bars styling
+
 ## [1.1.2] 2020-11-20
 ### Added
 - Added option 'titleColor' which allows to modify the webview title color
@@ -23,7 +32,7 @@
 
 ## [1.0.7] - 2020-07-28
 ### Added
-- Added attribute `isS2S`  in `InitOptions` with default value `false`
+- Added attribute `isS2S` in `InitOptions` with default value `false`
 
 ### Changed
 - Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.3` (from `0.1.25`)

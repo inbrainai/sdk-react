@@ -1,31 +1,12 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import { assertIsColor } from './Utils';
 import { enhanceError } from './Errors';
 import { InitOptions, InitOptionName, StylingOptionName } from './Options';
+import { InBrainReward, InBrainNativeSurveys } from './Models';
+import { assertIsColor } from './Utils';
 
 const { InBrainSurveys  } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
-
-/**
- * Reward interface
- */
-export type InBrainReward = {
-    transactionId: number;
-    amount: number;
-    currency: string;
-    transactionType: number;
-}
-
-/**
- * Native Surveys interface
- */
-export type InBrainNativeSurveys = {
-    id: string;
-    rank: number;
-    time: number;
-    value: number;
-}
 
 /*
  * Init the SDK.
@@ -39,12 +20,14 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
     options = options || {};
 
     // set defaults
-    options.title = options.title || 'inBrain Surveys'
+    options.title = options.title || 'inBrain.ai Surveys'
     options.userId = options.userId || ''
     options.isS2S = options.isS2S || false
 
+    // Validate
+    validateOptions(options)
+    
     // Call all options bridge methodes
-
     // -- this method is apart as these two properties can't be set individually
     await wrapPromise(InBrainSurveys.setInBrainValuesFor(options.sessionUid, options.dataPoints));
 
@@ -56,8 +39,13 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
 }
 
 const callOptionSetters = (options: InitOptions) => {
-    options = options || {};
-
+    let internalOptions: any = options || {};
+    
+    // Ugly, but we have to populate the title in navigationBar as this is what Android uses (and not iOS)
+    internalOptions.navigationBar = {...internalOptions.navigationBar, title: options.title}
+    // And we have to populate this, as it's not possible to only set the status bar color on iOS
+    internalOptions.statusBar = {...internalOptions.statusBar, statusBarColor: options.navigationBar?.backgroundColor}
+    
     const optionPromises =  Object.keys(options)
         // From the options, extract the appropriate methodhandler, and the parameterof this method
         .map( (opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }) )
@@ -100,15 +88,6 @@ const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurvey
  */
 const showNativeSurvey = (id: string) => wrapPromise<void>(InBrainSurveys.showNativeSurvey(id))
 
-/**
- * Set the webview navbar color
- * @param color hexadecimal string color (e.g #ff0000)
- */
-const setNavbarColor = (color: string): Promise<void> => {
-    assertIsColor(color);
-    return InBrainSurveys.setNavbarColor(color);
-}
-
 var onClose : () => void = () => {};
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
@@ -143,11 +122,24 @@ const wrapPromise = async <T extends {} | void>(promise: Promise<T>) => {
     }
 }
 
+/**
+ * Validation for options.
+ * TODO: find any validation library
+ */
+const validateOptions = (options: InitOptions) => {
+    options.navigationBar?.backgroundColor && assertIsColor(options.navigationBar?.backgroundColor)
+    options.navigationBar?.buttonsColor && assertIsColor(options.navigationBar?.buttonsColor)
+    options.navigationBar?.titleColor && assertIsColor(options.navigationBar?.titleColor)
+}
+
+/**
+ * Map between <option name> and <corresponding SDK bridge method>
+ */
 const optionsActions : { [key in StylingOptionName] : ((params: any) => Promise<any>) | null} = {
     "title" : InBrainSurveys.setTitle,
-    "titleColor" : InBrainSurveys.setTitleColor,
     "language" : InBrainSurveys.setLanguage,
-    "navbarColor" : setNavbarColor,
+    "statusBar" : InBrainSurveys.setStatusBarConfig,
+    "navigationBar" : InBrainSurveys.setNavigationBarConfig,
 }
 
 export default { 
