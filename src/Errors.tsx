@@ -12,9 +12,8 @@ export type ErrorCode =
     "ERR_SHOW_SURVEYS" |
     "ERR_SET_LANGUAGE" |
     "ERR_SET_TITLE" |
-    "ERR_SET_TITLE_COLOR" |
-    "ERR_SET_NAVBAR_COLOR" |
-    "ERR_SET_BUTTON_COLOR";
+    "ERR_SET_NAVIGATION_BAR_CONFIG" |
+    "ERR_SET_STATUS_BAR_CONFIG";
   
  type IErrorMessages = {[key in ErrorCode] : string}
 
@@ -29,9 +28,8 @@ export type ErrorCode =
     ERR_SHOW_SURVEYS: "Error while showing surveys",
     ERR_SET_TITLE: "Error while setting title",
     ERR_SET_LANGUAGE: "Error while setting language",
-    ERR_SET_TITLE_COLOR: "Error while setting title color",
-    ERR_SET_NAVBAR_COLOR: "Error while setting navbar color",
-    ERR_SET_BUTTON_COLOR: "Error while setting button color",
+    ERR_SET_NAVIGATION_BAR_CONFIG: "Error while setting navigation bar config",
+    ERR_SET_STATUS_BAR_CONFIG: "Error while setting status bar config",
  }
 
 /**

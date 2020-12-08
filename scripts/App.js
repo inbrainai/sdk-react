@@ -25,11 +25,14 @@ export default class App extends Component {
   }
 
   callBridge = (name, sdkMethod, successCallback) => () => {
+    console.log(`Call Bridge Method: ${name}`);
+
     sdkMethod().then((result) => {
-      successCallback && successCallback(result);
       console.log(result);
+      successCallback && successCallback(result);
       this.appendLog(`[${name} SUCCESS] => ${result}`);
     }).catch( (err) => {
+      console.log('Error: ' + err);
       this.appendLog(`[${name} ERROR] => ${err.message || err}`);
     });
   };
@@ -49,11 +52,18 @@ export default class App extends Component {
       sessionUid: SESSION_UID, 
       userId: USER_ID, 
       dataPoints: { gender: 'male', age: '25'},
-      title: "NEW TITLE",
-      navbarColor: "#ff0000",
-      titleColor: "#fff000",
       language: 'fr-fr',
-      isS2S: false
+      isS2S: false,
+      statusBar: {
+        lightStatusBar: true
+      },
+      navigationBar: {
+        backgroundColor: "#2784B6",
+        buttonsColor: "#E7F722",
+        titleColor: "#FF0404",
+        hasShadow: false,
+      },
+
     };
     this.callBridge('init', () => inbrain.init(clientId, clientSecret, options) )();   
 
