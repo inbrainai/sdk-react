@@ -1,3 +1,7 @@
+## [1.1.3] 2020-12-18
+### Changed
+- Internals of Android bridge. Prevent app from crashing if problem during init call.
+
 ## [1.1.2] 2020-11-20
 ### Added
 - Added option 'titleColor' which allows to modify the webview title color
