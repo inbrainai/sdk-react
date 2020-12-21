@@ -1,5 +1,7 @@
 package com.inbrain;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -50,27 +52,33 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN *****
     // ***********************
     @ReactMethod
-    public void setInBrain(final String apiClientId, final String clientSecret, final boolean isS2S, final String userId, Promise promise) {
+    public void setInBrain(final String apiClientId, final String clientSecret, final boolean isS2S, final String userId, final Promise promise) {
         try {
             // Validate parameters
             notNull("apiClientId", apiClientId);
             notNull("clientSecret", clientSecret);
             notNull("userId", userId);
 
-            // Call Braintree sdk
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    InBrain.getInstance().setInBrain(getCurrentActivity(), apiClientId, clientSecret, isS2S, userId);
-                }
-            });
-
             // Set the listener
             InBrain.getInstance().removeCallback(this);
             InBrain.getInstance().addCallback(this);
 
-            // Everything went well, resolve the promise
-            promise.resolve(null);
+            // Needs to be in main thread
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Call Braintree sdk
+                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, isS2S, userId);
+
+                        // Everything went well, resolve the promise
+                        promise.resolve(null);
+                    } catch(Exception e) {
+                        promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
+                    }
+                }
+            });
+
         } catch (Exception e) {
             promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
         }
@@ -111,13 +119,15 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             };
 
             // Call braintree SDK
-            InBrain.getInstance().showSurveys(getCurrentActivity(), callback);
+            InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
         } catch (Exception e) {
             promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
         }
     }
 
-    // ************************
+
+
+    // ************************x
     // ***** GET REWARDS ******
     // ************************
     @ReactMethod
@@ -190,7 +200,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     public void checkSurveysAvailable(final Promise promise) {
         try {
 
-            InBrain.getInstance().areSurveysAvailable(this.getReactApplicationContext(), new SurveysAvailableCallback() {
+            InBrain.getInstance().areSurveysAvailable(getReactApplicationContext(), new SurveysAvailableCallback() {
                 @Override
                 public void onSurveysAvailable(boolean available) {
                     promise.resolve(available);
@@ -241,7 +251,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     public void showNativeSurvey(final String id, final Promise promise) {
         try {
 
-            InBrain.getInstance().showNativeSurveyWith(getCurrentActivity(), id, new StartSurveysCallback() {
+            InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, new StartSurveysCallback() {
                 @Override
                 public void onSuccess() {
                     promise.resolve(true);
@@ -416,6 +426,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***************************
     // ***** UTILITY METHODS *****
     // ***************************
+    private Activity getCurrentActivityOrThrow() {
+        Activity activity = getCurrentActivity();
+        notNull("current activity", activity);
+        return activity;
+    }
+
     private HashMap<String, String> toHashMap(ReadableMap data) {
         HashMap<String, String> datMap = new HashMap<>();
 
