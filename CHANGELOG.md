@@ -1,3 +1,7 @@
+## [2.0.1] 2020-12-21
+### Merged
+- Merged 1.1.3 into 2.0.0: Internals of Android bridge. Prevent app from crashing if problem during init call.
+
 ## [2.0.0] 2020-12-12
 ### Changed
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.4.12`
