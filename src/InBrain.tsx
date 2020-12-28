@@ -1,9 +1,9 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import { assertIsColor, wrapPromise } from './Utils';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
 import { InitOptions, InitOptionName, StylingOptionName } from './Options';
 import { InBrainReward, InBrainNativeSurveys } from './Models';
 
-const { InBrainSurveys  } = NativeModules;
+const { InBrainSurveys } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
 
@@ -24,8 +24,8 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
     safeOptions.isS2S = safeOptions.isS2S || false
 
     // Validate
-    validateOptions(safeOptions)
-    
+    validateOptions(apiClientId, apiSecret, safeOptions)
+
     // Call all options bridge methodes
     // -- this method is apart as these two properties can't be set individually
     await wrapPromise(() => InBrainSurveys.setInBrainValuesFor(safeOptions.sessionUid, safeOptions.dataPoints));
@@ -39,19 +39,20 @@ const init = async (apiClientId: string, apiSecret: string, options?: InitOption
 
 const callOptionSetters = (options: InitOptions) => {
     let internalOptions: any = options || {};
-    
+
     // Ugly, but we have to populate the title in navigationBar as this is what Android uses (and not iOS)
-    internalOptions.navigationBar = {...internalOptions.navigationBar, title: options.title}
+    internalOptions.navigationBar = { ...internalOptions.navigationBar, title: options.title }
     // And we have to populate this, as it's not possible to only set the status bar color on iOS
-    internalOptions.statusBar = {...internalOptions.statusBar, statusBarColor: options.navigationBar?.backgroundColor}
-    
-    const optionPromises =  Object.keys(options)
-        // From the options, extract the appropriate methodhandler, and the parameterof this method
-        .map( (opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }) )
-        // Then just call the method against the parameter
-        .map(pair => pair.method && pair.method(pair.param));
-     
-        return Promise.all(optionPromises)
+    internalOptions.statusBar = { ...internalOptions.statusBar, statusBarColor: options.navigationBar?.backgroundColor }
+
+    return wrapPromise(() => {
+        const optionPromises = Object.keys(options)
+            // From the options, extract the appropriate methodhandler, and the parameterof this method
+            .map((opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }))
+            // Then just call the method against the parameter
+            .map(pair => pair.method && pair.method(pair.param));
+
+        return Promise.all(optionPromises);
     });
 }
 
@@ -87,10 +88,10 @@ const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(() => InBrain
  */
 const showNativeSurvey = (id: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id))
 
-var onClose : () => void = () => {};
+var onClose: () => void = () => { };
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
-var onCloseFromPage : () => void = () => {};
+var onCloseFromPage: () => void = () => { };
 inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 
 /**
@@ -113,7 +114,11 @@ const setOnCloseListenerFromPage = (callback: () => void) => {
  * Validation for options.
  * TODO: find any validation library
  */
-const validateOptions = (options: InitOptions) => {
+const validateOptions = (apiClientId: string, apiSecret: string, options: InitOptions) => {
+
+    assertNotNullNorEmpty("apiClientId", apiClientId)
+    assertNotNullNorEmpty("apiSecret", apiSecret)
+
     options.navigationBar?.backgroundColor && assertIsColor(options.navigationBar?.backgroundColor)
     options.navigationBar?.buttonsColor && assertIsColor(options.navigationBar?.buttonsColor)
     options.navigationBar?.titleColor && assertIsColor(options.navigationBar?.titleColor)
@@ -122,18 +127,18 @@ const validateOptions = (options: InitOptions) => {
 /**
  * Map between <option name> and <corresponding SDK bridge method>
  */
-const optionsActions : { [key in StylingOptionName] : ((params: any) => Promise<any>) | null} = {
-    "title" : InBrainSurveys.setTitle,
-    "language" : InBrainSurveys.setLanguage,
-    "statusBar" : InBrainSurveys.setStatusBarConfig,
-    "navigationBar" : InBrainSurveys.setNavigationBarConfig,
+const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<any>) | null } = {
+    "title": InBrainSurveys.setTitle,
+    "language": InBrainSurveys.setLanguage,
+    "statusBar": InBrainSurveys.setStatusBarConfig,
+    "navigationBar": InBrainSurveys.setNavigationBarConfig,
 }
 
-export default { 
-    init, 
-    showSurveys, 
-    getRewards, 
-    confirmRewards, 
+export default {
+    init,
+    showSurveys,
+    getRewards,
+    confirmRewards,
     checkSurveysAvailable,
     getNativeSurveys,
     showNativeSurvey,
