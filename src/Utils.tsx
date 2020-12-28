@@ -27,7 +27,6 @@ export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseS
         // If error corresponds to null activity (happens occasionnally in Android), then we retry
         if(err.code == 'ERR_NULL_CURRENT_ACTIVITY' && count < 10) {
             await timeout(50) // -- sleep 50ms
-            console.log('Retrying bridge: ' + count)
             return wrapPromise(promiseSupplier, count+1)
         }
 
