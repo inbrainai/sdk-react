@@ -1,6 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import { assertIsColor } from './Utils';
-import { enhanceError } from './Errors';
+import { assertIsColor, wrapPromise } from './Utils';
 import { InitOptions, InitOptionName, StylingOptionName } from './Options';
 
 const { InBrainSurveys  } = NativeModules;
@@ -36,69 +35,71 @@ export type InBrainNativeSurveys = {
 const init = async (apiClientId: string, apiSecret: string, options?: InitOptions): Promise<void> => {
 
     // Null safe options
-    options = options || {};
+    var safeOptions = options || {};
 
     // set defaults
-    options.title = options.title || 'inBrain Surveys'
-    options.userId = options.userId || ''
-    options.isS2S = options.isS2S || false
+    safeOptions.title = safeOptions.title || 'inBrain Surveys'
+    safeOptions.userId = safeOptions.userId || ''
+    safeOptions.isS2S = safeOptions.isS2S || false
 
     // Call all options bridge methodes
 
     // -- this method is apart as these two properties can't be set individually
-    await wrapPromise(InBrainSurveys.setInBrainValuesFor(options.sessionUid, options.dataPoints));
+    await wrapPromise(() => InBrainSurveys.setInBrainValuesFor(safeOptions.sessionUid, safeOptions.dataPoints));
 
     // -- call all the other properties one by one (styling options)
-    await callOptionSetters(options)
+    await callOptionSetters(safeOptions)
 
     // return promise for init
-    return wrapPromise(InBrainSurveys.setInBrain(apiClientId, apiSecret, options.isS2S, options.userId));
+    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, safeOptions.isS2S, safeOptions.userId));
 }
 
 const callOptionSetters = (options: InitOptions) => {
     options = options || {};
 
-    const optionPromises =  Object.keys(options)
+    return wrapPromise(() => {
+
+        const optionPromises =  Object.keys(options)
         // From the options, extract the appropriate methodhandler, and the parameterof this method
         .map( (opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }) )
         // Then just call the method against the parameter
         .map(pair => pair.method && pair.method(pair.param));
-        
-    // Return all promises
-    return wrapPromise(Promise.all(optionPromises));
+     
+        return Promise.all(optionPromises)
+    });
 }
 
 /**
  * Show the surveys webview
  */
-const showSurveys = () => wrapPromise<void>(InBrainSurveys.showSurveys())
+const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
 
 /**
  * Get the rewards
  */
-const getRewards = () => wrapPromise<InBrainReward[]>(InBrainSurveys.getRewards())
+const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards())
 
 /**
  * Manually confirm a list of rewards
  * @param rewards The rewards to confirm
  */
-const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(InBrainSurveys.confirmRewards(rewards))
+const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards))
 
 /**
  * Check if surveys are available to show
  */
-const checkSurveysAvailable = () => wrapPromise<boolean>(InBrainSurveys.checkSurveysAvailable())
+const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
 
 /**
  * Get Native Surveys
  */
-const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(InBrainSurveys.getNativeSurveys())
+const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys())
 
 /**
  * Show a specific native survey
  * @param id the survey's identifier
  */
-const showNativeSurvey = (id: string) => wrapPromise<void>(InBrainSurveys.showNativeSurvey(id))
+const showNativeSurvey = (id: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id))
 
 /**
  * Set the webview navbar color
@@ -129,18 +130,6 @@ const setOnCloseListener = (callback: () => void) => {
  */
 const setOnCloseListenerFromPage = (callback: () => void) => {
     onCloseFromPage = callback;
-}
-
-/**
- * Wrap a promise call to add common functionnalities
- * @param promise promise to call
- */
-const wrapPromise = async <T extends {} | void>(promise: Promise<T>) => {
-    try {
-        return await promise
-    } catch(err) {
-        throw enhanceError(err)
-    }
 }
 
 const optionsActions : { [key in StylingOptionName] : ((params: any) => Promise<any>) | null} = {

@@ -1,3 +1,7 @@
+## [1.1.4] 2020-12-29
+### Changed
+- Improve handling of null Activity (bridge method is being re-called at most 10 times before throwing, with 50ms intervals) in Android
+
 ## [1.1.3] 2020-12-18
 ### Changed
 - Internals of Android bridge. Prevent app from crashing if problem during init call.

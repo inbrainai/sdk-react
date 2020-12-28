@@ -14,7 +14,9 @@ export type ErrorCode =
     "ERR_SET_TITLE" |
     "ERR_SET_TITLE_COLOR" |
     "ERR_SET_NAVBAR_COLOR" |
-    "ERR_SET_BUTTON_COLOR";
+    "ERR_SET_BUTTON_COLOR" |
+    "ERR_NULL_CURRENT_ACTIVITY"
+    ;
   
  type IErrorMessages = {[key in ErrorCode] : string}
 
@@ -32,6 +34,7 @@ export type ErrorCode =
     ERR_SET_TITLE_COLOR: "Error while setting title color",
     ERR_SET_NAVBAR_COLOR: "Error while setting navbar color",
     ERR_SET_BUTTON_COLOR: "Error while setting button color",
+    ERR_NULL_CURRENT_ACTIVITY: "Error activity is null",
  }
 
 /**
