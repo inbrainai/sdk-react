@@ -13,7 +13,9 @@ export type ErrorCode =
     "ERR_SET_LANGUAGE" |
     "ERR_SET_TITLE" |
     "ERR_SET_NAVIGATION_BAR_CONFIG" |
-    "ERR_SET_STATUS_BAR_CONFIG";
+    "ERR_SET_STATUS_BAR_CONFIG" |
+    "ERR_NULL_CURRENT_ACTIVITY"
+    ;
   
  type IErrorMessages = {[key in ErrorCode] : string}
 
@@ -30,6 +32,7 @@ export type ErrorCode =
     ERR_SET_LANGUAGE: "Error while setting language",
     ERR_SET_NAVIGATION_BAR_CONFIG: "Error while setting navigation bar config",
     ERR_SET_STATUS_BAR_CONFIG: "Error while setting status bar config",
+    ERR_NULL_CURRENT_ACTIVITY: "Error activity is null",
  }
 
 /**
