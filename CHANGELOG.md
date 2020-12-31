@@ -1,4 +1,4 @@
-## [1.1.4] 2020-12-29
+## [1.1.4] 2020-12-31
 ### Changed
 - Improve handling of null Activity (bridge method is being re-called at most 10 times before throwing, with 50ms intervals) in Android
 
