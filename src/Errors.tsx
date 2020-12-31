@@ -13,11 +13,13 @@ export type ErrorCode =
     "ERR_SET_LANGUAGE" |
     "ERR_SET_TITLE" |
     "ERR_SET_NAVIGATION_BAR_CONFIG" |
-    "ERR_SET_STATUS_BAR_CONFIG";
-  
- type IErrorMessages = {[key in ErrorCode] : string}
+    "ERR_SET_STATUS_BAR_CONFIG" |
+    "ERR_NULL_CURRENT_ACTIVITY"
+    ;
 
- const errorMessages: IErrorMessages = {
+type IErrorMessages = { [key in ErrorCode]: string }
+
+const errorMessages: IErrorMessages = {
     ERR_SET_INBRAIN: "Error while initialising sdk",
     ERR_SET_INBRAIN_VALUES: "Error while initialising sdk",
     ERR_GET_REWARDS: "Error while getting rewards",
@@ -30,7 +32,8 @@ export type ErrorCode =
     ERR_SET_LANGUAGE: "Error while setting language",
     ERR_SET_NAVIGATION_BAR_CONFIG: "Error while setting navigation bar config",
     ERR_SET_STATUS_BAR_CONFIG: "Error while setting status bar config",
- }
+    ERR_NULL_CURRENT_ACTIVITY: "Error activity is null",
+}
 
 /**
  * Error happening during the SDK calls
@@ -40,16 +43,16 @@ export type InBrainError = {
     message: string;
     stack: string;
     userInfo: any;
-} 
+}
 
 /**
  * Common error formatting
  * @param err original error
  */
-export const enhanceError = ( err: InBrainError ) : InBrainError => {
+export const enhanceError = (err: InBrainError): InBrainError => {
     let prefix = (err && err.code) ? errorMessages[err.code] : "An unexpected error occured";
 
-    return {...err, message: prefix + ". Reason: " + err.message }
+    return { ...err, message: prefix + ". Reason: " + err.message }
 }
 
 

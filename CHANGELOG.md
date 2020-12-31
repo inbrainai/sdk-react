@@ -1,3 +1,9 @@
+## [2.0.2] 2020-12-31
+### Changed
+- Added some Javascript side validation
+### Merged
+- Merged 1.1.4 into 2.0.0: Improve handling of null Activity.
+
 ## [2.0.1] 2020-12-21
 ### Merged
 - Merged 1.1.3 into 2.0.0: Internals of Android bridge. Prevent app from crashing if problem during init call.
@@ -10,6 +16,10 @@
 ### Changed
 - Moved options `titleColor` and `navbarColor`
 - Added two different kind of options `navigationBar` and `statusBar` to have more fine-grained control over navigation and status bars styling
+
+## [1.1.4] 2020-12-31
+### Changed
+- Improve handling of null Activity (bridge method is being re-called at most 10 times before throwing, with 50ms intervals) in Android
 
 ## [1.1.3] 2020-12-18
 ### Changed

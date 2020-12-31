@@ -120,6 +120,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
             // Call braintree SDK
             InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
+        } catch (NullCurrentActivityException e) {
+            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
         } catch (Exception e) {
             promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
         }
@@ -263,6 +265,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 }
             });
 
+        } catch (NullCurrentActivityException e) {
+            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
         } catch (Exception e) {
             promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
         }
@@ -426,9 +430,14 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***************************
     // ***** UTILITY METHODS *****
     // ***************************
-    private Activity getCurrentActivityOrThrow() {
+    private Activity getCurrentActivityOrThrow() throws NullCurrentActivityException {
         Activity activity = getCurrentActivity();
-        notNull("current activity", activity);
+
+        // For some reasons (?), the activity returned here can be null. We need to handle this scenario
+        if (activity == null) {
+            throw new NullCurrentActivityException();
+        }
+
         return activity;
     }
 

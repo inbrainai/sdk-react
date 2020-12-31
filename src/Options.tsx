@@ -4,7 +4,7 @@
 export type ConfigOptionName = "isS2S" | "userId" | "sessionUid" | "dataPoints";
 export type StylingOptionName = "title" | "language" | "navigationBar" | "statusBar";
 export type NavigationBarOptionName = "backgroundColor" | "buttonsColor" | "titleColor" | "hasShadow";
-export type StatusBarOptionName = "lightStatusBar" ;
+export type StatusBarOptionName = "lightStatusBar";
 
 // *** CONFIG OPTION TYPE
 export type ConfigOptionTypes = {
