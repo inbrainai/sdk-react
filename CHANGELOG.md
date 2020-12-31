@@ -1,4 +1,4 @@
-## [2.0.2] 2020-12-29
+## [2.0.2] 2020-12-31
 ### Changed
 - Added some Javascript side validation
 ### Merged
@@ -17,7 +17,7 @@
 - Moved options `titleColor` and `navbarColor`
 - Added two different kind of options `navigationBar` and `statusBar` to have more fine-grained control over navigation and status bars styling
 
-## [1.1.4] 2020-12-29
+## [1.1.4] 2020-12-31
 ### Changed
 - Improve handling of null Activity (bridge method is being re-called at most 10 times before throwing, with 50ms intervals) in Android
 
