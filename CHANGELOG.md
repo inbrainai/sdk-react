@@ -1,6 +1,7 @@
-## [2.0.3] 2020-12-31
+## [2.1.0] 2020-01-13
 ### Changed
-- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.15` (from `1.0.4`)
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.15` (from `1.0.14`)
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.5.0`
 
 ## [2.0.2] 2020-12-31
 ### Changed
