@@ -110,6 +110,9 @@ inbrain.setOnCloseListenerFromPage(callback: () => void)
 Note: Calling this method multiple times will override the previous listener.
 
 ## Troubleshoots
+### [BUILD TIME] Several errors similar to `Bad receiver 'int *'`, `Unkown type name 'InBrain'`...
+First check that the framework target membership is correctly set. If the problem still occurs, and you are trying to create a release build with a simulator as target (and you are using XCode 12), please add `arm64` in the Excluded Architecture of your project and 'inbrain-surveys' pods (see [this post](https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios) for detailed information)
+
 ### [BUILD TIME] 'InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h' file not found
 This problem usually happens if the framework is not set in the Embedded Binaries, or if the framework doesn't have the target set to `inbrain-surveys` See above for set up.
 Clean and build the project after changes.
