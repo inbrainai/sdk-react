@@ -20,6 +20,10 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency "React"
   
+  # Require for now for XCode 12. 
+  # See https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios for details
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+
   # ENHANCE when the new version is deployed as a pod, try this
   s.vendored_frameworks = "ios/Frameworks/InBrainSurveys_SDK_Swift.xcframework"
 

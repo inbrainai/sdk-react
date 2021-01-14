@@ -454,6 +454,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 
 
 
+
+
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop
 #endif
@@ -911,6 +913,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 /// *
 - (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error;
 @end
+
+
 
 
 
