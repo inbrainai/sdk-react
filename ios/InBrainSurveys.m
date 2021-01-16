@@ -113,8 +113,8 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 
 
             resolve(rewardList);
-        } failed:^(NSError * failed){
-            reject(@"ERR_GET_REWARDS", @"Failed to get rewards", failed);
+        } failed:^(NSError * error){
+            reject(@"ERR_GET_REWARDS", error.localizedDescription, error);
         }];
     }
     @catch (NSException *error) {
@@ -131,8 +131,8 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
     
     @try{
 
-        [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * err) {
-            if(err) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", @"Failed to get rewards", nil);
+        [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
+            if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
             else resolve(@(available));
         }];
 
@@ -163,7 +163,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 
             resolve(surveyList);
         } failed:^(NSError * failed){
-            reject(@"ERR_GET_NATIVE_SURVEYS", @"Failed to get native surveys", failed);
+            reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
         }];
 
     }
