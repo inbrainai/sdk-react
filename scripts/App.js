@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import inbrain from 'inbrain-surveys';
 import { CLIENT_ID, CLIENT_SECRET, USER_ID, SESSION_UID } from '@env';
@@ -21,7 +21,7 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {rewards: [], nativeSurveys: [], logs: []};
+    this.state = { rewards: [], nativeSurveys: [], logs: [] };
   }
 
   callBridge = (name, sdkMethod, successCallback) => () => {
@@ -31,27 +31,27 @@ export default class App extends Component {
       console.log(result);
       successCallback && successCallback(result);
       this.appendLog(`[${name} SUCCESS] => ${result}`);
-    }).catch( (err) => {
+    }).catch((err) => {
       console.log('Error: ' + err);
       this.appendLog(`[${name} ERROR] => ${err.message || err}`);
     });
   };
 
   // Convenient callback methods
-  setRewards = (rewards) => this.setState({rewards});
-  setNativeSurveys = (nativeSurveys) => this.setState({nativeSurveys});
-  appendLog = (log) => this.setState({ logs: this.state.logs.concat(log)});
+  setRewards = (rewards) => this.setState({ rewards });
+  setNativeSurveys = (nativeSurveys) => this.setState({ nativeSurveys });
+  appendLog = (log) => this.setState({ logs: this.state.logs.concat(log) });
 
   componentDidMount = () => {
 
-    const clientId = CLIENT_ID;
-    const clientSecret = CLIENT_SECRET;
+    const clientId = CLIENT_ID;
+    const clientSecret = CLIENT_SECRET;
 
     // Init 
     const options = {
-      sessionUid: SESSION_UID, 
-      userId: USER_ID, 
-      dataPoints: { gender: 'male', age: '25'},
+      sessionUid: SESSION_UID,
+      userId: USER_ID,
+      dataPoints: { gender: 'male', age: '25' },
       language: 'fr-fr',
       isS2S: false,
       statusBar: {
@@ -65,7 +65,8 @@ export default class App extends Component {
       },
 
     };
-    this.callBridge('init', () => inbrain.init(clientId, clientSecret, options) )();   
+
+    this.callBridge('init', () => inbrain.init(clientId, clientSecret, options))();
 
     // OnClose listener
     inbrain.setOnCloseListener(() => this.appendLog(`[onClose SUCCESS] => `));
@@ -76,47 +77,47 @@ export default class App extends Component {
     return (
       <SafeAreaView style={styles.container}>
 
-      <View>
-        <Text style={styles.title}>SDK Methods</Text>
-        <View style={styles.buttonsContainer}>
-          <View style={{flexGrow:1, margin: 2}}>
-            <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", () => inbrain.getRewards(), this.setRewards)} />
-            <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", () => inbrain.confirmRewards(this.state.rewards) )} />
-            <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", () => inbrain.showSurveys() )} />
-            <BridgeButton name="checkSurveysAvailable" onPress={this.callBridge("checkSurveysAvailable", () => inbrain.checkSurveysAvailable() )} />
-            <BridgeButton name="getNativeSurveys" onPress={this.callBridge("getNativeSurveys", () => inbrain.getNativeSurveys(), this.setNativeSurveys)} />
-            <BridgeButton name="showNativeSurvey" onPress={this.callBridge("showNativeSurvey", () => inbrain.showNativeSurvey(this.state.nativeSurveys[3].id))} />
+        <View>
+          <Text style={styles.title}>SDK Methods</Text>
+          <View style={styles.buttonsContainer}>
+            <View style={{ flexGrow: 1, margin: 2 }}>
+              <BridgeButton name="getRewards" onPress={this.callBridge("getRewards", () => inbrain.getRewards(), this.setRewards)} />
+              <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", () => inbrain.confirmRewards(this.state.rewards))} />
+              <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", () => inbrain.showSurveys())} />
+              <BridgeButton name="checkSurveysAvailable" onPress={this.callBridge("checkSurveysAvailable", () => inbrain.checkSurveysAvailable())} />
+              <BridgeButton name="getNativeSurveys" onPress={this.callBridge("getNativeSurveys", () => inbrain.getNativeSurveys(), this.setNativeSurveys)} />
+              <BridgeButton name="showNativeSurvey" onPress={this.callBridge("showNativeSurvey", () => inbrain.showNativeSurvey(this.state.nativeSurveys[3].id))} />
+            </View>
           </View>
         </View>
-      </View>
-      <View>
-        <Text style={styles.title}>Rewards</Text>
-        {this.state.rewards.map((r,i) => (
-          <Text style={styles.message} key={r.transactionId}>
-            [ Reward {i} ] id={r.transactionId} / amount={r.amount} / currency={r.currency} / transactionType={r.transactionType}
-          </Text>
-        ))}
-      </View>
+        <View>
+          <Text style={styles.title}>Rewards</Text>
+          {this.state.rewards.map((r, i) => (
+            <Text style={styles.message} key={r.transactionId}>
+              [ Reward {i} ] id={r.transactionId} / amount={r.amount} / currency={r.currency} / transactionType={r.transactionType}
+            </Text>
+          ))}
+        </View>
 
-      <ScrollView style={{ flexGrow: 1 }}>
-        <Text style={styles.title}>Native Surveys</Text>
-        {this.state.nativeSurveys.map((s,i) => (
-          <Text style={styles.message} key={s.id}>
-            [ Native Survey {i} ] id={s.id} / rank={s.rank} / time={s.time} / value={s.value}
-          </Text>
-        ))}
-      </ScrollView>
+        <ScrollView style={{ flexGrow: 1 }}>
+          <Text style={styles.title}>Native Surveys</Text>
+          {this.state.nativeSurveys.map((s, i) => (
+            <Text style={styles.message} key={s.id}>
+              [ Native Survey {i} ] id={s.id} / rank={s.rank} / time={s.time} / value={s.value}
+            </Text>
+          ))}
+        </ScrollView>
 
-      <Text style={styles.title}>Logs</Text>
-      <ScrollView style={{ flexGrow: 1 }}>
-        {this.state.logs.map((m, i) => (
-          <Text style={styles.message} key={i}>
-            {m}
-          </Text>
-        ))}
-      </ScrollView>
+        <Text style={styles.title}>Logs</Text>
+        <ScrollView style={{ flexGrow: 1 }}>
+          {this.state.logs.map((m, i) => (
+            <Text style={styles.message} key={i}>
+              {m}
+            </Text>
+          ))}
+        </ScrollView>
 
-    </SafeAreaView>
+      </SafeAreaView>
     );
   }
 }
