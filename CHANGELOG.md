@@ -1,8 +1,13 @@
+## [2.1.2] 2020-01-20
+### Changed
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.5.2`
+
 ## [2.1.1] 2020-01-16
 ### Bug Fix
 - Fixed and improved error messages on iOS
 ### Changed
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.5.1`
+
 
 ## [2.1.0] 2020-01-14
 ### Changed
