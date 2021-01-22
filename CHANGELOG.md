@@ -1,3 +1,7 @@
+## [1.1.5] 2021-01-22
+### Changed
+- `showSurveys` and `showNativeSurveys` are now executed from the UI Thread in Android
+
 ## [1.1.4] 2020-12-31
 ### Changed
 - Improve handling of null Activity (bridge method is being re-called at most 10 times before throwing, with 50ms intervals) in Android
