@@ -47,3 +47,5 @@ scripts/*.vars
 scripts/APP
 scripts/cli/package-lock.json
 APP*.tar.gz
+ 
+*.log

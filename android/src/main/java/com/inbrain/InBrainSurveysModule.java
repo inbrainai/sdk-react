@@ -14,6 +14,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -105,7 +106,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         try {
 
             // Build the callback
-            StartSurveysCallback callback = new StartSurveysCallback() {
+            final StartSurveysCallback callback = new StartSurveysCallback() {
                 public void onSuccess() {
                     promise.resolve(null);
                 };
@@ -116,10 +117,22 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             };
 
             // Call braintree SDK
-            InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
-        } catch (NullCurrentActivityException e) {
-            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-        } catch (Exception e) {
+            // Needs to be on the UI Thread. Errors were reported when not:
+            // java.lang.IllegalStateException: Calling View methods on another thread than the UI thread.
+            UiThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
+                    } catch (NullCurrentActivityException e) {
+                        promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+                    } catch (Exception e) {
+                        promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
+                    }
+                }
+            });
+
+        }catch (Exception e) {
             promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
         }
     }
@@ -250,20 +263,35 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     public void showNativeSurvey(final String id, final Promise promise) {
         try {
 
-            InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, new StartSurveysCallback() {
-                @Override
-                public void onSuccess() {
-                    promise.resolve(true);
-                }
 
+            // Call braintree SDK
+            // Needs to be on the UI Thread. Errors were reported when not:
+            // java.lang.IllegalStateException: Calling View methods on another thread than the UI thread.
+            UiThreadUtil.runOnUiThread(new Runnable() {
                 @Override
-                public void onFail(String s) {
-                    promise.reject("ERR_SHOW_NATIVE_SURVEY", s);
+                public void run() {
+                    try {
+                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, new StartSurveysCallback() {
+                            @Override
+                            public void onSuccess() {
+                                promise.resolve(true);
+                            }
+
+                            @Override
+                            public void onFail(String s) {
+                                promise.reject("ERR_SHOW_NATIVE_SURVEY", s);
+                            }
+                        });
+                    } catch (NullCurrentActivityException e) {
+                        promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+                    } catch (Exception e) {
+                        promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
+                    }
                 }
             });
 
-        } catch (NullCurrentActivityException e) {
-            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+
+
         } catch (Exception e) {
             promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
         }
