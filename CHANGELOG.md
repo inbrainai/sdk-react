@@ -1,3 +1,9 @@
+## [2.1.2] 2020-01-23
+### Changed
+- Merged v1.1.4 and v1.1.5 into 2.1.x
+- `showSurveys` and `showNativeSurveys` are now executed from the UI Thread in Android
+
+
 ## [2.1.2] 2020-01-20
 ### Changed
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.5.2`
@@ -7,7 +13,6 @@
 - Fixed and improved error messages on iOS
 ### Changed
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.5.1`
-
 
 ## [2.1.0] 2020-01-14
 ### Changed
@@ -32,7 +37,8 @@
 ### Changed
 - Moved options `titleColor` and `navbarColor`
 - Added two different kind of options `navigationBar` and `statusBar` to have more fine-grained control over navigation and status bars styling
-## [1.1.5] 2021-01-22
+
+## [1.1.5] 2021-01-23
 ### Changed
 - `showSurveys` and `showNativeSurveys` are now executed from the UI Thread in Android
 
