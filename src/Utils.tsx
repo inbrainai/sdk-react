@@ -28,7 +28,7 @@ export const assertNotNullNorEmpty = (attributeName: string, attributeValue: str
  * Wrap a promise call to add common functionnalities
  * @param promise promise to call
  */
-type PromiseSupplier<T> = () => Promise<T>
+export type PromiseSupplier<T> = () => Promise<T>
 export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseSupplier<T>, count = 0): Promise<T> => {
     try {
         return await promiseSupplier()
