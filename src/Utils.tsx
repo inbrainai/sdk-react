@@ -24,8 +24,6 @@ export const assertNotNullNorEmpty = (attributeName: string, attributeValue: str
     }
 }
 
-
-
 /**
  * Wrap a promise call to add common functionnalities
  * @param promise promise to call

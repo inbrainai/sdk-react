@@ -266,12 +266,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     public void showNativeSurvey(final String id, final Promise promise) {
         try {
 
-            InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, new StartSurveysCallback() {
-                @Override
-                public void onSuccess() {
-                    promise.resolve(true);
-                }
-
             // Call braintree SDK
             // Needs to be on the UI Thread. Errors were reported when not:
             // java.lang.IllegalStateException: Calling View methods on another thread than the UI thread.
