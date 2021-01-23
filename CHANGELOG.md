@@ -1,8 +1,7 @@
-## [2.1.2] 2020-01-23
+## [2.1.3] 2020-01-23
 ### Changed
 - Merged v1.1.4 and v1.1.5 into 2.1.x
 - `showSurveys` and `showNativeSurveys` are now executed from the UI Thread in Android
-
 
 ## [2.1.2] 2020-01-20
 ### Changed
