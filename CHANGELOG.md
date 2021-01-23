@@ -32,6 +32,9 @@
 ### Changed
 - Moved options `titleColor` and `navbarColor`
 - Added two different kind of options `navigationBar` and `statusBar` to have more fine-grained control over navigation and status bars styling
+## [1.1.5] 2021-01-22
+### Changed
+- `showSurveys` and `showNativeSurveys` are now executed from the UI Thread in Android
 
 ## [1.1.4] 2020-12-31
 ### Changed
