@@ -24,13 +24,11 @@ export const assertNotNullNorEmpty = (attributeName: string, attributeValue: str
     }
 }
 
-
-
 /**
  * Wrap a promise call to add common functionnalities
  * @param promise promise to call
  */
-export type PromiseSupplier<T> = () => Promise<T>
+type PromiseSupplier<T> = () => Promise<T>
 export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseSupplier<T>, count = 0): Promise<T> => {
     try {
         return await promiseSupplier()
@@ -39,36 +37,6 @@ export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseS
         if (err.code == 'ERR_NULL_CURRENT_ACTIVITY' && count < 10) {
             await timeout(50) // -- sleep 50ms
             return wrapPromise(promiseSupplier, count + 1)
-        }
-
-        // Else, throw the enhanced error
-        throw enhanceError(err)
-    }
-}
-
-/**
- * 
- * @param ms 
- */
-const timeout = (ms: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-
-
-/**
- * Wrap a promise call to add common functionnalities
- * @param promise promise to call
- */
-type PromiseSupplier<T> = () => Promise<T>
-export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseSupplier<T> , count = 0): Promise<T> => {
-    try {
-        return await promiseSupplier()
-    } catch(err) {
-        // If error corresponds to null activity (happens occasionnally in Android), then we retry
-        if(err.code == 'ERR_NULL_CURRENT_ACTIVITY' && count < 10) {
-            await timeout(50) // -- sleep 50ms
-            return wrapPromise(promiseSupplier, count+1)
         }
 
         // Else, throw the enhanced error
