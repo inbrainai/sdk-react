@@ -1,3 +1,7 @@
+## [2.1.4] 2020-01-25
+### Changed
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.16` (from `1.0.15`)
+
 ## [2.1.3] 2020-01-23
 ### Changed
 - Merged v1.1.4 and v1.1.5 into 2.1.x
