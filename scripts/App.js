@@ -85,8 +85,9 @@ export default class App extends Component {
               <BridgeButton name="confirmRewards" onPress={this.callBridge("confirmRewards", () => inbrain.confirmRewards(this.state.rewards))} />
               <BridgeButton name="showSurveys" onPress={this.callBridge("showSurveys", () => inbrain.showSurveys())} />
               <BridgeButton name="checkSurveysAvailable" onPress={this.callBridge("checkSurveysAvailable", () => inbrain.checkSurveysAvailable())} />
-              <BridgeButton name="getNativeSurveys" onPress={this.callBridge("getNativeSurveys", () => inbrain.getNativeSurveys(), this.setNativeSurveys)} />
-              <BridgeButton name="showNativeSurvey" onPress={this.callBridge("showNativeSurvey", () => inbrain.showNativeSurvey(this.state.nativeSurveys[3].id))} />
+              <BridgeButton name="getNativeSurveys" onPress={this.callBridge("getNativeSurveys", () => inbrain.getNativeSurveys("a"), this.setNativeSurveys)} />
+              <BridgeButton name="showNativeSurvey" onPress={this.callBridge("showNativeSurvey", () => inbrain.showNativeSurvey("this.state.nativeSurveys[3].id", "a"))} />
+              <BridgeButton name="showNativeSurvey" onPress={this.callBridge("setSessionParameters", () => inbrain.setSessionParameters("newSessionId", {}))} />
             </View>
           </View>
         </View>

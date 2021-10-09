@@ -62,6 +62,13 @@ inbrain.init(apiClientId: string, apiSecret: string, options?: InitOptions) : Pr
 
 Note: This method need to be called prior calling all the other methods. 
 
+### Change the session parameters
+```javascript
+inbrain.setSessionParameters(sessionUid: string, dataPoints: {}) : Promise<void>
+```
+* sessionUid the session identifiers
+* dataPoints datapoints
+
 ### Show the surveys webview
 ```javascript
 inbrain.showSurveys() : Promise<void>
@@ -85,13 +92,15 @@ inbrain.checkSurveysAvailable() : Promise<boolean>
 
 ### Get the Native Surveys available
 ```javascript
-inbrain.getNativeSurveys() : Promise<InBrainNativeSurveys[]>
+inbrain.getNativeSurveys(placementId?: string) : Promise<InBrainNativeSurveys[]>
 ```
+* placementId: an optional placement identifier
 
 ### Show a Native Survey
 ```javascript
-inbrain.showNativeSurvey(id: string) : Promise<void>
+inbrain.showNativeSurvey(id: string, placementId?: string) : Promise<void>
 ```
+* placementId: an optional placement identifier
 
 ### On webview dismissed
 ```javascript

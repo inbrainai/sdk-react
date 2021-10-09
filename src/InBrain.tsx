@@ -71,6 +71,13 @@ const callOptionSetters = (options: InitOptions) => {
 const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
 
 /**
+ * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
+ * @param sessionUid the session identifiers
+ * @param dataPoints datapoints
+ */
+const setSessionParameters = (sessionUid: string, dataPoints: {}) => InBrainSurveys.setInBrainValuesFor(sessionUid, dataPoints);
+
+/**
  * Get the rewards
  */
 const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards())
@@ -88,14 +95,16 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 
 /**
  * Get Native Surveys
+ * @param placementId an optional placement identifier
  */
-const getNativeSurveys = () => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys())
+const getNativeSurveys = (placementId?: string) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(placementId))
 
 /**
  * Show a specific native survey
  * @param id the survey's identifier
+ * @param placementId an optional placement identifier
  */
-const showNativeSurvey = (id: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id))
+const showNativeSurvey = (id: string, placementId?: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, placementId))
 
 var onClose: () => void = () => { };
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());
@@ -146,6 +155,7 @@ const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<an
 export default {
     init,
     showSurveys,
+    setSessionParameters,
     getRewards,
     confirmRewards,
     checkSurveysAvailable,

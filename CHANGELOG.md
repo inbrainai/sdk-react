@@ -1,3 +1,10 @@
+## [2.2.0] 2020-10-09
+### Changed
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.19` (from `1.0.16`)
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.0`
+- Added `placementId` optional parameters to methods `getNativeSurveys` and `showNativeSurvey`
+- Added method `setSessionParameters` to update parameters without having to call `init`
+
 ## [2.1.4] 2020-01-27
 ### Changed
 - Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.16` (from `1.0.15`)

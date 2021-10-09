@@ -231,10 +231,10 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** GET NATIVE SURVEYS ******
     // *******************************
     @ReactMethod
-    public void getNativeSurveys(final Promise promise) {
+    public void getNativeSurveys(final String placementId, final Promise promise) {
         try {
 
-            InBrain.getInstance().getNativeSurveys(new GetNativeSurveysCallback() {
+            InBrain.getInstance().getNativeSurveys(placementId, new GetNativeSurveysCallback() {
                 @Override
                 public void nativeSurveysReceived(List<Survey> surveys) {
 
@@ -263,7 +263,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SHOW NATIVE SURVEY ******
     // *******************************
     @ReactMethod
-    public void showNativeSurvey(final String id, final Promise promise) {
+    public void showNativeSurvey(final String id, final String placementId, final Promise promise) {
         try {
 
             // Call braintree SDK
@@ -273,7 +273,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 @Override
                 public void run() {
                     try {
-                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, new StartSurveysCallback() {
+                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, placementId, new StartSurveysCallback() {
                             @Override
                             public void onSuccess() {
                                 promise.resolve(true);

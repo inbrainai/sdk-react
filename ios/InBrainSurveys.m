@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     dispatch_async(dispatch_get_main_queue(), ^{
     
         @try {
-            [self.inbrain showSurveys];
+            [self.inbrain showSurveysFrom:NULL];
             resolve(nil);
         }
         @catch (NSException *error) {
@@ -118,7 +118,7 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
         }];
     }
     @catch (NSException *error) {
-        reject(@"ERR_GET", error.description, nil);
+        reject(@"ERR_GET_REWARDS", error.description, nil);
     }
 
 }
@@ -145,11 +145,10 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
 // *******************************
 // ***** GET NATIVE SURVEYS ******
 // *******************************
-RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-
-        [[InBrain shared] getNativeSurveysWithSuccess:^(NSArray<InBrainNativeSurvey *> * surveys){
+        [[InBrain shared] getNativeSurveysWithPlacementID:placementId success:^(NSArray<InBrainNativeSurvey *> * surveys){
             NSMutableArray *surveyList = [NSMutableArray array];
             for(int i = 0; i < surveys.count; i++) {
 
@@ -187,12 +186,12 @@ RCT_EXPORT_METHOD(getNativeSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 // *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  placementId:(NSString*)placementId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         // This requires the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[InBrain shared] showNativeSurveyWithId:id];
+            [[InBrain shared] showNativeSurveyWithId:id placementId:placementId from:NULL];
             resolve(@true);
         });
     }
