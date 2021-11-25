@@ -10,13 +10,22 @@ import WebKit
 @objc public protocol InBrainDelegate : AnyObject {
   @objc optional func didReceiveInBrainRewards(rewardsArray: [InBrainSurveys_SDK_Swift.InBrainReward])
   @objc optional func didFailToReceiveRewards(error: Swift.Error)
+  @objc optional func surveysClosed(byWebView: Swift.Bool, completedSurvey: Swift.Bool)
+  @available(*, unavailable, renamed: "surveysClosed(byWebView:completedSurvey:)")
   @objc optional func surveysClosedFromPage()
+  @available(*, unavailable, renamed: "surveysClosed(byWebView:completedSurvey:)")
   @objc optional func surveysClosed()
 }
 @objc public protocol NativeSurveyDelegate : AnyObject {
-  @objc func nativeSurveysLoadingStarted()
-  @objc func nativeSurveysReceived(_ surveys: [InBrainSurveys_SDK_Swift.InBrainNativeSurvey])
-  @objc func failedToReceiveNativeSurveys(error: Swift.Error)
+  @objc @available(*, unavailable, renamed: "nativeSurveysLoadingStarted(placementId:)")
+  func nativeSurveysLoadingStarted()
+  @objc func nativeSurveysLoadingStarted(placementId: Swift.String?)
+  @objc @available(*, unavailable, renamed: "nativeSurveysReceived(surveys:placementId:)")
+  func nativeSurveysReceived(_ surveys: [InBrainSurveys_SDK_Swift.InBrainNativeSurvey])
+  @objc func nativeSurveysReceived(_ surveys: [InBrainSurveys_SDK_Swift.InBrainNativeSurvey], placementId: Swift.String?)
+  @objc @available(*, unavailable, renamed: "failedToReceiveNativeSurveys(error:placementId:)")
+  func failedToReceiveNativeSurveys(error: Swift.Error)
+  @objc func failedToReceiveNativeSurveys(error: Swift.Error, placementId: Swift.String?)
 }
 @objc final public class InBrain : ObjectiveC.NSObject {
   @objc public static let shared: InBrainSurveys_SDK_Swift.InBrain

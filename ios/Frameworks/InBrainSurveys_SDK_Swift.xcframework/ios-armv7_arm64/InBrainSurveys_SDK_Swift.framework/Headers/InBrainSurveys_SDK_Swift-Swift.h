@@ -258,16 +258,19 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 /// Check are surveys available.
 - (void)checkForAvailableSurveysWithCompletion:(void (^ _Nonnull)(BOOL, NSError * _Nullable))completion;
 /// All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// If you are using <em>NativeSurveys</em> (regardless of placementId) - please, take care about refreshing them after some survey(s) completed. Additional details may be found at <em>getNativeSurveys</em> function description.
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
 ///
 - (void)showSurveysFrom:(UIViewController * _Nullable)viewController;
-/// Cay be used for surveys with and without <code>placementId</code> as well. All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// Can be used for surveys with and without <code>placementId</code> as well. All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// After survey completed - it becames invalid and cannot be opened again. Please, ensure all the NativeSurveys updated after <em>InBrainWebView</em> closed. Additional details may be found at <em>getNativeSurveys</em> function description
 /// \param survey Native survey to be opened
 ///
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
 ///
 - (void)showNativeSurvey:(InBrainNativeSurvey * _Nonnull)survey from:(UIViewController * _Nullable)viewController;
 /// All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// After survey completed - it becames invalid and cannot be opened again. Please, ensure all the NativeSurveys updated after <em>InBrainWebView</em> closed. Additional details may be found at <em>getNativeSurveys</em> function description
 /// \param placementId Identifer of place, survey linked to;
 ///
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
@@ -291,13 +294,25 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Available native surveys will be changed after user complete some.
-/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
+/// After survey completed - it becames invalid and cannot be opened again.
+/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of <em>NativeSurveys</em> for the same placementId, as completed survey has.
+/// important:
+/// Please, note:
+/// <ul>
+///   <li>
+///     The same NativeSurvey may be related to different placements. If some survey appears at lists with different placementId - please take care about refreshing surveys for rest placements;
+///   </li>
+///   <li>
+///     If you are using SurveyWall as well - please take care about refreshing NativeSurveys after some survey(s) completed.
+///   </li>
+/// </ul>
+/// Use <em>surveysClosed(byWebView: Bool, completedSurvey: Bool)</em> method of <em>InBrainDelegate</em> to detect InBbrainWebView dismissal.
 - (void)getNativeSurveysWithPlacementId:(NSString * _Nullable)placementId;
-/// Get native surveys just once.
-/// After survey completed - some Native Surveys may became invalid.
-/// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
-/// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
+/// Get native surveys once.
+/// After survey completed - it becames invalid and cannot be opened again. We are proposing to fetch <em>NativeSurveys</em> each time after <em>InBbrainWebView</em> closed and some survey(s) completed.
+/// Please, use <em>surveysClosed(byWebView: Bool, completedSurvey: Bool)</em> method of <em>InBrainDelegate</em> to detect InBbrainWebView dismissal.
+/// important:
+/// The same NativeSurvey may be related to different placements. If some survey contains at lists with different placementId - surveys for each placement needs to be updated.
 - (void)getNativeSurveysWithPlacementID:(NSString * _Nullable)placementID success:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
 /// Config inBrain before <code>showSurveys</code> function call.
 /// \param userID If userID not set (or empty) - <code>identifierForVendor</code> will be used;
@@ -348,10 +363,16 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift15InBrainDelegate_")
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
 /// Called if <code>getRewards()</code>failed
 - (void)didFailToReceiveRewardsWithError:(NSError * _Nonnull)error;
-/// Called upon dismissal of inBrainWebView from within the webview
-- (void)surveysClosedFromPage;
-/// Called upon dismissal of inBrainWebView
-- (void)surveysClosed;
+/// Called upon dismissal of inBrainWebView.
+/// important:
+/// If you are using NativeSurveys - please, ensure the surveys reloaded after some survey(s) completed.
+/// \param byWebView <em>true</em> means closed by WebView’s command; <em>false</em> - closed by user;
+///
+/// \param completedSurvey <em>true</em> means some survey(s) completed (succeded or disqualified).
+///
+- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey;
+- (void)surveysClosedFromPage SWIFT_UNAVAILABLE_MSG("'surveysClosedFromPage' has been renamed to 'surveysClosedByWebView:completedSurvey:'");
+- (void)surveysClosed SWIFT_UNAVAILABLE_MSG("'surveysClosed' has been renamed to 'surveysClosedByWebView:completedSurvey:'");
 @end
 
 
@@ -434,7 +455,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 ///     Automatically, after user completed some of Native Surveys, received before.
 ///   </li>
 /// </ol>
-- (void)nativeSurveysLoadingStarted;
+- (void)nativeSurveysLoadingStarted SWIFT_UNAVAILABLE_MSG("'nativeSurveysLoadingStarted' has been renamed to 'nativeSurveysLoadingStartedWithPlacementId:'");
+- (void)nativeSurveysLoadingStartedWithPlacementId:(NSString * _Nullable)placementId;
 /// Provides fresh portion of Native surveys. Update app UI with actual surveys.
 /// Native surveys can be loaded in next cases:
 /// <ol>
@@ -447,10 +469,12 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 /// </ol>
 /// \param surveys List of available Native Surveys.
 ///
-- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys;
+- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys SWIFT_UNAVAILABLE_MSG("'nativeSurveysReceived' has been renamed to 'nativeSurveysReceived(surveys:placementId:)'");
+- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys placementId:(NSString * _Nullable)placementId;
 /// Called if loading of Native Surveys failed
 /// *
-- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error;
+- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error SWIFT_UNAVAILABLE_MSG("'failedToReceiveNativeSurveys' has been renamed to 'failedToReceiveNativeSurveysWithError:placementId:'");
+- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error placementId:(NSString * _Nullable)placementId;
 @end
 
 
@@ -721,16 +745,19 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 /// Check are surveys available.
 - (void)checkForAvailableSurveysWithCompletion:(void (^ _Nonnull)(BOOL, NSError * _Nullable))completion;
 /// All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// If you are using <em>NativeSurveys</em> (regardless of placementId) - please, take care about refreshing them after some survey(s) completed. Additional details may be found at <em>getNativeSurveys</em> function description.
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
 ///
 - (void)showSurveysFrom:(UIViewController * _Nullable)viewController;
-/// Cay be used for surveys with and without <code>placementId</code> as well. All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// Can be used for surveys with and without <code>placementId</code> as well. All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// After survey completed - it becames invalid and cannot be opened again. Please, ensure all the NativeSurveys updated after <em>InBrainWebView</em> closed. Additional details may be found at <em>getNativeSurveys</em> function description
 /// \param survey Native survey to be opened
 ///
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
 ///
 - (void)showNativeSurvey:(InBrainNativeSurvey * _Nonnull)survey from:(UIViewController * _Nullable)viewController;
 /// All the configs should be done <code>BEFORE</code> calling <code>showSurveys()</code>.
+/// After survey completed - it becames invalid and cannot be opened again. Please, ensure all the NativeSurveys updated after <em>InBrainWebView</em> closed. Additional details may be found at <em>getNativeSurveys</em> function description
 /// \param placementId Identifer of place, survey linked to;
 ///
 /// \param viewController ViewController to present InBrain from. If no controller specified - InBrain will be presented from inBrainDelegate (if subclass of UIViewController) OR from UIApplication’s keyWindow.
@@ -754,13 +781,25 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) InBrain * _N
 ///
 - (void)confirmRewardsWithTxIdArray:(NSArray<NSNumber *> * _Nonnull)txIdArray;
 /// Get native surveys for the user. Result will be delivered to <code>NativeSurveyDelegate</code>.
-/// Available native surveys will be changed after user complete some.
-/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of Native Surveys after user completed some.
+/// After survey completed - it becames invalid and cannot be opened again.
+/// In order to keep you with up-to-date surveys - SDK will provide a fresh portion of <em>NativeSurveys</em> for the same placementId, as completed survey has.
+/// important:
+/// Please, note:
+/// <ul>
+///   <li>
+///     The same NativeSurvey may be related to different placements. If some survey appears at lists with different placementId - please take care about refreshing surveys for rest placements;
+///   </li>
+///   <li>
+///     If you are using SurveyWall as well - please take care about refreshing NativeSurveys after some survey(s) completed.
+///   </li>
+/// </ul>
+/// Use <em>surveysClosed(byWebView: Bool, completedSurvey: Bool)</em> method of <em>InBrainDelegate</em> to detect InBbrainWebView dismissal.
 - (void)getNativeSurveysWithPlacementId:(NSString * _Nullable)placementId;
-/// Get native surveys just once.
-/// After survey completed - some Native Surveys may became invalid.
-/// Please, re-load native surveys after InBrain WebView dismissed. As alternative -
-/// use <code>NativeSurveyDelegate</code> and <code>getNativeSurveys()</code> method.
+/// Get native surveys once.
+/// After survey completed - it becames invalid and cannot be opened again. We are proposing to fetch <em>NativeSurveys</em> each time after <em>InBbrainWebView</em> closed and some survey(s) completed.
+/// Please, use <em>surveysClosed(byWebView: Bool, completedSurvey: Bool)</em> method of <em>InBrainDelegate</em> to detect InBbrainWebView dismissal.
+/// important:
+/// The same NativeSurvey may be related to different placements. If some survey contains at lists with different placementId - surveys for each placement needs to be updated.
 - (void)getNativeSurveysWithPlacementID:(NSString * _Nullable)placementID success:(void (^ _Nonnull)(NSArray<InBrainNativeSurvey *> * _Nonnull))success failed:(void (^ _Nonnull)(NSError * _Nonnull))failed;
 /// Config inBrain before <code>showSurveys</code> function call.
 /// \param userID If userID not set (or empty) - <code>identifierForVendor</code> will be used;
@@ -811,10 +850,16 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift15InBrainDelegate_")
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray;
 /// Called if <code>getRewards()</code>failed
 - (void)didFailToReceiveRewardsWithError:(NSError * _Nonnull)error;
-/// Called upon dismissal of inBrainWebView from within the webview
-- (void)surveysClosedFromPage;
-/// Called upon dismissal of inBrainWebView
-- (void)surveysClosed;
+/// Called upon dismissal of inBrainWebView.
+/// important:
+/// If you are using NativeSurveys - please, ensure the surveys reloaded after some survey(s) completed.
+/// \param byWebView <em>true</em> means closed by WebView’s command; <em>false</em> - closed by user;
+///
+/// \param completedSurvey <em>true</em> means some survey(s) completed (succeded or disqualified).
+///
+- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey;
+- (void)surveysClosedFromPage SWIFT_UNAVAILABLE_MSG("'surveysClosedFromPage' has been renamed to 'surveysClosedByWebView:completedSurvey:'");
+- (void)surveysClosed SWIFT_UNAVAILABLE_MSG("'surveysClosed' has been renamed to 'surveysClosedByWebView:completedSurvey:'");
 @end
 
 
@@ -897,7 +942,8 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 ///     Automatically, after user completed some of Native Surveys, received before.
 ///   </li>
 /// </ol>
-- (void)nativeSurveysLoadingStarted;
+- (void)nativeSurveysLoadingStarted SWIFT_UNAVAILABLE_MSG("'nativeSurveysLoadingStarted' has been renamed to 'nativeSurveysLoadingStartedWithPlacementId:'");
+- (void)nativeSurveysLoadingStartedWithPlacementId:(NSString * _Nullable)placementId;
 /// Provides fresh portion of Native surveys. Update app UI with actual surveys.
 /// Native surveys can be loaded in next cases:
 /// <ol>
@@ -910,10 +956,12 @@ SWIFT_PROTOCOL("_TtP24InBrainSurveys_SDK_Swift20NativeSurveyDelegate_")
 /// </ol>
 /// \param surveys List of available Native Surveys.
 ///
-- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys;
+- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys SWIFT_UNAVAILABLE_MSG("'nativeSurveysReceived' has been renamed to 'nativeSurveysReceived(surveys:placementId:)'");
+- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys placementId:(NSString * _Nullable)placementId;
 /// Called if loading of Native Surveys failed
 /// *
-- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error;
+- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error SWIFT_UNAVAILABLE_MSG("'failedToReceiveNativeSurveys' has been renamed to 'failedToReceiveNativeSurveysWithError:placementId:'");
+- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error placementId:(NSString * _Nullable)placementId;
 @end
 
 

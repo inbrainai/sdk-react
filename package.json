@@ -1,7 +1,7 @@
 {
   "name": "inbrain-surveys",
   "title": "Inbrain Survey",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Survey library to monetize your mobile app, provided by inBrain.ai",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -42,17 +42,17 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "16.11.0",
-    "react-native": "0.62.0"
+    "react": "^16.11.0",
+    "react-native": "^0.62.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
-    "@types/react": "16.9.34",
-    "@types/react-native": "0.62.0",
+    "@types/react": "^16.11.0",
+    "@types/react-native": "^0.62.0",
     "babel-plugin-module-resolver": "^4.0.0",
-    "react": "16.11.0",
-    "react-native": "0.62.0",
+    "react": "^16.11.0",
+    "react-native": "^0.62.0",
     "typescript": "^3.7.5",
     "metro-react-native-babel-preset": "0.54.1"
   },

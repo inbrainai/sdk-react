@@ -171,18 +171,6 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RC
     }
 }
 
-- (void)nativeSurveysLoadingStarted {
-    // Do nothing
-}
-
-- (void)nativeSurveysReceived:(NSArray<InBrainNativeSurvey *> * _Nonnull)surveys {
-   // Do nothing. Not used for RN
-}
-
-- (void)failedToReceiveNativeSurveysWithError:(NSError * _Nonnull)error {
-    // Do nothing. Not used for RN
-}
-
 // *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
@@ -311,7 +299,11 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     @try{
 
         // Forwarding to SDK
-        [[InBrain shared] setLanguageWithValue:language];
+        NSError *error = nil;
+        [[InBrain shared] setLanguage:language error:&error];
+        if (error != nil) {
+            reject(@"ERR_SET_LANGUAGE", error.description, nil);
+        }
 
         // Resolve the promise
         resolve(@true);
@@ -332,12 +324,8 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
   return @[@"OnClose", @"OnCloseFromPage"];
 }
 
-- (void)surveysClosed {
-    [self sendEventWithName:@"OnClose" body:@{}];
-}
-
-- (void)surveysClosedFromPage {
-    [self sendEventWithName:@"OnCloseFromPage" body:@{}];
+- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey {
+    [self sendEventWithName:(byWebView ? @"OnCloseFromPage" : @"OnClose") body:@{}];
 }
 
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
