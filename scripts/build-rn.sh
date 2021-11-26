@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RNVERSION=0.62.2
+RNVERSION=0.62.0
 echo 'Building RN app '$RNVERSION
 
 RELATIVEPATH=$(dirname "$0")
