@@ -1,7 +1,9 @@
-## [2.2.1] 2020-11-25
+## [2.2.2] 2020-11-27
 ### Changed
 - Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.20` (from `1.0.19`)
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.1`
+
+## [2.2.1] SKIPPED - was unpublished from npmjs (published by mistake)
 
 ## [2.2.0] 2020-10-09
 ### Changed
