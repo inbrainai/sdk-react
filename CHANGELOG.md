@@ -1,3 +1,7 @@
+## [2.2.3] 2020-11-29
+### Fixed
+- Fixed 2.2.2 crash related to NativeSurveysDelegate on iOS
+
 ## [2.2.2] 2020-11-27
 ### Changed
 - Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.20` (from `1.0.19`)
