@@ -10,7 +10,6 @@
 {
     self = [super init];
     self.inbrain = [InBrain shared];
-    [self.inbrain setNativeSurveysDelegate:self];
     [self.inbrain setInBrainDelegate:self];
     return self;
 }
