@@ -83,6 +83,8 @@ import WebKit
   @objc final public let rank: Swift.Int
   @objc final public let time: Swift.Int
   @objc final public let value: Swift.Double
+  @objc final public let currencySale: Swift.Bool
+  @objc final public let multiplier: Swift.Double
   required public init(from decoder: Swift.Decoder) throws
   @objc override dynamic public init()
   @objc deinit

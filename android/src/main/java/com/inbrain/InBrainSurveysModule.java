@@ -245,6 +245,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putInt("rank", (int) survey.rank);
                         map.putInt("time", (int) survey.time);
                         map.putDouble("value", survey.value);
+                        map.putBoolean("currencySale", survey.currencySale);
+                        map.putDouble("multiplier", survey.multiplier);
                         array.pushMap(map);
                     }
 

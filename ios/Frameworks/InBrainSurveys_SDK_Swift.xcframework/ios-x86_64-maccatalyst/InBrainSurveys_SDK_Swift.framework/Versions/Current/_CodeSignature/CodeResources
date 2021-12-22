@@ -10,7 +10,7 @@
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		18kd80rl3wWMPpyUfpehg45zCek=
+		O+Y2Ru0twrAMFMuSiS6L/3Ua0Vs=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -19,7 +19,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			FqAHGmFLzFGsLCrBvsUVgfVSqipuh+Xqvwx+gr3MMw0=
+			HgQNKjgMLHqfy5E1mqzGPt5lqTwHqxumDmmPTrGkNMw=
 			</data>
 		</dict>
 		<key>Headers/InBrainSurveys_SDK_Swift.h</key>
@@ -40,14 +40,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6/eGFclDNRNc+tw6huleyoXxZaspPg/6Kj0KmJKVBFU=
+			zbYANxsE4QpMEqfbHd12N0WpLBJZlOJPaB/jVvEg/nk=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Swift.swiftmodule/x86_64-apple-ios-macabi.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AtFx6LIFsl2btyidQBs+aS7VX6F2pRv/1dLyWCzSAPg=
+			kZUn+/Pgp5WwV55Ex9nhbmRYROeU+irBWL8Gl7tUk/8=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Swift.swiftmodule/x86_64.swiftdoc</key>
@@ -61,14 +61,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6/eGFclDNRNc+tw6huleyoXxZaspPg/6Kj0KmJKVBFU=
+			zbYANxsE4QpMEqfbHd12N0WpLBJZlOJPaB/jVvEg/nk=
 			</data>
 		</dict>
 		<key>Modules/InBrainSurveys_SDK_Swift.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AtFx6LIFsl2btyidQBs+aS7VX6F2pRv/1dLyWCzSAPg=
+			kZUn+/Pgp5WwV55Ex9nhbmRYROeU+irBWL8Gl7tUk/8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -89,7 +89,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			LuSG1pi+R/TXJ/KC7ce3aEB/TuYRR+paj+DEmtJyIl0=
+			sOtUUddKugzBeSHNLtQuZz3bApF4DYm9fcocPfSr7j8=
 			</data>
 		</dict>
 	</dict>

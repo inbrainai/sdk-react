@@ -16,4 +16,6 @@ export type InBrainNativeSurveys = {
     rank: number;
     time: number;
     value: number;
+    currencySale: boolean;
+    multiplier: number;
 }

@@ -381,6 +381,8 @@ SWIFT_CLASS("_TtC24InBrainSurveys_SDK_Swift19InBrainNativeSurvey")
 @property (nonatomic, readonly) NSInteger rank;
 @property (nonatomic, readonly) NSInteger time;
 @property (nonatomic, readonly) double value;
+@property (nonatomic, readonly) BOOL currencySale;
+@property (nonatomic, readonly) double multiplier;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
