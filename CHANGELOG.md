@@ -1,4 +1,10 @@
 ## [2.2.3] 2020-11-29
+### Changed
+- Added two new properties in InBrainNativeSurveys: currencySale and multiplier
+- Updated Android framework `com.github.inbrainai:sdk-android` to version `1.0.21` (from `1.0.120`)
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.2`
+
+## [2.2.3] 2020-11-29
 ### Fixed
 - Fixed 2.2.2 crash related to NativeSurveysDelegate on iOS
 
