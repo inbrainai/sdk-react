@@ -1,4 +1,4 @@
-## [2.3.0] 2020-11-29
+## [2.3.0] 2022-03-07
 ### Changed
 - Updated RN version from `0.62` to `0.63`
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.4`
