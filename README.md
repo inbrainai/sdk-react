@@ -3,10 +3,11 @@ Survey library to monetize your mobile app, provided by inBrain.ai
 
 ## Requirements
 This SDK is targeted to the following tools:
-- XCode 11.4+
+- XCode 12
+- iOS 11.0;
 - CocoaPods 1.10+
 - Swift 5
-- React Native >=0.60.0
+- React Native >=0.63.0
 
 ## Installation
 
@@ -133,3 +134,12 @@ This problem also consistently appears when usinx XCode10
 
 ### [RUNTIME - Release scheme] dependent dylib '@rpath/InBrainSurveys_SDK_Swift.framework/InBrainSurveys_SDK_Swift' not found 
 This problem happen with previous version of Cocoapods and XCode. Try updating to Cocoapods 1.10.x, and if it still doesn't work, also upgrade to XCode12
+
+### [DEVELOPMENT] When running 'pod install' in APP: "Specs satisfying the `inbrain-surveys (from `../node_modules/inbrain-surveys`)` dependency were found, but they required a higher minimum deployment target."
+ => Modify the platform version in 'APP/ios/Podfile'
+
+ ### [DEVELOPMENT] When building in XCode: No matching function for call to 'RCTBridgeModuleNameForClass' 
+Update from RN0.62 to RN0.63
+
+ ### [DEVELOPMENT] When building in XCode: problem with not finding switch libraries
+https://github.com/facebook/react-native/issues/31733#issuecomment-931824830
