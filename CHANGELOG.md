@@ -1,3 +1,9 @@
+## [2.3.2] 2022-10-14
+### Changed
+- Updated RN version from `0.63` to `0.70.2`
+- Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.7`
+- Fix library compatibility issue with the latest version of react native
+
 ## [2.3.0] 2022-03-07
 ### Changed
 - Updated RN version from `0.62` to `0.63`
