@@ -1,4 +1,7 @@
-## [2.3.2] 2022-10-14
+## [2.3.4] 2022-10-25
+### Changed
+- Update android SDK version
+## [2.3.3] 2022-10-14
 ### Changed
 - Updated RN version from `0.63` to `0.70.2`
 - Updated iOS framework `InBrainSurveys_SDK_Legacy.xcframework` to version `1.8.7`
