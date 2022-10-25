@@ -3,10 +3,10 @@ Survey library to monetize your mobile app, provided by inBrain.ai
 
 ## Requirements
 This SDK is targeted to the following tools:
-- XCode 12
-- iOS 11.0;
-- CocoaPods 1.10+
-- Swift 5
+- XCode >= 12
+- iOS >= 11.0;
+- CocoaPods >= 1.10+
+- Swift >= 5
 - React Native >=0.63.0
 
 ## Installation
@@ -15,13 +15,6 @@ Install and link the module:
 
 `$ npm install inbrain-surveys --save`
 
-### Extra steps iOS
-
-Do not forget to use Cocoapods 1.9 in your project. Handling of xcframeworks isn't well supported in the previous versions. 
-
-Set the framework 'Target Membership' to `inbrain-surveys` as below:
-
-![Framework Target Membership](https://i.ibb.co/N2ntq0P/target-membership.png)
 
 ### Extra steps Android
 Add jitpack repository you your gradle configuration `android/build.gradle > allprojects > repositories`
@@ -123,9 +116,6 @@ Note: Calling this method multiple times will override the previous listener.
 ### [BUILD TIME] Several errors similar to `Bad receiver 'int *'`, `Unkown type name 'InBrain'`...
 First check that the framework target membership is correctly set. If the problem still occurs, and you are trying to create a release build with a simulator as target (and you are using XCode 12), please add `arm64` in the Excluded Architecture of your project and 'inbrain-surveys' pods (see [this post](https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios) for detailed information)
 
-### [BUILD TIME] 'InBrainSurveys_SDK_Legacy/InBrainSurveys_SDK_Legacy-Swift.h' file not found
-This problem usually happens if the framework is not set in the Embedded Binaries, or if the framework doesn't have the target set to `inbrain-surveys` See above for set up.
-Clean and build the project after changes.
 
 ### [RUNTIME] Library not loaded: @rpath/libswiftCore.dylib
 This problem can happen if your project doesn't have the Swift standard libraries included. Set the 'Always Embed Swift Standard Libraries' to yes in your target to fix it.
