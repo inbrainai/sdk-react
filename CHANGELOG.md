@@ -1,3 +1,6 @@
+## [2.3.5] 2022-11-01
+### Changed
+- Fix android sdk version to 1.0.28
 ## [2.3.4] 2022-10-25
 ### Changed
 - Update android SDK version
