@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 
     // Inbrain Android SDK
-    implementation 'com.github.inbrainai:sdk-android:1.0.28'
+    implementation 'com.github.inbrainai:sdk-android:2.0.0'
 }
 
 def configureReactNativePom(def pom) {

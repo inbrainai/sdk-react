@@ -8,7 +8,7 @@ cd $BASEDIR/..
 rm -rf node_modules
 
 echo 'Unpublishing previous version '$VERSION
-npm unpublish inbrain-surveys-legacy@$VERSION --force
+npm unpublish inbrain-surveys@$VERSION --force
 
 echo 'Installing dependencies'
 rm -rf node_modules 

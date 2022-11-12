@@ -1,7 +1,7 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
 import { InitOptions, InitOptionName, StylingOptionName } from './Options';
-import { InBrainReward, InBrainNativeSurveys } from './Models';
+import { InBrainReward, InBrainNativeSurveys, InBrainSurveyFilter } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -97,7 +97,14 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
  * Get Native Surveys
  * @param placementId an optional placement identifier
  */
-const getNativeSurveys = (placementId?: string) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(placementId))
+// const getNativeSurveys = (placementId?: string) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(placementId))
+
+/**
+ * Get Native Surveys with filters
+ * @param placementId an optional placement identifier
+ */
+ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
+
 
 /**
  * Show a specific native survey

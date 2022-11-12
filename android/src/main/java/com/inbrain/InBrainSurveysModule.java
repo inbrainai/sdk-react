@@ -28,6 +28,8 @@ import com.inbrain.sdk.config.StatusBarConfig;
 import com.inbrain.sdk.config.ToolBarConfig;
 import com.inbrain.sdk.model.Reward;
 import com.inbrain.sdk.model.Survey;
+import com.inbrain.sdk.model.SurveyCategory;
+import com.inbrain.sdk.model.SurveyFilter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +76,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
                         // Everything went well, resolve the promise
                         promise.resolve(null);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
                     }
                 }
@@ -135,11 +137,10 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 }
             });
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
         }
     }
-
 
 
     // ************************x
@@ -231,10 +232,25 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** GET NATIVE SURVEYS ******
     // *******************************
     @ReactMethod
-    public void getNativeSurveys(final String placementId, final Promise promise) {
+    public void getNativeSurveys(final String placementId, ReadableArray categoryIds, ReadableArray excludedCategoryIds, final Promise promise) {
         try {
+            SurveyFilter filter = new SurveyFilter();
+            filter.placementId = placementId;
+            if (categoryIds != null && categoryIds.size() > 0) {
+                filter.includeCategories = new ArrayList<>();
+                for (int i = 0; i < categoryIds.size(); i++) {
+                    filter.includeCategories.add(SurveyCategory.fromId(categoryIds.getInt(i)));
+                }
+            }
 
-            InBrain.getInstance().getNativeSurveys(placementId, new GetNativeSurveysCallback() {
+            if (excludedCategoryIds != null && excludedCategoryIds.size() > 0) {
+                filter.excludeCategories = new ArrayList<>();
+                for (int i = 0; i < excludedCategoryIds.size(); i++) {
+                    filter.excludeCategories.add(SurveyCategory.fromId(excludedCategoryIds.getInt(i)));
+                }
+            }
+
+            InBrain.getInstance().getNativeSurveys(filter, new GetNativeSurveysCallback() {
                 @Override
                 public void nativeSurveysReceived(List<Survey> surveys) {
 
@@ -265,7 +281,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SHOW NATIVE SURVEY ******
     // *******************************
     @ReactMethod
-    public void showNativeSurvey(final String id, final String placementId, final Promise promise) {
+    public void showNativeSurvey(final String id, final String searchId, final Promise promise) {
         try {
 
             // Call braintree SDK
@@ -275,7 +291,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 @Override
                 public void run() {
                     try {
-                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, placementId, new StartSurveysCallback() {
+                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, new StartSurveysCallback() {
                             @Override
                             public void onSuccess() {
                                 promise.resolve(true);
@@ -410,14 +426,15 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
 
-@ReactMethod
-   public void addListener(String eventName) {
-     // Keep: Required for RN built in Event Emitter Calls.
-   }
-   @ReactMethod
-   public void removeListeners(Integer count) {
-     // Keep: Required for RN built in Event Emitter Calls.
-   }
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
 
     // ***********************
     // ***** SET LANGUAGE ****

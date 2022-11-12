@@ -1,3 +1,8 @@
+## [2.4.0] 2022-11-12
+### Changed
+- Updated android sdk version to 2.0.0
+- Updated ios sdk version to 2.0.0
+- Introduced InBrainSurveyFilter class to reduce arguments while caling getNativeSurveys method 
 ## [2.3.5] 2022-11-01
 ### Changed
 - Fix android sdk version to 1.0.28

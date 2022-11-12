@@ -1,6 +1,6 @@
 #import "InBrainSurveys.h"
-#import <InBrainSurveys_SDK_Swift/InBrainSurveys_SDK_Swift-Swift.h>
-
+#import <InBrainSurveys/InBrainSurveys.h>
+#import <React/RCTConvert.h>
 @implementation InBrainSurveys
 
 // ***********************************
@@ -19,9 +19,9 @@
 // *********************************
 
 RCT_EXPORT_MODULE()
-
 + (BOOL)requiresMainQueueSetup
 {
+
   return NO;  // only do this if your module initialization relies on calling UIKit!
 }
 
@@ -141,26 +141,58 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
     }
 }
 
+
+//RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+//{
+//    @try {
+//        [[InBrain shared] getNativeSurveysWithPlacementID:placementId success:^(NSArray<InBrainNativeSurvey *> * surveys){
+//            NSMutableArray *surveyList = [NSMutableArray array];
+//            for(int i = 0; i < surveys.count; i++) {
+//
+//                // ENHANCE
+//                // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
+//                // The result on the RN side is an array with null elements...
+//                 NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
+//
+//                   [surveyList addObject:o];
+//            }
+//
+//            resolve(surveyList);
+//        } failed:^(NSError * failed){
+//            reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
+//        }];
+//
+//    }
+//    @catch (NSException *error) {
+//        reject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
+//    }
+//}
 // *******************************
 // ***** GET NATIVE SURVEYS ******
 // *******************************
-RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs:(NSArray* __nullable) categoryIDs
+                  excludedCategoryIDs:(NSArray* __nullable) excludedCategoryIDs
+                 resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[InBrain shared] getNativeSurveysWithPlacementID:placementId success:^(NSArray<InBrainNativeSurvey *> * surveys){
-            NSMutableArray *surveyList = [NSMutableArray array];
-            for(int i = 0; i < surveys.count; i++) {
+      InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
+      
+      
+      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^
+        (NSArray<InBrainNativeSurvey *> * surveys){
+              NSMutableArray *surveyList = [NSMutableArray array];
+              for(int i = 0; i < surveys.count; i++) {
 
-                // ENHANCE
-                // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-                // The result on the RN side is an array with null elements...
-                 NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
+                  // ENHANCE
+                  // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
+                  // The result on the RN side is an array with null elements...
+                   NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
 
-                   [surveyList addObject:o];
-            }
+                     [surveyList addObject:o];
+              }
 
-            resolve(surveyList);
-        } failed:^(NSError * failed){
+              resolve(surveyList);
+      } failed:^(NSError * failed){
             reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
         }];
 
@@ -173,12 +205,12 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RC
 // *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  placementId:(NSString*)placementId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         // This requires the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[InBrain shared] showNativeSurveyWithId:id placementId:placementId from:NULL];
+            [[InBrain shared] showNativeSurveyWithId:id searchId:searchId from:NULL];
             resolve(@true);
         });
     }

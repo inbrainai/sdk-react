@@ -6,7 +6,7 @@ RELATIVEPATH=$(dirname "$0")
 cd $RELATIVEPATH
 
 # InBrain envvars
-source env.vars
+# source env.vars
 
 # export common
 export RNCLI_DIR=$(pwd)/cli/node_modules/.bin
