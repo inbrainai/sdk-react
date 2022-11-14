@@ -1,4 +1,4 @@
-package com.inbrain;
+package com.inbrainreactnativeexample;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -258,6 +258,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                     for (Survey survey : surveys) {
                         WritableMap map = Arguments.createMap();
                         map.putString("id", survey.id);
+                        map.putString("searchId", survey.searchId);
                         map.putInt("rank", (int) survey.rank);
                         map.putInt("time", (int) survey.time);
                         map.putDouble("value", survey.value);

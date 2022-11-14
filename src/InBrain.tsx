@@ -93,15 +93,10 @@ const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InB
  */
 const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
 
-/**
- * Get Native Surveys
- * @param placementId an optional placement identifier
- */
-// const getNativeSurveys = (placementId?: string) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(placementId))
 
 /**
- * Get Native Surveys with filters
- * @param placementId an optional placement identifier
+ * Get Native Surveys
+ * @param InBrainSurveyFilter an optional parameter
  */
  const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
 
@@ -109,9 +104,9 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 /**
  * Show a specific native survey
  * @param id the survey's identifier
- * @param placementId an optional placement identifier
+ * @param searchId an mandatory identifier
  */
-const showNativeSurvey = (id: string, placementId?: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, placementId))
+const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
 
 var onClose: () => void = () => { };
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());

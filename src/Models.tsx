@@ -13,6 +13,7 @@ export type InBrainReward = {
  */
 export type InBrainNativeSurveys = {
     id: string;
+    searchId: string;
     rank: number;
     time: number;
     value: number;

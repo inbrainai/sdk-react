@@ -186,7 +186,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                   // ENHANCE
                   // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
                   // The result on the RN side is an array with null elements...
-                   NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
+                   NSObject* o = @{@"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
 
                      [surveyList addObject:o];
               }
