@@ -1,4 +1,4 @@
-package com.inbrainreactnativeexample;
+package com.inbrain;
 
 import android.app.Activity;
 import android.graphics.Color;

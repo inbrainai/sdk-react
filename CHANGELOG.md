@@ -1,3 +1,6 @@
+## [2.4.2] 2022-11-14
+### Changed
+- Core refactored
 ## [2.4.0] 2022-11-12
 ### Changed
 - Updated android sdk version to 2.0.0
