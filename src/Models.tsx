@@ -19,6 +19,8 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
+    categories: number[];
+    
 }
 
 /**

@@ -1,3 +1,6 @@
+## [2.4.3] 2022-11-18
+### Changed
+- Categories list added in response of getNativeSurveys api
 ## [2.4.2] 2022-11-14
 ### Changed
 - Core refactored

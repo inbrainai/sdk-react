@@ -264,6 +264,14 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putDouble("value", survey.value);
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putDouble("multiplier", survey.multiplier);
+
+
+                        WritableArray categories = Arguments.createArray();
+                        for (SurveyCategory category:survey.categories) {
+                            categories.pushInt(category.getId());
+
+                        }
+                        map.putArray("categories", categories);
                         array.pushMap(map);
                     }
 
