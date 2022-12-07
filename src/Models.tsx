@@ -12,7 +12,7 @@ export type InBrainReward = {
  * Native Surveys interface
  * @deprecated The type should not be used
  */
-export declare type InBrainNativeSurveys = {
+export type InBrainNativeSurveys = {
     id: string;
     searchId: string;
     rank: number;
