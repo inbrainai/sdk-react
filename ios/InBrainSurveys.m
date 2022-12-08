@@ -31,7 +31,7 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        
+
         [self notNull:@"apiClientId" toCheck:apiClientId];
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
@@ -77,10 +77,10 @@ RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *
 // ************************
 RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     // This requires the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-    
+
         @try {
             [self.inbrain showSurveysFrom:NULL];
             resolve(nil);
@@ -89,7 +89,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             reject(@"ERR_SHOW_SURVEYS", error.description, nil);
         }
     });
-    
+
 }
 
 // ************************
@@ -127,7 +127,7 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 // ***********************************
 RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     @try{
 
         [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
@@ -176,8 +176,8 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
 {
     @try {
       InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
-      
-      
+
+
       [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^
         (NSArray<InBrainNativeSurvey *> * surveys){
               NSMutableArray *surveyList = [NSMutableArray array];
@@ -186,10 +186,10 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                   // ENHANCE
                   // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
                   // The result on the RN side is an array with null elements...
-                 
+
                   NSObject* o = @{@"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
                                   @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
-                                  @"categories": surveys[i].categoryIds
+                                  @"categories": surveys[i].categoryIds, @"profileMatch": [NSNumber numberWithInt:surveys[i].profileMatch]
                   };
 
                      [surveyList addObject:o];
@@ -228,7 +228,7 @@ RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId r
 // ***************************
 RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     @try{
         // Mapping to list of ids and forwarding to SDK
         NSArray* ids = [rewards valueForKey:@"transactionId"];
@@ -265,19 +265,19 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
-        
+
         // Extract parameters
         NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
         UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
 
         NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
         UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
-        
+
         NSString* titleColorString = [data objectForKey:@"titleColor"];
         UIColor* titleColor = [self colorWithHexString:titleColorString];
-        
+
         BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
-        
+
         // Instantiate config object
         InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
 
@@ -286,7 +286,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromi
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_NAVIGATION_BAR_CONFIG", error.description, nil);
@@ -302,7 +302,7 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
 
         // Extract parameters
         BOOL lighStatusBar = [[data objectForKey:@"lightStatusBar"] boolValue];
-        
+
         UIStatusBarStyle style = 1;
         if(!lighStatusBar) {
             if(@available(iOS 13, *))
@@ -310,16 +310,16 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
             else
                 style = 0; // UIStatusBarStyleDefault
         }
-        
+
        // Instantiate config object
        InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
-        
+
         // Forwarding to SDK
         [[InBrain shared] setStatusBarConfig:config];
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_STATUS_BAR_CONFIG", error.description, nil);
@@ -342,7 +342,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_LANGUAGE", error.description, nil);

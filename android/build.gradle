@@ -66,9 +66,9 @@ repositories {
         // Android JSC is installed from npm
         url "$rootDir/../node_modules/jsc-android/dist"
     }
-    maven { 
+    maven {
         // Inbrain
-        url 'https://jitpack.io' 
+        url 'https://jitpack.io'
     }
 
     google()
@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 
     // Inbrain Android SDK
-    implementation 'com.github.inbrainai:sdk-android:2.0.0'
+    implementation 'com.github.inbrainai:sdk-android:2.0.+'
 }
 
 def configureReactNativePom(def pom) {

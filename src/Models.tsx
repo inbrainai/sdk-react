@@ -19,8 +19,8 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
+    profileMatch: number;
     categories: number[];
-    
 }
 
 /**
@@ -67,5 +67,5 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-    
+
 }
