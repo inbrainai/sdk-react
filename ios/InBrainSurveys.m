@@ -317,12 +317,8 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                       [categories addObject:o];
                   }
 
-
-//                  int matchId = [surveys[i].profileMatch intValue];
                   NSString *matchTitle = [self profileMatchTitle:surveys[i].profileMatch];
                   NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:surveys[i].profileMatch], @"name": matchTitle};
-//                 @"profileMatch": [NSNumber numberWithInt:surveys[i].profileMatch]
-
 
                   // ENHANCE
                   // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
