@@ -19,15 +19,31 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
-    profileMatch: number;
-    categories: number[];
+    profileMatch: ProfileMatch;
+    categories: Category[];
+    categoryIds: number[],
+}
+
+/**
+ * Native Surveys Category interface
+ */
+export type Category = {
+    id: number;
+    name: string
+}
+
+/**
+ * Native profile match interface
+ */
+export type ProfileMatch = {
+    id: number;
+    name: string
 }
 
 /**
  * Reward filter interface
  */
  export type InBrainSurveyFilter = {
-
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
@@ -67,5 +83,4 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-
 }

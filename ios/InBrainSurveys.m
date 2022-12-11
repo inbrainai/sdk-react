@@ -14,6 +14,133 @@
     return self;
 }
 
+- (NSString *)profileMatchTitle:(SurveyProfileMatch) profileMatch {
+    switch (profileMatch) {
+        case SurveyProfileMatchNewSurvey:
+            return @"SurveyProfileMatchNewSurvey";
+            break;
+        case SurveyProfileMatchPoorMatch:
+            return @"SurveyProfileMatchPoorMatch";
+            break;
+        case SurveyProfileMatchFairMatch:
+            return @"SurveyProfileMatchFairMatch";
+            break;
+        case SurveyProfileMatchGoodMatch:
+            return @"SurveyProfileMatchGoodMatch";
+            break;
+        case SurveyProfileMatchGreatMatch:
+            return @"SurveyProfileMatchGreatMatch";
+            break;
+        case SurveyProfileMatchExcellentMatch:
+            return @"SurveyProfileMatchExcellentMatch";
+            break;
+    }
+    return @"Unknown";
+}
+
+
+- (NSString *)categoryTitle:(InBrainSurveyCategory) category {
+  switch (category) {
+      case InBrainSurveyCategoryAutomotive:
+          return @"InBrainSurveyCategoryAutomotive";
+      case InBrainSurveyCategoryBeveragesAlcoholic:
+          return @"InBrainSurveyCategoryBeveragesAlcoholic";
+          break;
+      case InBrainSurveyCategoryBeveragesNonAlcoholic:
+          return @"InBrainSurveyCategoryBeveragesNonAlcoholic";
+          break;
+      case InBrainSurveyCategoryBusiness:
+          return @"InBrainSurveyCategoryBusiness";
+          break;
+      case InBrainSurveyCategoryChildrenAndParenting:
+          return @"InBrainSurveyCategoryChildrenAndParenting";
+          break;
+      case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
+          return @"InBrainSurveyCategoryCoalitionLoyaltyPrograms";
+          break;
+      case InBrainSurveyCategoryDestinationsAndTourism:
+          return @"InBrainSurveyCategoryDestinationsAndTourism";
+          break;
+      case InBrainSurveyCategoryEducation:
+          return @"InBrainSurveyCategoryEducation";
+          break;
+      case InBrainSurveyCategoryElectronicsComputerSoftware:
+          return @"InBrainSurveyCategoryElectronicsComputerSoftware";
+          break;
+      case InBrainSurveyCategoryEntertainmentAndLeisure:
+          return @"InBrainSurveyCategoryEntertainmentAndLeisure";
+          break;
+      case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
+          return @"InBrainSurveyCategoryFinanceBankingInvestingAndInsurance";
+          break;
+      case InBrainSurveyCategoryFood:
+          return @"InBrainSurveyCategoryFood";
+          break;
+      case InBrainSurveyCategoryGamblingLottery:
+          return @"InBrainSurveyCategoryGamblingLottery";
+          break;
+      case InBrainSurveyCategoryGovernmentAndPolitics:
+          return @"InBrainSurveyCategoryGovernmentAndPolitics";
+          break;
+      case InBrainSurveyCategoryHealthCare:
+          return @"InBrainSurveyCategoryHealthCare";
+          break;
+      case InBrainSurveyCategoryHome:
+          return @"InBrainSurveyCategoryHome";
+          break;
+      case InBrainSurveyCategoryMediaAndPublishing:
+          return @"InBrainSurveyCategoryMediaAndPublishing";
+          break;
+      case InBrainSurveyCategoryPersonalCare:
+          return @"InBrainSurveyCategoryPersonalCare";
+          break;
+      case InBrainSurveyCategoryRestaurants:
+          return @"InBrainSurveyCategoryRestaurants";
+          break;
+      case InBrainSurveyCategorySensitiveExplicitContent:
+          return @"InBrainSurveyCategorySensitiveExplicitContent";
+          break;
+      case InBrainSurveyCategorySmokingTobacco:
+          return @"InBrainSurveyCategorySmokingTobacco";
+          break;
+      case InBrainSurveyCategorySocialResearch:
+          return @"InBrainSurveyCategorySocialResearch";
+          break;
+      case InBrainSurveyCategorySportsRecreationFitness:
+          return @"InBrainSurveyCategorySportsRecreationFitness";
+          break;
+      case InBrainSurveyCategoryTelecommunications:
+          return @"InBrainSurveyCategoryTelecommunications";
+          break;
+      case InBrainSurveyCategoryTransportation:
+          return @"InBrainSurveyCategoryTransportation";
+          break;
+      case InBrainSurveyCategoryTravelAirlines:
+          return @"InBrainSurveyCategoryTravelAirlines";
+          break;
+      case InBrainSurveyCategoryTravelHotels:
+          return @"InBrainSurveyCategoryTravelHotels";
+          break;
+      case InBrainSurveyCategoryTravelServicesAgencyBooking:
+          return @"InBrainSurveyCategoryTravelServicesAgencyBooking";
+          break;
+      case InBrainSurveyCategoryCreditCards:
+          return @"InBrainSurveyCategoryCreditCards";
+          break;
+      case InBrainSurveyCategoryVideoGames:
+          return @"InBrainSurveyCategoryVideoGames";
+          break;
+      case InBrainSurveyCategoryFashionAndClothingOther:
+          return @"InBrainSurveyCategoryFashionAndClothingOther";
+          break;
+      case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
+          return @"InBrainSurveyCategoryFashionAndClothingDepartmentStore";
+          break;
+  }
+  return @"Unknown";
+}
+
+
 // *********************************
 // ***** RN BRIDGE methods  ********
 // *********************************
@@ -177,11 +304,25 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
     @try {
       InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
 
-
       [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^
         (NSArray<InBrainNativeSurvey *> * surveys){
               NSMutableArray *surveyList = [NSMutableArray array];
               for(int i = 0; i < surveys.count; i++) {
+
+                  NSMutableArray *categories = [NSMutableArray array];
+                  for(int y = 0; y < surveys[i].categoryIds.count; y++) {
+                      int categoryId = [surveys[i].categoryIds[y] intValue];
+                      NSString *title = [self categoryTitle:categoryId];
+                      NSObject* o = @{@"id": surveys[i].categoryIds[y], @"name": title};
+                      [categories addObject:o];
+                  }
+
+
+//                  int matchId = [surveys[i].profileMatch intValue];
+                  NSString *matchTitle = [self profileMatchTitle:surveys[i].profileMatch];
+                  NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:surveys[i].profileMatch], @"name": matchTitle};
+//                 @"profileMatch": [NSNumber numberWithInt:surveys[i].profileMatch]
+
 
                   // ENHANCE
                   // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
@@ -189,7 +330,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
 
                   NSObject* o = @{@"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
                                   @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
-                                  @"categories": surveys[i].categoryIds, @"profileMatch": [NSNumber numberWithInt:surveys[i].profileMatch]
+                                  @"categories": categories, @"profileMatch": profileMatch, @"categoryIds": surveys[i].categoryIds
                   };
 
                      [surveyList addObject:o];

@@ -30,6 +30,7 @@ import com.inbrain.sdk.model.Reward;
 import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -257,6 +258,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                     WritableArray array = Arguments.createArray();
                     for (Survey survey : surveys) {
                         WritableMap map = Arguments.createMap();
+
                         map.putString("id", survey.id);
                         map.putString("searchId", survey.searchId);
                         map.putInt("rank", (int) survey.rank);
@@ -264,14 +266,35 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putDouble("value", survey.value);
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putDouble("multiplier", survey.multiplier);
-                        map.putInt("profileMatch", survey.conversionThreshold);
 
                         WritableArray categories = Arguments.createArray();
+                        WritableArray categoriesNamed = Arguments.createArray();
+                        WritableMap categoryNamed = Arguments.createMap();
                         for (SurveyCategory category:survey.categories) {
+                            categoryNamed.putInt("id", category.getId());
+                            categoryNamed.putString("name", category.name());
+                            categoriesNamed.pushMap(categoryNamed);
                             categories.pushInt(category.getId());
-
                         }
-                        map.putArray("categories", categories);
+
+                        map.putArray("categoriesId", categories);
+                        map.putArray("categories", categoriesNamed);
+
+                        //TMP map FOR MAPPING profileMatches
+                        WritableMap matches = Arguments.createMap();
+                        matches.putString("0", "New Survey");
+                        matches.putString("1", "Poor Profile Match");
+                        matches.putString("2", "Poor Profile Match");
+                        matches.putString("3", "Fair Profile Match");
+                        matches.putString("4", "Good Profile Match");
+                        matches.putString("5", "Great Profile Match");
+                        matches.putString("6", "Excellent Profile Match");
+
+                        WritableMap profileMatch = Arguments.createMap();
+                        profileMatch.putInt("id", survey.conversionThreshold);
+                        profileMatch.putString("name", matches.getString(String.valueOf(survey.conversionThreshold)));
+                        map.putMap("profileMatch", profileMatch);
+
                         array.pushMap(map);
                     }
 
