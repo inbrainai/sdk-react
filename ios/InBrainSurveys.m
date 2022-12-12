@@ -4,7 +4,7 @@
 @implementation InBrainSurveys
 
 // ***********************************
-// ***** UIVIEWCONTROLER methods *****
+// ***** UTILS methods *****
 // ***********************************
 - (instancetype)init
 {
@@ -227,17 +227,15 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
     @try {
         [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
             NSMutableArray *rewardList = [NSMutableArray array];
-            for(int i = 0; i < rewards.count; i++) {
-
-                // ENHANCE
-                // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
+                // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
                 // The result on the RN side is an array with null elements...
-                 NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
+            for(int i = 0; i < rewards.count; i++) {
+                 NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:rewards[i].transactionId],
+                                  @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount],
+                                  @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
 
                [rewardList addObject:o];
             }
-
-
             resolve(rewardList);
         } failed:^(NSError * error){
             reject(@"ERR_GET_REWARDS", error.localizedDescription, error);
@@ -256,44 +254,16 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
 {
 
     @try{
-
         [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
             if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
             else resolve(@(available));
         }];
-
     }
     @catch (NSException *error) {
         reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.description, nil);
     }
 }
 
-
-//RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-//{
-//    @try {
-//        [[InBrain shared] getNativeSurveysWithPlacementID:placementId success:^(NSArray<InBrainNativeSurvey *> * surveys){
-//            NSMutableArray *surveyList = [NSMutableArray array];
-//            for(int i = 0; i < surveys.count; i++) {
-//
-//                // ENHANCE
-//                // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-//                // The result on the RN side is an array with null elements...
-//                 NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
-//
-//                   [surveyList addObject:o];
-//            }
-//
-//            resolve(surveyList);
-//        } failed:^(NSError * failed){
-//            reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
-//        }];
-//
-//    }
-//    @catch (NSException *error) {
-//        reject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
-//    }
-//}
 // *******************************
 // ***** GET NATIVE SURVEYS ******
 // *******************************
@@ -304,31 +274,30 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
     @try {
       InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
 
-      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^
-        (NSArray<InBrainNativeSurvey *> * surveys){
+      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
               NSMutableArray *surveyList = [NSMutableArray array];
+
+              // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
+              // The result on the RN side is an array with null elements...
               for(int i = 0; i < surveys.count; i++) {
 
                   NSMutableArray *categories = [NSMutableArray array];
                   for(int y = 0; y < surveys[i].categoryIds.count; y++) {
                       int categoryId = [surveys[i].categoryIds[y] intValue];
-                      NSString *title = [self categoryTitle:categoryId];
+                      NSString *title = [self categoryTitle: categoryId];
                       NSObject* o = @{@"id": surveys[i].categoryIds[y], @"name": title};
                       [categories addObject:o];
                   }
 
-                  NSString *matchTitle = [self profileMatchTitle:surveys[i].profileMatch];
+                  NSString *matchTitle = [self profileMatchTitle:surveys[i].profileMatch ];
                   NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:surveys[i].profileMatch], @"name": matchTitle};
 
-                  // ENHANCE
-                  // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-                  // The result on the RN side is an array with null elements...
-
-                  NSObject* o = @{@"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
-                                  @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
-                                  @"categories": categories, @"profileMatch": profileMatch, @"categoryIds": surveys[i].categoryIds
-                  };
-
+                  NSObject* o = @{ @"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank],
+                                   @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
+                                   @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale],
+                                   @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
+                                   @"categories": categories, @"profileMatch": profileMatch, @"categoryIds": surveys[i].categoryIds
+                                 };
                      [surveyList addObject:o];
               }
 
