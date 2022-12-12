@@ -21,8 +21,11 @@ export type InBrainNativeSurveys = {
     currencySale: boolean;
     multiplier: number;
     profileMatch: ProfileMatch;
-    categories: Category[];
-    categoryIds: number[],
+    namedCategories: Category[];
+    /**
+     * @deprecated use namedCategories instead
+     */
+    categories: number[],
 }
 
 /**
@@ -53,7 +56,6 @@ export type ProfileMatch = {
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
-
 }
 
 export const InBrainSurveyCategory = {

@@ -17,126 +17,89 @@
 - (NSString *)profileMatchTitle:(SurveyProfileMatch) profileMatch {
     switch (profileMatch) {
         case SurveyProfileMatchNewSurvey:
-            return @"SurveyProfileMatchNewSurvey";
-            break;
+            return @"New Survey";
         case SurveyProfileMatchPoorMatch:
-            return @"SurveyProfileMatchPoorMatch";
-            break;
+            return @"Poor Profile Match";
         case SurveyProfileMatchFairMatch:
-            return @"SurveyProfileMatchFairMatch";
-            break;
+            return @"Fair Profile Match";
         case SurveyProfileMatchGoodMatch:
-            return @"SurveyProfileMatchGoodMatch";
-            break;
+            return @"Good Profile Match";
         case SurveyProfileMatchGreatMatch:
-            return @"SurveyProfileMatchGreatMatch";
-            break;
+            return @"Great Profile Match";
         case SurveyProfileMatchExcellentMatch:
-            return @"SurveyProfileMatchExcellentMatch";
-            break;
+            return @"Excellent Profile Match";
     }
     return @"Unknown";
 }
 
 
 - (NSString *)categoryTitle:(InBrainSurveyCategory) category {
-  switch (category) {
-      case InBrainSurveyCategoryAutomotive:
-          return @"InBrainSurveyCategoryAutomotive";
-      case InBrainSurveyCategoryBeveragesAlcoholic:
-          return @"InBrainSurveyCategoryBeveragesAlcoholic";
-          break;
-      case InBrainSurveyCategoryBeveragesNonAlcoholic:
-          return @"InBrainSurveyCategoryBeveragesNonAlcoholic";
-          break;
-      case InBrainSurveyCategoryBusiness:
-          return @"InBrainSurveyCategoryBusiness";
-          break;
-      case InBrainSurveyCategoryChildrenAndParenting:
-          return @"InBrainSurveyCategoryChildrenAndParenting";
-          break;
-      case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
-          return @"InBrainSurveyCategoryCoalitionLoyaltyPrograms";
-          break;
-      case InBrainSurveyCategoryDestinationsAndTourism:
-          return @"InBrainSurveyCategoryDestinationsAndTourism";
-          break;
-      case InBrainSurveyCategoryEducation:
-          return @"InBrainSurveyCategoryEducation";
-          break;
-      case InBrainSurveyCategoryElectronicsComputerSoftware:
-          return @"InBrainSurveyCategoryElectronicsComputerSoftware";
-          break;
-      case InBrainSurveyCategoryEntertainmentAndLeisure:
-          return @"InBrainSurveyCategoryEntertainmentAndLeisure";
-          break;
-      case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
-          return @"InBrainSurveyCategoryFinanceBankingInvestingAndInsurance";
-          break;
-      case InBrainSurveyCategoryFood:
-          return @"InBrainSurveyCategoryFood";
-          break;
-      case InBrainSurveyCategoryGamblingLottery:
-          return @"InBrainSurveyCategoryGamblingLottery";
-          break;
-      case InBrainSurveyCategoryGovernmentAndPolitics:
-          return @"InBrainSurveyCategoryGovernmentAndPolitics";
-          break;
-      case InBrainSurveyCategoryHealthCare:
-          return @"InBrainSurveyCategoryHealthCare";
-          break;
-      case InBrainSurveyCategoryHome:
-          return @"InBrainSurveyCategoryHome";
-          break;
-      case InBrainSurveyCategoryMediaAndPublishing:
-          return @"InBrainSurveyCategoryMediaAndPublishing";
-          break;
-      case InBrainSurveyCategoryPersonalCare:
-          return @"InBrainSurveyCategoryPersonalCare";
-          break;
-      case InBrainSurveyCategoryRestaurants:
-          return @"InBrainSurveyCategoryRestaurants";
-          break;
-      case InBrainSurveyCategorySensitiveExplicitContent:
-          return @"InBrainSurveyCategorySensitiveExplicitContent";
-          break;
-      case InBrainSurveyCategorySmokingTobacco:
-          return @"InBrainSurveyCategorySmokingTobacco";
-          break;
-      case InBrainSurveyCategorySocialResearch:
-          return @"InBrainSurveyCategorySocialResearch";
-          break;
-      case InBrainSurveyCategorySportsRecreationFitness:
-          return @"InBrainSurveyCategorySportsRecreationFitness";
-          break;
-      case InBrainSurveyCategoryTelecommunications:
-          return @"InBrainSurveyCategoryTelecommunications";
-          break;
-      case InBrainSurveyCategoryTransportation:
-          return @"InBrainSurveyCategoryTransportation";
-          break;
-      case InBrainSurveyCategoryTravelAirlines:
-          return @"InBrainSurveyCategoryTravelAirlines";
-          break;
-      case InBrainSurveyCategoryTravelHotels:
-          return @"InBrainSurveyCategoryTravelHotels";
-          break;
-      case InBrainSurveyCategoryTravelServicesAgencyBooking:
-          return @"InBrainSurveyCategoryTravelServicesAgencyBooking";
-          break;
-      case InBrainSurveyCategoryCreditCards:
-          return @"InBrainSurveyCategoryCreditCards";
-          break;
-      case InBrainSurveyCategoryVideoGames:
-          return @"InBrainSurveyCategoryVideoGames";
-          break;
-      case InBrainSurveyCategoryFashionAndClothingOther:
-          return @"InBrainSurveyCategoryFashionAndClothingOther";
-          break;
-      case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
-          return @"InBrainSurveyCategoryFashionAndClothingDepartmentStore";
-          break;
-  }
+    switch (category) {
+        case InBrainSurveyCategoryAutomotive:
+            return @"Automotive";
+        case InBrainSurveyCategoryBeveragesAlcoholic:
+            return @"Beverages Alcoholic";
+        case InBrainSurveyCategoryBeveragesNonAlcoholic:
+            return @"Beverages Non Alcoholic";
+        case InBrainSurveyCategoryBusiness:
+            return @"Business";
+        case InBrainSurveyCategoryChildrenAndParenting:
+            return @"Children & Parenting";
+        case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
+            return @"Coalition Loyalty Programs";
+        case InBrainSurveyCategoryDestinationsAndTourism:
+            return @"Destinations & Tourism";
+        case InBrainSurveyCategoryEducation:
+            return @"Education";
+        case InBrainSurveyCategoryElectronicsComputerSoftware:
+            return @"Electronics, Computer Software";
+        case InBrainSurveyCategoryEntertainmentAndLeisure:
+            return @"Entertainment And Leisure";
+        case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
+            return @"Finance, Banking, Investing & Insurance";
+        case InBrainSurveyCategoryFood:
+            return @"Food";
+        case InBrainSurveyCategoryGamblingLottery:
+            return @"Gambling, Lottery";
+        case InBrainSurveyCategoryGovernmentAndPolitics:
+            return @"Government & Politics";
+        case InBrainSurveyCategoryHealthCare:
+            return @"HealthCare";
+        case InBrainSurveyCategoryHome:
+            return @"Home";
+        case InBrainSurveyCategoryMediaAndPublishing:
+            return @"Media & Publishing";
+        case InBrainSurveyCategoryPersonalCare:
+            return @"Personal Care";
+        case InBrainSurveyCategoryRestaurants:
+            return @"Restaurants";
+        case InBrainSurveyCategorySensitiveExplicitContent:
+            return @"Sensitive & Explicit Content";
+        case InBrainSurveyCategorySmokingTobacco:
+            return @"Smoking & Tobacco";
+        case InBrainSurveyCategorySocialResearch:
+            return @"Social Research";
+        case InBrainSurveyCategorySportsRecreationFitness:
+            return @"Sports Recreation Fitness";
+        case InBrainSurveyCategoryTelecommunications:
+            return @"Telecommunications";
+        case InBrainSurveyCategoryTransportation:
+            return @"Transportation";
+        case InBrainSurveyCategoryTravelAirlines:
+            return @"Travel - Airlines";
+        case InBrainSurveyCategoryTravelHotels:
+            return @"Travel - Hotels";
+        case InBrainSurveyCategoryTravelServicesAgencyBooking:
+            return @"Travel - Services, Agency, Booking";
+        case InBrainSurveyCategoryCreditCards:
+            return @"Credit Cards";
+        case InBrainSurveyCategoryVideoGames:
+            return @"Video Games";
+        case InBrainSurveyCategoryFashionAndClothingOther:
+            return @"Fashion & Clothing - Other";
+        case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
+            return @"Fashion & Clothing - Department Store";
+    }
   return @"Unknown";
 }
 
@@ -280,23 +243,25 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
               // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
               // The result on the RN side is an array with null elements...
               for(int i = 0; i < surveys.count; i++) {
+                  InBrainNativeSurvey *survey = surveys[i];
+
 
                   NSMutableArray *categories = [NSMutableArray array];
-                  for(int y = 0; y < surveys[i].categoryIds.count; y++) {
-                      int categoryId = [surveys[i].categoryIds[y] intValue];
+                  for(int y = 0; y < survey.categoryIds.count; y++) {
+                      int categoryId = [survey.categoryIds[y] intValue];
                       NSString *title = [self categoryTitle: categoryId];
-                      NSObject* o = @{@"id": surveys[i].categoryIds[y], @"name": title};
+                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
                       [categories addObject:o];
                   }
 
-                  NSString *matchTitle = [self profileMatchTitle:surveys[i].profileMatch ];
-                  NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:surveys[i].profileMatch], @"name": matchTitle};
+                  NSString *matchTitle = [self profileMatchTitle:survey.profileMatch ];
+                  NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:survey.profileMatch], @"name": matchTitle};
 
-                  NSObject* o = @{ @"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank],
-                                   @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
-                                   @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale],
-                                   @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
-                                   @"categories": categories, @"profileMatch": profileMatch, @"categoryIds": surveys[i].categoryIds
+                  NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithLong:survey.rank],
+                                   @"time": [NSNumber numberWithLong:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
+                                   @"currencySale": [NSNumber numberWithBool:survey.currencySale],
+                                   @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
+                                   @"categories": survey.categoryIds, @"profileMatch": profileMatch, @"namedCategories": categories
                                  };
                      [surveyList addObject:o];
               }
