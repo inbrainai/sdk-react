@@ -267,17 +267,17 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putDouble("multiplier", survey.multiplier);
 
                         WritableArray categories = Arguments.createArray();
-                        WritableArray categoriesNamed = Arguments.createArray();
+                        WritableArray namedCategories = Arguments.createArray();
                         WritableMap categoryNamed = Arguments.createMap();
                         for (SurveyCategory category:survey.categories) {
                             categoryNamed.putInt("id", category.getId());
                             categoryNamed.putString("name", categoriesMap(category.name()));
-                            categoriesNamed.pushMap(categoryNamed);
+                            namedCategories.pushMap(categoryNamed);
                             categories.pushInt(category.getId());
                         }
 
                         map.putArray("categories", categories);
-                        map.putArray("categoriesNamed", categoriesNamed);
+                        map.putArray("namedCategories", namedCategories);
 
                         WritableMap profileMatch = Arguments.createMap();
                         profileMatch.putInt("id", survey.conversionThreshold);
