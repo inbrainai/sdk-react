@@ -257,8 +257,8 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                   NSString *matchTitle = [self profileMatchTitle:survey.profileMatch ];
                   NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:survey.profileMatch], @"name": matchTitle};
 
-                  NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithLong:survey.rank],
-                                   @"time": [NSNumber numberWithLong:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
+                  NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithInt:survey.rank],
+                                   @"time": [NSNumber numberWithInt:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
                                    @"currencySale": [NSNumber numberWithBool:survey.currencySale],
                                    @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
                                    @"categories": survey.categoryIds, @"profileMatch": profileMatch, @"namedCategories": categories

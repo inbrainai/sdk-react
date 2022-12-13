@@ -268,8 +268,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
                         WritableArray categories = Arguments.createArray();
                         WritableArray namedCategories = Arguments.createArray();
-                        WritableMap categoryNamed = Arguments.createMap();
                         for (SurveyCategory category:survey.categories) {
+                            WritableMap categoryNamed = Arguments.createMap();
                             categoryNamed.putInt("id", category.getId());
                             categoryNamed.putString("name", categoriesMap(category.name()));
                             namedCategories.pushMap(categoryNamed);
