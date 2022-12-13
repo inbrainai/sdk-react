@@ -10,6 +10,7 @@ export type InBrainReward = {
 
 /**
  * Native Surveys interface
+ * @deprecated The type should not be used
  */
 export type InBrainNativeSurveys = {
     id: string;
@@ -19,19 +20,42 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
-    categories: number[];
-    
+    profileMatch: ProfileMatch;
+    namedCategories: Category[];
+    /**
+     * @deprecated use namedCategories instead
+     */
+    categories: number[],
+}
+
+/**
+ * Native Surveys interface
+ */
+export type InBrainNativeSurvey = InBrainNativeSurveys
+
+/**
+ * Native Surveys Category interface
+ */
+export type Category = {
+    id: number;
+    name: string
+}
+
+/**
+ * Native profile match interface
+ */
+export type ProfileMatch = {
+    id: number;
+    name: string
 }
 
 /**
  * Reward filter interface
  */
  export type InBrainSurveyFilter = {
-
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
-
 }
 
 export const InBrainSurveyCategory = {
@@ -67,5 +91,4 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-    
 }

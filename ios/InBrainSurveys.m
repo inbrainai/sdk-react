@@ -4,7 +4,7 @@
 @implementation InBrainSurveys
 
 // ***********************************
-// ***** UIVIEWCONTROLER methods *****
+// ***** UTILS methods *****
 // ***********************************
 - (instancetype)init
 {
@@ -13,6 +13,96 @@
     [self.inbrain setInBrainDelegate:self];
     return self;
 }
+
+- (NSString *)profileMatchTitle:(SurveyProfileMatch) profileMatch {
+    switch (profileMatch) {
+        case SurveyProfileMatchNewSurvey:
+            return @"New Survey";
+        case SurveyProfileMatchPoorMatch:
+            return @"Poor Profile Match";
+        case SurveyProfileMatchFairMatch:
+            return @"Fair Profile Match";
+        case SurveyProfileMatchGoodMatch:
+            return @"Good Profile Match";
+        case SurveyProfileMatchGreatMatch:
+            return @"Great Profile Match";
+        case SurveyProfileMatchExcellentMatch:
+            return @"Excellent Profile Match";
+    }
+    return @"Unknown";
+}
+
+
+- (NSString *)categoryTitle:(InBrainSurveyCategory) category {
+    switch (category) {
+        case InBrainSurveyCategoryAutomotive:
+            return @"Automotive";
+        case InBrainSurveyCategoryBeveragesAlcoholic:
+            return @"Beverages Alcoholic";
+        case InBrainSurveyCategoryBeveragesNonAlcoholic:
+            return @"Beverages Non Alcoholic";
+        case InBrainSurveyCategoryBusiness:
+            return @"Business";
+        case InBrainSurveyCategoryChildrenAndParenting:
+            return @"Children & Parenting";
+        case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
+            return @"Coalition Loyalty Programs";
+        case InBrainSurveyCategoryDestinationsAndTourism:
+            return @"Destinations & Tourism";
+        case InBrainSurveyCategoryEducation:
+            return @"Education";
+        case InBrainSurveyCategoryElectronicsComputerSoftware:
+            return @"Electronics, Computer Software";
+        case InBrainSurveyCategoryEntertainmentAndLeisure:
+            return @"Entertainment And Leisure";
+        case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
+            return @"Finance, Banking, Investing & Insurance";
+        case InBrainSurveyCategoryFood:
+            return @"Food";
+        case InBrainSurveyCategoryGamblingLottery:
+            return @"Gambling, Lottery";
+        case InBrainSurveyCategoryGovernmentAndPolitics:
+            return @"Government & Politics";
+        case InBrainSurveyCategoryHealthCare:
+            return @"HealthCare";
+        case InBrainSurveyCategoryHome:
+            return @"Home";
+        case InBrainSurveyCategoryMediaAndPublishing:
+            return @"Media & Publishing";
+        case InBrainSurveyCategoryPersonalCare:
+            return @"Personal Care";
+        case InBrainSurveyCategoryRestaurants:
+            return @"Restaurants";
+        case InBrainSurveyCategorySensitiveExplicitContent:
+            return @"Sensitive & Explicit Content";
+        case InBrainSurveyCategorySmokingTobacco:
+            return @"Smoking & Tobacco";
+        case InBrainSurveyCategorySocialResearch:
+            return @"Social Research";
+        case InBrainSurveyCategorySportsRecreationFitness:
+            return @"Sports Recreation Fitness";
+        case InBrainSurveyCategoryTelecommunications:
+            return @"Telecommunications";
+        case InBrainSurveyCategoryTransportation:
+            return @"Transportation";
+        case InBrainSurveyCategoryTravelAirlines:
+            return @"Travel - Airlines";
+        case InBrainSurveyCategoryTravelHotels:
+            return @"Travel - Hotels";
+        case InBrainSurveyCategoryTravelServicesAgencyBooking:
+            return @"Travel - Services, Agency, Booking";
+        case InBrainSurveyCategoryCreditCards:
+            return @"Credit Cards";
+        case InBrainSurveyCategoryVideoGames:
+            return @"Video Games";
+        case InBrainSurveyCategoryFashionAndClothingOther:
+            return @"Fashion & Clothing - Other";
+        case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
+            return @"Fashion & Clothing - Department Store";
+    }
+  return @"Unknown";
+}
+
 
 // *********************************
 // ***** RN BRIDGE methods  ********
@@ -31,7 +121,7 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        
+
         [self notNull:@"apiClientId" toCheck:apiClientId];
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
@@ -77,10 +167,10 @@ RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *
 // ************************
 RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     // This requires the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-    
+
         @try {
             [self.inbrain showSurveysFrom:NULL];
             resolve(nil);
@@ -89,7 +179,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
             reject(@"ERR_SHOW_SURVEYS", error.description, nil);
         }
     });
-    
+
 }
 
 // ************************
@@ -100,17 +190,15 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
     @try {
         [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
             NSMutableArray *rewardList = [NSMutableArray array];
-            for(int i = 0; i < rewards.count; i++) {
-
-                // ENHANCE
-                // The mapping seems to be necessary. Resolving the promise directly with 'rewards' array doesn't work
+                // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
                 // The result on the RN side is an array with null elements...
-                 NSObject* o = @{@"transactionId": [NSNumber numberWithLong:rewards[i].transactionId], @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount], @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
+            for(int i = 0; i < rewards.count; i++) {
+                 NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:rewards[i].transactionId],
+                                  @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount],
+                                  @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
 
                [rewardList addObject:o];
             }
-
-
             resolve(rewardList);
         } failed:^(NSError * error){
             reject(@"ERR_GET_REWARDS", error.localizedDescription, error);
@@ -127,46 +215,18 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 // ***********************************
 RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
-    @try{
 
+    @try{
         [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
             if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
             else resolve(@(available));
         }];
-
     }
     @catch (NSException *error) {
         reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.description, nil);
     }
 }
 
-
-//RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-//{
-//    @try {
-//        [[InBrain shared] getNativeSurveysWithPlacementID:placementId success:^(NSArray<InBrainNativeSurvey *> * surveys){
-//            NSMutableArray *surveyList = [NSMutableArray array];
-//            for(int i = 0; i < surveys.count; i++) {
-//
-//                // ENHANCE
-//                // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-//                // The result on the RN side is an array with null elements...
-//                 NSObject* o = @{@"id": surveys[i].id, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value], @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier]};
-//
-//                   [surveyList addObject:o];
-//            }
-//
-//            resolve(surveyList);
-//        } failed:^(NSError * failed){
-//            reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
-//        }];
-//
-//    }
-//    @catch (NSException *error) {
-//        reject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
-//    }
-//}
 // *******************************
 // ***** GET NATIVE SURVEYS ******
 // *******************************
@@ -176,22 +236,33 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
 {
     @try {
       InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
-      
-      
-      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^
-        (NSArray<InBrainNativeSurvey *> * surveys){
+
+      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
               NSMutableArray *surveyList = [NSMutableArray array];
+
+              // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
+              // The result on the RN side is an array with null elements...
               for(int i = 0; i < surveys.count; i++) {
+                  InBrainNativeSurvey *survey = surveys[i];
 
-                  // ENHANCE
-                  // The mapping seems to be necessary. Resolving the promise directly with 'surveys' array doesn't work
-                  // The result on the RN side is an array with null elements...
-                 
-                  NSObject* o = @{@"id": surveys[i].id, @"searchId": surveys[i].searchId, @"rank": [NSNumber numberWithLong:surveys[i].rank], @"time": [NSNumber numberWithLong:surveys[i].time], @"value": [NSNumber numberWithDouble:surveys[i].value],
-                                  @"currencySale": [NSNumber numberWithBool:surveys[i].currencySale], @"multiplier": [NSNumber numberWithDouble:surveys[i].multiplier],
-                                  @"categories": surveys[i].categoryIds
-                  };
 
+                  NSMutableArray *categories = [NSMutableArray array];
+                  for(int y = 0; y < survey.categoryIds.count; y++) {
+                      int categoryId = [survey.categoryIds[y] intValue];
+                      NSString *title = [self categoryTitle: categoryId];
+                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
+                      [categories addObject:o];
+                  }
+
+                  NSString *matchTitle = [self profileMatchTitle:survey.profileMatch ];
+                  NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:survey.profileMatch], @"name": matchTitle};
+
+                  NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithInt:survey.rank],
+                                   @"time": [NSNumber numberWithInt:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
+                                   @"currencySale": [NSNumber numberWithBool:survey.currencySale],
+                                   @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
+                                   @"categories": survey.categoryIds, @"profileMatch": profileMatch, @"namedCategories": categories
+                                 };
                      [surveyList addObject:o];
               }
 
@@ -228,7 +299,7 @@ RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId r
 // ***************************
 RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     @try{
         // Mapping to list of ids and forwarding to SDK
         NSArray* ids = [rewards valueForKey:@"transactionId"];
@@ -265,19 +336,19 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try{
-        
+
         // Extract parameters
         NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
         UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
 
         NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
         UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
-        
+
         NSString* titleColorString = [data objectForKey:@"titleColor"];
         UIColor* titleColor = [self colorWithHexString:titleColorString];
-        
+
         BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
-        
+
         // Instantiate config object
         InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
 
@@ -286,7 +357,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromi
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_NAVIGATION_BAR_CONFIG", error.description, nil);
@@ -302,7 +373,7 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
 
         // Extract parameters
         BOOL lighStatusBar = [[data objectForKey:@"lightStatusBar"] boolValue];
-        
+
         UIStatusBarStyle style = 1;
         if(!lighStatusBar) {
             if(@available(iOS 13, *))
@@ -310,16 +381,16 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
             else
                 style = 0; // UIStatusBarStyleDefault
         }
-        
+
        // Instantiate config object
        InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
-        
+
         // Forwarding to SDK
         [[InBrain shared] setStatusBarConfig:config];
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_STATUS_BAR_CONFIG", error.description, nil);
@@ -342,7 +413,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
         // Resolve the promise
         resolve(@true);
-    
+
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_LANGUAGE", error.description, nil);
