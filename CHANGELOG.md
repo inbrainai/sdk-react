@@ -1,3 +1,14 @@
+## [2.5.0] 2022-12-19
+### Changed
+- getNativeSurveys renamed to getNativeSurvey
+- getNativeSurveys.categories mark as deprecated
+- add new property profileMatch 
+- add new type profileMatch
+- add property namedCategories
+- add new type namedCategories
+- add mapping for categories and profileMatch to get readable names on RN side
+- update pod and Gradle files, how they will always get latest minor version of sdk
+- add comments to some types
 ## [2.4.3] 2022-11-18
 ### Changed
 - Categories list added in response of getNativeSurveys api
