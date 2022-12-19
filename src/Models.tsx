@@ -10,6 +10,7 @@ export type InBrainReward = {
 
 /**
  * Native Surveys interface
+ * @deprecated use InBrainNativeSurvey instead
  */
 export type InBrainNativeSurveys = {
     id: string;
@@ -19,21 +20,76 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
-    categories: number[];
-    
+    /**
+     * Possible cases are:
+     * 0 = New Survey;
+     * 1 = Poor Profile Match;
+     * 2 = Fair Profile Match;
+     * 3 = Good Profile Match;
+     * 4 = Great Profile Match;
+     * 5 = Excellent Profile Match
+     */
+    profileMatch: ProfileMatch;
+    namedCategories: Category[];
+
+    /**
+     * @deprecated use namedCategories instead
+     */
+    categories: number[],
+}
+
+/**
+ * Native Surveys interface
+ */
+export type InBrainNativeSurvey = InBrainNativeSurveys
+
+/**
+ * Native Surveys Category interface
+ */
+export type Category = {
+    id: number;
+    name: string
+}
+
+/**
+ * Native profile match interface
+ */
+export type ProfileMatch = {
+    id: number;
+    name: string
 }
 
 /**
  * Reward filter interface
  */
  export type InBrainSurveyFilter = {
-
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
-
 }
 
+/**
+ * ProfileMatchNames
+ * Possible cases are:
+ * 0 = New Survey;
+ * 1 = Poor Profile Match;
+ * 2 = Fair Profile Match;
+ * 3 = Good Profile Match;
+ * 4 = Great Profile Match;
+ * 5 = Excellent Profile Match
+ */
+export const ProfileMatchNames = {
+    NewSurvey:0,
+    PoorProfileMatch:1,
+    FairProfileMatch:2,
+    GoodProfileMatch:3,
+    GreatProfileMatch:4,
+    ExcellentProfileMatch:5,
+}
+
+/**
+* InBrainSurveyCategory
+*/
 export const InBrainSurveyCategory = {
    Automotive:1,
    BeveragesAlcoholic:2,
@@ -67,5 +123,4 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-    
 }

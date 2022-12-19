@@ -1,7 +1,6 @@
 package com.inbrain;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -30,6 +29,7 @@ import com.inbrain.sdk.model.Reward;
 import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -257,6 +257,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                     WritableArray array = Arguments.createArray();
                     for (Survey survey : surveys) {
                         WritableMap map = Arguments.createMap();
+
                         map.putString("id", survey.id);
                         map.putString("searchId", survey.searchId);
                         map.putInt("rank", (int) survey.rank);
@@ -265,13 +266,24 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putDouble("multiplier", survey.multiplier);
 
-
                         WritableArray categories = Arguments.createArray();
+                        WritableArray namedCategories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
+                            WritableMap categoryNamed = Arguments.createMap();
+                            categoryNamed.putInt("id", category.getId());
+                            categoryNamed.putString("name", categoriesMap(category.name()));
+                            namedCategories.pushMap(categoryNamed);
                             categories.pushInt(category.getId());
-
                         }
+
                         map.putArray("categories", categories);
+                        map.putArray("namedCategories", namedCategories);
+
+                        WritableMap profileMatch = Arguments.createMap();
+                        profileMatch.putInt("id", survey.conversionThreshold);
+                        profileMatch.putString("name", profileMatchMap(survey.conversionThreshold));
+                        map.putMap("profileMatch", profileMatch);
+
                         array.pushMap(map);
                     }
 
@@ -502,6 +514,98 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
 
         return activity;
+    }
+
+    private String categoriesMap(String categoryName) {
+        switch (categoryName) {
+            case "Automotive" :
+                return "Automotive";
+            case "BeveragesAlcoholic" :
+                return "Beverages Alcoholic";
+            case "BeveragesNonAlcoholic" :
+                return "Beverages Non Alcoholic";
+            case "Business" :
+                return "Business";
+            case "ChildrenAndParenting" :
+                return "Children & Parenting";
+            case "CoalitionLoyaltyPrograms" :
+                return "Coalition Loyalty Programs";
+            case "DestinationsAndTourism" :
+                return "Destinations & Tourism";
+            case "Education" :
+                return "Education";
+            case "ElectronicsComputerSoftware" :
+                return "Electronics, Computer Software";
+            case "EntertainmentAndLeisure" :
+                return "Entertainment And Leisure";
+            case "FinanceBankingInvestingAndInsurance" :
+                return "Finance, Banking, Investing & Insurance";
+            case "Food" :
+                return "Food";
+            case "GamblingLottery" :
+                return "Gambling, Lottery";
+            case "GovernmentAndPolitics" :
+                return "Government & Politics";
+            case "HealthCare" :
+                return "HealthCare";
+            case "Home" :
+                return "Home";
+            case "MediaAndPublishing" :
+                return "Media & Publishing";
+            case "PersonalCare" :
+                return "Personal Care";
+            case "Restaurants" :
+                return "Restaurants";
+            case "SensitiveExplicitContent" :
+                return "Sensitive & Explicit Content";
+            case "SmokingTobacco" :
+                return "Smoking & Tobacco";
+            case "SocialResearch" :
+                return "Social Research";
+            case "SportsRecreationFitness" :
+                return "Sports Recreation Fitness";
+            case "Telecommunications" :
+                return "Telecommunications";
+            case "Transportation" :
+                return "Transportation";
+            case "TravelAirlines" :
+                return "Travel - Airlines";
+            case "TravelHotels" :
+                return "Travel - Hotels";
+            case "TravelServicesAgencyBooking" :
+                return "Travel - Services, Agency, Booking";
+            case "CreditCards" :
+                return "Credit Cards";
+            case "VideoGames" :
+                return "Video Games";
+            case "FashionAndClothingOther" :
+                return "Fashion & Clothing - Other";
+            case "FashionAndClothingDepartmentStore" :
+                return "Fashion & Clothing - Department Store";
+            default:
+                return "Unknown";
+        }
+    }
+
+    private String profileMatchMap(Integer profileMatchId) {
+        switch (profileMatchId) {
+            case 0 :
+                return "New Survey";
+            case 1 :
+                return "Poor Profile Match";
+            case 2 :
+                return "Poor Profile Match";
+            case 3 :
+                return "Fair Profile Match";
+            case 4 :
+                return "Good Profile Match";
+            case 5 :
+                return "Great Profile Match";
+            case 6 :
+                return "Excellent Profile Match";
+            default:
+                return "Unknown";
+        }
     }
 
     private HashMap<String, String> toHashMap(ReadableMap data) {
