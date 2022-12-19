@@ -21,17 +21,17 @@ export type InBrainNativeSurveys = {
     currencySale: boolean;
     multiplier: number;
     /**
-     * Possible cases are
-     * // 0 = New Survey;
-     * // 1 = Poor Profile Match;
-     * // 2 = Fair Profile Match;
-     * // 3 = Good Profile Match;
-     * // 4 = Great Profile Match;
-     * // 5 = Excellent Profile Match
+     * Possible cases are:
+     * 0 = New Survey;
+     * 1 = Poor Profile Match;
+     * 2 = Fair Profile Match;
+     * 3 = Good Profile Match;
+     * 4 = Great Profile Match;
+     * 5 = Excellent Profile Match
      */
     profileMatch: ProfileMatch;
     namedCategories: Category[];
-    
+
     /**
      * @deprecated use namedCategories instead
      */
@@ -53,6 +53,13 @@ export type Category = {
 
 /**
  * Native profile match interface
+ * Possible cases are:
+ * 0 = New Survey;
+ * 1 = Poor Profile Match;
+ * 2 = Fair Profile Match;
+ * 3 = Good Profile Match;
+ * 4 = Great Profile Match;
+ * 5 = Excellent Profile Match
  */
 export type ProfileMatch = {
     id: number;
