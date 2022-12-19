@@ -53,13 +53,6 @@ export type Category = {
 
 /**
  * Native profile match interface
- * Possible cases are:
- * 0 = New Survey;
- * 1 = Poor Profile Match;
- * 2 = Fair Profile Match;
- * 3 = Good Profile Match;
- * 4 = Great Profile Match;
- * 5 = Excellent Profile Match
  */
 export type ProfileMatch = {
     id: number;
@@ -73,6 +66,25 @@ export type ProfileMatch = {
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
+}
+
+/**
+ * ProfileMatchNames
+ * Possible cases are:
+ * 0 = New Survey;
+ * 1 = Poor Profile Match;
+ * 2 = Fair Profile Match;
+ * 3 = Good Profile Match;
+ * 4 = Great Profile Match;
+ * 5 = Excellent Profile Match
+ */
+export const ProfileMatchNames = {
+    NewSurvey:0,
+    PoorProfileMatch:1,
+    FairProfileMatch:2,
+    GoodProfileMatch:3,
+    GreatProfileMatch:4,
+    ExcellentProfileMatch:5,
 }
 
 /**
