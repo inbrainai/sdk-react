@@ -6,7 +6,7 @@
 ### Changed
 - `InBrainNativeSurveys` renamed into `InBrainNativeSurvey`;  
 - `InBrainNativeSurvey`'s `categories` property became deprecated in favor of `namedCategories`;  
-- The package uses latest .patch varsion of iOS and Android InBrainSurveys SDKs (means 02.00.xx instead of 02.00.00) - that will help to deliver the "underhood" fixes and improvements ASAP.
+- The package uses the latest .patch versions of iOS and Android InBrainSurveys SDKs (means 02.00.xx instead of 02.00.00) - which will help to deliver the "underhood" fixes and improvements ASAP.
 
 ### Removed
 - Bitcode support for iOS. 
