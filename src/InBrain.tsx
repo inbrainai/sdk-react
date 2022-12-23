@@ -7,7 +7,7 @@ const { InBrainSurveys } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
 
-/*
+/**
  * Init the SDK.
  * @param apiClientId Provided in inBrain.ai dashboard
  * @param apiSecret Provided in inBrain.ai dashboard
@@ -31,6 +31,13 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
     // return promise for init
     return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.isS2S, options.userId));
 }
+
+/**
+ * set userID
+ *  @param sessionUid the session identifiers
+ */
+const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
+// const setUserID = (userID: string) => wrapPromise<void>(() => InBrainSurveys.setUserID(userID))
 
 const setDefaultOptions = (options?: InitOptions) => {
     let internalOptions: any = options || {};
@@ -74,8 +81,21 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
  * @param sessionUid the session identifiers
  * @param dataPoints datapoints
+ * @deprecated use namedCategories instead
  */
 const setSessionParameters = (sessionUid: string, dataPoints: {}) => InBrainSurveys.setInBrainValuesFor(sessionUid, dataPoints);
+
+/**
+ * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
+ * @param sessionUid the session identifiers
+ */
+const setSessionID = (sessionUid: string) => InBrainSurveys.setSessionID(sessionUid);
+
+/**
+ * Set setDataOptions. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
+ * @param dataPoints datapoints
+ */
+const setDataOptions = (dataPoints: {}) => InBrainSurveys.setDataOptions(dataPoints);
 
 /**
  * Get the rewards
@@ -156,7 +176,10 @@ const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<an
 
 export default {
     init,
+    setUserID,
     showSurveys,
+    setSessionID,
+    setDataOptions,
     setSessionParameters,
     getRewards,
     confirmRewards,

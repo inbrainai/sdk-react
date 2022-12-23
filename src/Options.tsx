@@ -34,6 +34,9 @@ export type StatusBarOptions = { [opt in StatusBarOptionName]?: StatusBarOptionT
 
 // *** STYLING OPTION TYPE
 export type StylingOptionType = {
+    /**
+     * @deprecated use namedCategories instead
+     */
     language?: String
     title?: String
     navigationBar?: NavigationBarOptionType
