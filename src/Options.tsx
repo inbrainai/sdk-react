@@ -9,11 +9,14 @@ export type StatusBarOptionName = "lightStatusBar";
 // *** CONFIG OPTION TYPE
 export type ConfigOptionTypes = {
     /**
-     * @deprecated in future also remove need remove from ConfigOptionName
+     * @deprecated in future also need remove from ConfigOptionName
      */
     isS2S: boolean,
     sessionUid: string,
     userId: string,
+    /**
+     * @deprecated in future also  need remove type DataPoints
+     */
     dataPoints: DataPoints,
 }
 export type ConfigOptions = { [opt in ConfigOptionName]?: ConfigOptionTypes[opt] }
@@ -38,7 +41,7 @@ export type StatusBarOptions = { [opt in StatusBarOptionName]?: StatusBarOptionT
 // *** STYLING OPTION TYPE
 export type StylingOptionType = {
     /**
-     * @deprecated in future also remove need remove from StylingOptionName
+     * @deprecated in future also need remove from StylingOptionName
      */
     language?: String
     title?: String

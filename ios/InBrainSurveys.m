@@ -130,13 +130,6 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
 
         //hardcoded isS2S (always True)
         bool isS2S = true;
-
-//         if([userId length] == 0) {
-//             [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S];
-//         } else {
-//             [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
-//         }
-//
         [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
 
         // Resolve
@@ -158,7 +151,7 @@ RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionUId)
 // **********************************
 // ***** SET INBRAIN DATA POINTS *****
 // **********************************
-RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
 {
     // Convert map to array of single entry maps
     // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
