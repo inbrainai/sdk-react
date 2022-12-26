@@ -130,7 +130,7 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
 
         //hardcoded isS2S (always True)
         bool isS2S = true;
-        
+
 //         if([userId length] == 0) {
 //             [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S];
 //         } else {

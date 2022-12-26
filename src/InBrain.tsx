@@ -22,10 +22,8 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
     validateOptions(apiClientId, apiSecret, options)
 
     // Call all options bridge methodes
-    // -- this method is apart as these two properties can't be set individually
-
-    await wrapPromise(() => InBrainSurveys.setSessionID(options.sessionUid));
-    await wrapPromise(() => InBrainSurveys.setDataOptions(options.dataPoints));
+    InBrainSurveys.setSessionID(options.sessionUid);
+    InBrainSurveys.setDataOptions(options.dataPoints);
 
     // -- call all the other properties one by one (styling options)
     await callOptionSetters(options)
