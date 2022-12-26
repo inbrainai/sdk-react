@@ -94,16 +94,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
     }
 
-//     // **********************************
-//     // ***** SET INBRAIN VALUES FOR *****
-//     // **********************************
-//     @ReactMethod
-//     public void setUserId(final String userId, Promise promise) {
-//
-//
-//
-//     }
-
     // **********************************
     // ***** SET INBRAIN VALUES FOR *****
     // **********************************
@@ -127,16 +117,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         //tmp data until android sdk new version
         this.sessionID = sessionId;
         HashMap<String, String> data = this.sessionData;
-
-        //tmp check until android sdk new version
-        if(data != null) {
-            new InBrainSDKParamSetter<HashMap<String, String>>() {
-                @Override
-                public void setParam(HashMap<String, String> param) {
-                    InBrain.getInstance().setInBrainValuesFor(sessionId, data);
-                }
-            }.apply(promise, "values", data, "ERR_SET_INBRAIN_SESSION_ID");
-        }
+        InBrain.getInstance().setInBrainValuesFor(sessionId, data);
     }
 
     // **********************************
@@ -147,16 +128,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         //tmp data until android sdk new version
         this.sessionData = toHashMap(data);
         String sessionId = this.sessionID;
-
-        //tmp check until android sdk new version
-        if(sessionId != null) {
-            new InBrainSDKParamSetter<HashMap<String, String>>() {
-                @Override
-                public void setParam(HashMap<String, String> param) {
-                    InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
-                }
-            }.apply(promise, "values", toHashMap(data), "ERR_SET_INBRAIN_DATA_POINTS");
-        }
+        InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
     }
 
     // ************************

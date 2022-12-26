@@ -32,12 +32,6 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
     return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.userId));
 }
 
-// /**
-//  * set userID
-//  *  @param sessionUid the session identifiers
-//  */
-// const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
-
 const setDefaultOptions = (options?: InitOptions) => {
     let internalOptions: any = options || {};
 
@@ -82,7 +76,10 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * @param dataPoints datapoints
  * @deprecated you use setSessionID and setDataOptions
  */
-const setSessionParameters = (sessionUid: string, dataPoints: {}) => InBrainSurveys.setInBrainValuesFor(sessionUid, dataPoints);
+const setSessionParameters = (sessionUid: string, dataPoints: {}) => {
+    InBrainSurveys.setSessionID(sessionUid);
+    InBrainSurveys.setDataOptions(dataPoints);
+}
 
 /**
  * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
@@ -175,7 +172,6 @@ const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<an
 
 export default {
     init,
-    setUserID,
     showSurveys,
     setSessionID,
     setDataOptions,

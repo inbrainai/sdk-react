@@ -147,63 +147,12 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
     }
 }
 
-// // ***********************
-// // ***** SET USER ID *****
-// // ***********************
-// RCT_EXPORT_METHOD(setUserID:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-// {
-//     @try {
-//         [self notNull:@"userId" toCheck:userId];
-//
-//         [self.inbrain setWithUserID: userId];
-//
-//         // Resolve
-//         resolve(nil);
-//     }
-//     @catch (NSException *error) {
-//         reject(@"ERR_SET_INBRAIN", error.description, nil);
-//     }
-// }
-
-// **********************************
-// ***** SET INBRAIN VALUES FOR *****
-// **********************************
-RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-
-        // Convert map to array of single entry maps
-        // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
-        NSArray* keys=[data allKeys];
-        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
-
-        [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [mapped addObject:@{ obj : [data objectForKey:obj]}];
-        }];
-
-        [self.inbrain setInBrainValuesForSessionID:sessionId dataOptions:mapped];
-
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN_VALUES", error.description, nil);
-    }
-}
-
 // **********************************
 // ***** SET INBRAIN SESSION ID *****
 // **********************************
-RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionUId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionUId)
 {
-    @try {
-        [self.inbrain setSessionID:sessionUId];
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN_VALUES", error.description, nil);
-    }
+    [self.inbrain setSessionID:sessionUId];
 }
 
 // **********************************
@@ -211,25 +160,16 @@ RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionUId resolver:(RCTPromiseResolv
 // **********************************
 RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    @try {
+    // Convert map to array of single entry maps
+    // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
+    NSArray* keys=[data allKeys];
+    NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
 
-        // Convert map to array of single entry maps
-        // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
-        NSArray* keys=[data allKeys];
-        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
+    [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [mapped addObject:@{ obj : [data objectForKey:obj]}];
+    }];
 
-        [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [mapped addObject:@{ obj : [data objectForKey:obj]}];
-        }];
-
-        [self.inbrain setDataOptions: mapped];
-
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN_VALUES", error.description, nil);
-    }
+    [self.inbrain setDataOptions: mapped];
 }
 
 
