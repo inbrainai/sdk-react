@@ -23,21 +23,22 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
 
     // Call all options bridge methodes
     // -- this method is apart as these two properties can't be set individually
-    await wrapPromise(() => InBrainSurveys.setInBrainValuesFor(options.sessionUid, options.dataPoints));
+
+    await wrapPromise(() => InBrainSurveys.setSessionID(options.sessionUid));
+    await wrapPromise(() => InBrainSurveys.setDataOptions(options.dataPoints));
 
     // -- call all the other properties one by one (styling options)
     await callOptionSetters(options)
 
     // return promise for init
-    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.isS2S, options.userId));
+    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.userId));
 }
 
-/**
- * set userID
- *  @param sessionUid the session identifiers
- */
-const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
-// const setUserID = (userID: string) => wrapPromise<void>(() => InBrainSurveys.setUserID(userID))
+// /**
+//  * set userID
+//  *  @param sessionUid the session identifiers
+//  */
+// const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
 
 const setDefaultOptions = (options?: InitOptions) => {
     let internalOptions: any = options || {};
@@ -81,7 +82,7 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
  * @param sessionUid the session identifiers
  * @param dataPoints datapoints
- * @deprecated use namedCategories instead
+ * @deprecated you use setSessionID and setDataOptions
  */
 const setSessionParameters = (sessionUid: string, dataPoints: {}) => InBrainSurveys.setInBrainValuesFor(sessionUid, dataPoints);
 

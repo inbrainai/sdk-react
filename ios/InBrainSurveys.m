@@ -120,7 +120,7 @@ RCT_EXPORT_MODULE()
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
 
@@ -128,6 +128,15 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
 
+        //hardcoded isS2S (always True)
+        bool isS2S = true;
+        
+//         if([userId length] == 0) {
+//             [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S];
+//         } else {
+//             [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
+//         }
+//
         [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
 
         // Resolve
@@ -138,23 +147,23 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
     }
 }
 
-// ***********************
-// ***** SET USER ID *****
-// ***********************
-RCT_EXPORT_METHOD(setUserID:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        [self notNull:@"userId" toCheck:userId];
-
-        [self.inbrain setWithUserID: userId];
-        
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN", error.description, nil);
-    }
-}
+// // ***********************
+// // ***** SET USER ID *****
+// // ***********************
+// RCT_EXPORT_METHOD(setUserID:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// {
+//     @try {
+//         [self notNull:@"userId" toCheck:userId];
+//
+//         [self.inbrain setWithUserID: userId];
+//
+//         // Resolve
+//         resolve(nil);
+//     }
+//     @catch (NSException *error) {
+//         reject(@"ERR_SET_INBRAIN", error.description, nil);
+//     }
+// }
 
 // **********************************
 // ***** SET INBRAIN VALUES FOR *****
