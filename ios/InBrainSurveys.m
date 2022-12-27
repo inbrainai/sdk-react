@@ -14,20 +14,22 @@
     return self;
 }
 
-- (NSString *)profileMatchTitle:(SurveyProfileMatch) profileMatch {
-    switch (profileMatch) {
-        case SurveyProfileMatchNewSurvey:
+- (NSString *)surveyConversionTitle:(SurveyConversionLevel) SurveyConversion {
+    switch (SurveyConversion) {
+        case SurveyConversionLevelNewSurvey:
             return @"New Survey";
-        case SurveyProfileMatchPoorMatch:
-            return @"Poor Profile Match";
-        case SurveyProfileMatchFairMatch:
-            return @"Fair Profile Match";
-        case SurveyProfileMatchGoodMatch:
-            return @"Good Profile Match";
-        case SurveyProfileMatchGreatMatch:
-            return @"Great Profile Match";
-        case SurveyProfileMatchExcellentMatch:
-            return @"Excellent Profile Match";
+        case SurveyConversionLevelVeryPoorConversion:
+            return @"Very Poor Conversion";
+        case SurveyConversionLevelPoorConversion:
+            return @"Poor Conversion";
+        case SurveyConversionLevelFairConversion:
+            return @"Fair Conversion";
+        case SurveyConversionLevelGoodConversion:
+            return @"Good Conversion";
+        case SurveyConversionLevelVeryGoodConversion:
+            return @"Vety Good Conversion";
+        case SurveyConversionLevelExcellentConversion:
+            return @"Excellent Conversion";
     }
     return @"Unknown";
 }
@@ -118,7 +120,7 @@ RCT_EXPORT_MODULE()
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret isS2S:(BOOL)isS2S userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
 
@@ -126,7 +128,7 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
 
-        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
+        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true userID:userId];
 
         // Resolve
         resolve(nil);
@@ -137,30 +139,30 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
 }
 
 // **********************************
-// ***** SET INBRAIN VALUES FOR *****
+// ***** SET INBRAIN SESSION ID *****
 // **********************************
-RCT_EXPORT_METHOD(setInBrainValuesFor:(NSString *)sessionId data:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionId)
 {
-    @try {
-
-        // Convert map to array of single entry maps
-        // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
-        NSArray* keys=[data allKeys];
-        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
-
-        [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [mapped addObject:@{ obj : [data objectForKey:obj]}];
-        }];
-
-        [self.inbrain setInBrainValuesForSessionID:sessionId dataOptions:mapped];
-
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN_VALUES", error.description, nil);
-    }
+    [self.inbrain setSessionID:sessionId];
 }
+
+// **********************************
+// ***** SET INBRAIN DATA POINTS *****
+// **********************************
+RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
+{
+    // Convert map to array of single entry maps
+    // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
+    NSArray* keys=[data allKeys];
+    NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:[keys count]];
+
+    [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [mapped addObject:@{ obj : [data objectForKey:obj]}];
+    }];
+
+    [self.inbrain setDataOptions: mapped];
+}
+
 
 // ************************
 // ***** SHOW SURVEYS *****
@@ -254,14 +256,14 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                       [categories addObject:o];
                   }
 
-                  NSString *matchTitle = [self profileMatchTitle:survey.profileMatch ];
-                  NSObject *profileMatch = @{ @"id": [NSNumber numberWithInt:survey.profileMatch], @"name": matchTitle};
+                  NSString *conversionTitle = [self surveyConversionTitle:survey.conversionLevel ];
+                  NSObject *conversionLevel = @{ @"id": [NSNumber numberWithInt:survey.conversionLevel], @"name": conversionTitle};
 
                   NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithInt:survey.rank],
                                    @"time": [NSNumber numberWithInt:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
                                    @"currencySale": [NSNumber numberWithBool:survey.currencySale],
                                    @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
-                                   @"categories": survey.categoryIds, @"profileMatch": profileMatch, @"namedCategories": categories
+                                   @"categories": survey.categoryIds, @"conversionLevel": conversionLevel, @"namedCategories": categories
                                  };
                      [surveyList addObject:o];
               }
