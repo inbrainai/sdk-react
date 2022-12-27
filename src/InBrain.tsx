@@ -1,7 +1,7 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
-import { InitOptions, InitOptionName, StylingOptionName } from './Options';
-import { InBrainReward, InBrainNativeSurveys, InBrainSurveyFilter } from './Models';
+import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -76,7 +76,7 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * @param dataPoints datapoints
  * @deprecated you use setSessionID and setDataOptions
  */
-const setSessionParameters = (sessionUid: string, dataPoints: {}) => {
+const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
     InBrainSurveys.setSessionID(sessionUid);
     InBrainSurveys.setDataOptions(dataPoints);
 }
@@ -85,13 +85,13 @@ const setSessionParameters = (sessionUid: string, dataPoints: {}) => {
  * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
  * @param sessionUid the session identifiers
  */
-const setSessionID = (sessionUid: string) => InBrainSurveys.setSessionID(sessionUid);
+const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
 
 /**
  * Set setDataOptions. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
- * @param dataPoints datapoints
+ * @param dataPoints The datapoints to be used
  */
-const setDataOptions = (dataPoints: {}) => InBrainSurveys.setDataOptions(dataPoints);
+const setDataOptions = (dataPoints: DataPoints) => InBrainSurveys.setDataOptions(dataPoints);
 
 /**
  * Get the rewards
@@ -114,7 +114,7 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
  * Get Native Surveys
  * @param InBrainSurveyFilter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
+ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
 
 
 /**

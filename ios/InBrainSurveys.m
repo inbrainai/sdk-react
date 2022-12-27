@@ -128,9 +128,7 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
         [self notNull:@"apiSecret" toCheck:apiSecret];
         [self notNull:@"userId" toCheck:userId];
 
-        //hardcoded isS2S (always True)
-        bool isS2S = true;
-        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:isS2S userID:userId];
+        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true userID:userId];
 
         // Resolve
         resolve(nil);
@@ -143,9 +141,9 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
 // **********************************
 // ***** SET INBRAIN SESSION ID *****
 // **********************************
-RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionUId)
+RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionId)
 {
-    [self.inbrain setSessionID:sessionUId];
+    [self.inbrain setSessionID:sessionId];
 }
 
 // **********************************

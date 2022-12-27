@@ -67,9 +67,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             notNull("clientSecret", clientSecret);
             notNull("userId", userId);
 
-            //hardcoded isS2S (always True)
-            Boolean isS2S = true;
-
             // Set the listener
             InBrain.getInstance().removeCallback(this);
             InBrain.getInstance().addCallback(this);
@@ -80,7 +77,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 public void run() {
                     try {
                         // Call Braintree sdk
-                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, isS2S, userId);
+                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true, userId);
                         // Everything went well, resolve the promise
                         promise.resolve(null);
                     } catch (Exception e) {
