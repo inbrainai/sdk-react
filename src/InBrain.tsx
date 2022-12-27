@@ -21,7 +21,7 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
     // Validate
     validateOptions(apiClientId, apiSecret, options)
 
-    // Call all options bridge methodes
+    // Call all options bridge methods
     InBrainSurveys.setSessionID(options.sessionUid);
     InBrainSurveys.setDataOptions(options.dataPoints);
 
@@ -74,7 +74,7 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
  * @param sessionUid the session identifiers
  * @param dataPoints datapoints
- * @deprecated you use setSessionID and setDataOptions
+ * @deprecated Please, use setSessionID and setDataOptions instead
  */
 const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
     InBrainSurveys.setSessionID(sessionUid);
