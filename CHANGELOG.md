@@ -1,3 +1,12 @@
+## [2.6.0] 2022-12-28
+### Added
+-  `conversionLevel` property to `InBrainNativeSurvey`.
+
+### Changed
+- `isS2S`, `language` and `dataPoints` properties of `InitOptions`;
+- `setSessionParameters(sessionUid:, dataPoints:)` deprecated in favour of `setSessionID(_:)` and `setDataOptions(_:)`;
+- `profileMatch` property of `InBrainNativeSurvey` deprecated.  
+
 ## [2.5.0] 2022-12-20
 ### Added
 - `profileMatch` property to `InBrainNativeSurvey`;  
@@ -6,7 +15,7 @@
 ### Changed
 - `InBrainNativeSurveys` renamed into `InBrainNativeSurvey`;  
 - `InBrainNativeSurvey`'s `categories` property became deprecated in favor of `namedCategories`;  
-- The package uses the latest .patch versions of iOS and Android InBrainSurveys SDKs (means 02.00.xx instead of 02.00.00) - which will help to deliver the "underhood" fixes and improvements ASAP.
+- The package will use latest minor iOS and Android InBrainSurveys SDKs instead of exact version (means 02.00.xx instead of 02.00.00) - that will help to deliver the "underhood" fixes and improvements ASAP.
 
 ### Removed
 - Bitcode support for iOS. 
