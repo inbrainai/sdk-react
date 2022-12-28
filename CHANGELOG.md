@@ -1,3 +1,17 @@
+## [2.6.0] 2022-12-28
+### Added
+- `setSessionID` new method for set session ID;  
+- `setDataOptions` new method for setting Data Options.  
+
+### Changed
+- `profileMatch` renamed into `ConversionLevel`.  
+- `dataPoints` property from `InitOptions` became deprecated.
+- `language` property from `InitOptions` became deprecated.
+- `isS2S` property from `InitOptions` became deprecated.
+- `setSessionParameters` method became deprecated.
+
+---  
+
 ## [2.5.0] 2022-12-20
 ### Added
 - `profileMatch` property to `InBrainNativeSurvey`;  
