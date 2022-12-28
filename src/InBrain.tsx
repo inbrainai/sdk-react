@@ -1,13 +1,13 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
-import { InitOptions, InitOptionName, StylingOptionName } from './Options';
-import { InBrainReward, InBrainNativeSurveys, InBrainSurveyFilter } from './Models';
+import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
 
-/*
+/**
  * Init the SDK.
  * @param apiClientId Provided in inBrain.ai dashboard
  * @param apiSecret Provided in inBrain.ai dashboard
@@ -21,15 +21,15 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
     // Validate
     validateOptions(apiClientId, apiSecret, options)
 
-    // Call all options bridge methodes
-    // -- this method is apart as these two properties can't be set individually
-    await wrapPromise(() => InBrainSurveys.setInBrainValuesFor(options.sessionUid, options.dataPoints));
+    // Call all options bridge methods
+    InBrainSurveys.setSessionID(options.sessionUid);
+    InBrainSurveys.setDataOptions(options.dataPoints);
 
     // -- call all the other properties one by one (styling options)
     await callOptionSetters(options)
 
     // return promise for init
-    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.isS2S, options.userId));
+    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.userId));
 }
 
 const setDefaultOptions = (options?: InitOptions) => {
@@ -74,8 +74,24 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
  * @param sessionUid the session identifiers
  * @param dataPoints datapoints
+ * @deprecated Please, use setSessionID and setDataOptions instead
  */
-const setSessionParameters = (sessionUid: string, dataPoints: {}) => InBrainSurveys.setInBrainValuesFor(sessionUid, dataPoints);
+const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
+    InBrainSurveys.setSessionID(sessionUid);
+    InBrainSurveys.setDataOptions(dataPoints);
+}
+
+/**
+ * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
+ * @param sessionUid the session identifiers
+ */
+const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
+
+/**
+ * Set setDataOptions. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
+ * @param dataPoints The datapoints to be used
+ */
+const setDataOptions = (dataPoints: DataPoints) => InBrainSurveys.setDataOptions(dataPoints);
 
 /**
  * Get the rewards
@@ -98,7 +114,7 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
  * Get Native Surveys
  * @param InBrainSurveyFilter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurveys[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
+ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
 
 
 /**
@@ -157,6 +173,8 @@ const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<an
 export default {
     init,
     showSurveys,
+    setSessionID,
+    setDataOptions,
     setSessionParameters,
     getRewards,
     confirmRewards,

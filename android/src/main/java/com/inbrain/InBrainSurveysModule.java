@@ -40,10 +40,15 @@ import javax.annotation.Nullable;
 public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
 
     private final ReactApplicationContext reactContext;
+    private HashMap sessionData;
+    private String sessionID;
 
     public InBrainSurveysModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        //TMP
+        this.sessionID = null;
+        this.sessionData = null;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN *****
     // ***********************
     @ReactMethod
-    public void setInBrain(final String apiClientId, final String clientSecret, final boolean isS2S, final String userId, final Promise promise) {
+    public void setInBrain(final String apiClientId, final String clientSecret, final String userId, final Promise promise) {
         try {
             // Validate parameters
             notNull("apiClientId", apiClientId);
@@ -72,8 +77,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 public void run() {
                     try {
                         // Call Braintree sdk
-                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, isS2S, userId);
-
+                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true, userId);
                         // Everything went well, resolve the promise
                         promise.resolve(null);
                     } catch (Exception e) {
@@ -100,6 +104,28 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             }
         }.apply(promise, "values", toHashMap(data), "ERR_SET_INBRAIN_VALUES");
 
+    }
+
+    // **********************************
+    // ***** SET INBRAIN SESSION ID *****
+    // **********************************
+    @ReactMethod
+    public void setSessionID(final String sessionId) {
+        //tmp data until android sdk new version
+        this.sessionID = sessionId;
+        HashMap<String, String> data = this.sessionData;
+        InBrain.getInstance().setInBrainValuesFor(sessionId, data);
+    }
+
+    // **********************************
+    // ***** SET INBRAIN DATA POINTS *****
+    // **********************************
+    @ReactMethod
+    public void setDataOptions(final ReadableMap data) {
+        //tmp data until android sdk new version
+        this.sessionData = toHashMap(data);
+        String sessionId = this.sessionID;
+        InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
     }
 
     // ************************
@@ -279,10 +305,10 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putArray("categories", categories);
                         map.putArray("namedCategories", namedCategories);
 
-                        WritableMap profileMatch = Arguments.createMap();
-                        profileMatch.putInt("id", survey.conversionThreshold);
-                        profileMatch.putString("name", profileMatchMap(survey.conversionThreshold));
-                        map.putMap("profileMatch", profileMatch);
+                        WritableMap conversionLevel = Arguments.createMap();
+                        conversionLevel.putInt("id", survey.conversionThreshold);
+                        conversionLevel.putString("name", conversionMap(survey.conversionThreshold));
+                        map.putMap("conversionLevel", conversionLevel);
 
                         array.pushMap(map);
                     }
@@ -587,22 +613,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
     }
 
-    private String profileMatchMap(Integer profileMatchId) {
-        switch (profileMatchId) {
+
+    private String conversionMap(Integer conversionId) {
+        switch (conversionId) {
             case 0 :
                 return "New Survey";
             case 1 :
-                return "Poor Profile Match";
+                return "Very Poor Conversion";
             case 2 :
-                return "Poor Profile Match";
+                return "Poor Conversion";
             case 3 :
-                return "Fair Profile Match";
+                return "Fair Conversion";
             case 4 :
-                return "Good Profile Match";
+                return "Good Conversion";
             case 5 :
-                return "Great Profile Match";
+                return "Very Good Conversion";
             case 6 :
-                return "Excellent Profile Match";
+                return "Excellent Conversion";
             default:
                 return "Unknown";
         }
