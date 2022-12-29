@@ -1,5 +1,5 @@
 /**
- * Reward interface
+ * InBrainReward interface
  */
 export type InBrainReward = {
     transactionId: number;
@@ -21,16 +21,14 @@ export type InBrainNativeSurveys = {
     currencySale: boolean;
     multiplier: number;
     /**
-     * Possible cases are:
-     * 0 = New Survey;
-     * 1 = Poor Profile Match;
-     * 2 = Fair Profile Match;
-     * 3 = Good Profile Match;
-     * 4 = Great Profile Match;
-     * 5 = Excellent Profile Match
+     * All the possible cases are listed at `ConversionLevel` declaration
+     */
+    conversionLevel: ConversionLevel;
+
+    /**
+     * @deprecated not supported anymore. Use conversionLevel instead
      */
     profileMatch: ProfileMatch;
-    namedCategories: Category[];
 
     /**
      * @deprecated use namedCategories instead
@@ -44,7 +42,25 @@ export type InBrainNativeSurveys = {
 export type InBrainNativeSurvey = InBrainNativeSurveys
 
 /**
- * Native Surveys Category interface
+ * ConversionLevel interface
+ *
+ *  Possible cases are:
+ *  0 = New Survey;
+ *  1 = Very Poor Conversion;
+ *  2 = Poor Conversion;
+ *  3 = Fair Conversion
+ *  4 = Good Profile Match;
+ *  5 = Very Good Conversion;
+ *  6 = Excellent Conversion
+ *
+ */
+export type ConversionLevel = {
+    id: number;
+    name: string
+}
+
+/**
+ * Native Survey's Category interface
  */
 export type Category = {
     id: number;
@@ -52,39 +68,12 @@ export type Category = {
 }
 
 /**
- * Native profile match interface
- */
-export type ProfileMatch = {
-    id: number;
-    name: string
-}
-
-/**
- * Reward filter interface
+ * InBrainSurveyFilter
  */
  export type InBrainSurveyFilter = {
     placementId?:string,
     categoryIds?: number[],
     excludedCategoryIds?: number[],
-}
-
-/**
- * ProfileMatchNames
- * Possible cases are:
- * 0 = New Survey;
- * 1 = Poor Profile Match;
- * 2 = Fair Profile Match;
- * 3 = Good Profile Match;
- * 4 = Great Profile Match;
- * 5 = Excellent Profile Match
- */
-export const ProfileMatchNames = {
-    NewSurvey:0,
-    PoorProfileMatch:1,
-    FairProfileMatch:2,
-    GoodProfileMatch:3,
-    GreatProfileMatch:4,
-    ExcellentProfileMatch:5,
 }
 
 /**
@@ -123,4 +112,26 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
+}
+
+
+/**
+ * @deprecated The type is not supported anymore
+ */
+export type ProfileMatch = {
+    id: number;
+    name: string
+}
+
+
+/**
+ * @deprecated The type is not supported anymore
+ */
+export const ProfileMatchNames = {
+    NewSurvey:0,
+    PoorProfileMatch:1,
+    FairProfileMatch:2,
+    GoodProfileMatch:3,
+    GreatProfileMatch:4,
+    ExcellentProfileMatch:5,
 }
