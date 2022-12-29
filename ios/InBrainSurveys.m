@@ -27,7 +27,7 @@
         case SurveyConversionLevelGoodConversion:
             return @"Good Conversion";
         case SurveyConversionLevelVeryGoodConversion:
-            return @"Vety Good Conversion";
+            return @"Very Good Conversion";
         case SurveyConversionLevelExcellentConversion:
             return @"Excellent Conversion";
     }
