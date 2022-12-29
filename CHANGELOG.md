@@ -1,11 +1,19 @@
-## [2.6.0] 2022-12-28
+## [2.7.0] 2022-12-29
+
 ### Added
 -  `conversionLevel` property to `InBrainNativeSurvey`.
 
 ### Changed
-- `isS2S`, `language` and `dataPoints` properties of `InitOptions`;
-- `setSessionParameters(sessionUid:, dataPoints:)` deprecated in favour of `setSessionID(_:)` and `setDataOptions(_:)`;
 - `profileMatch` property of `InBrainNativeSurvey` deprecated.  
+---
+
+
+## [2.6.0] 2022-12-28
+
+### Changed
+- `isS2S`, `language` and `dataPoints` properties of `InitOptions`;
+- `setSessionParameters(sessionUid:, dataPoints:)` deprecated in favour of `setSessionID(_:)` and `setDataOptions(_:)`.
+---
 
 ## [2.5.0] 2022-12-20
 ### Added
