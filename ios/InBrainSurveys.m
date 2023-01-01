@@ -401,6 +401,7 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
 
 // ***********************
 // ***** SET LANGUAGE ****
+
 // ***********************
 RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -429,12 +430,19 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"OnClose", @"OnCloseFromPage"];
+  return @[@"OnClose", @"OnCloseFromPage", @"OnCloseServey"];
 }
 
 - (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey {
     [self sendEventWithName:(byWebView ? @"OnCloseFromPage" : @"OnClose") body:@{}];
+    [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": @"H12"}];
 }
+
+//@{ @"id": survey.id, @"searchId": survey.searchId
+
+//- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> *)rewards {
+//  [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": byWebView, @"rewards": rewards}];
+//}
 
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
     // Never used, we use getRewardsWithSuccess which has callbacks. This method is only used when getRewards is called.

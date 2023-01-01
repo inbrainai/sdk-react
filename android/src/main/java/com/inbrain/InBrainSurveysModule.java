@@ -512,6 +512,11 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
     @Override
+    public void OnCloseServey() {
+        sendEvent("OnCloseServey", null);
+    }
+
+    @Override
     public boolean didReceiveInBrainRewards(List<Reward> rewards) {
         return false;
     }

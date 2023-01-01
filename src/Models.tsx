@@ -112,8 +112,7 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-}
-
+};
 
 /**
  * @deprecated The type is not supported anymore
@@ -121,8 +120,7 @@ export const InBrainSurveyCategory = {
 export type ProfileMatch = {
     id: number;
     name: string
-}
-
+};
 
 /**
  * @deprecated The type is not supported anymore
@@ -134,4 +132,22 @@ export const ProfileMatchNames = {
     GoodProfileMatch:3,
     GreatProfileMatch:4,
     ExcellentProfileMatch:5,
+};
+
+export type onCloseServeyData = {
+    byWebView: boolean,
+    reward: InBrainSurveyReward,
+};
+
+export const SurveyOutcomeType = {
+    completed:0,
+    terminated:1,
+};
+
+export type InBrainSurveyReward = {
+    surveyId: string,
+    placementId?: string,
+    categories?: number[],
+    userReward: number,
+    outcomeType: number,
 }
