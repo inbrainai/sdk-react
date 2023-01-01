@@ -438,8 +438,6 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": @"H12"}];
 }
 
-//@{ @"id": survey.id, @"searchId": survey.searchId
-
 //- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> *)rewards {
 //  [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": byWebView, @"rewards": rewards}];
 //}

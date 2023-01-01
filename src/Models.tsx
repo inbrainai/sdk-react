@@ -134,16 +134,25 @@ export const ProfileMatchNames = {
     ExcellentProfileMatch:5,
 };
 
+/**
+ * data returned with onClose event
+ */
 export type onCloseServeyData = {
     byWebView: boolean,
     reward: InBrainSurveyReward,
 };
 
+/**
+ * outcome type
+ */
 export const SurveyOutcomeType = {
     completed:0,
     terminated:1,
 };
 
+/**
+ * Survey reward interface
+ */
 export type InBrainSurveyReward = {
     surveyId: string,
     placementId?: string,
