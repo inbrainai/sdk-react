@@ -440,7 +440,9 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     if([rewards count] >0) {
         for(int i = 0; i < rewards.count; i++) {
             InBrainSurveyReward *reward = rewards[i];
-            NSMutableArray *categories = [self mapCategories: reward.categoryIds];
+            NSMutableArray *categories = [NSMutableArray new];
+            if(reward.categoryIds != nil)
+                categories = [self mapCategories: reward.categoryIds];
             NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
             NSObject *outcomeType = @{ @"id": [NSNumber numberWithInt:reward.outcomeType], @"name": outcomeTitle};
 
