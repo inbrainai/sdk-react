@@ -255,16 +255,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
               // The result on the RN side is an array with null elements...
               for(int i = 0; i < surveys.count; i++) {
                   InBrainNativeSurvey *survey = surveys[i];
-
                   NSMutableArray *categories = [self mapCategories: survey.categoryIds];
-//                  NSMutableArray *categories = [NSMutableArray array];
-//                  for(int y = 0; y < survey.categoryIds.count; y++) {
-//                      int categoryId = [survey.categoryIds[y] intValue];
-//                      NSString *title = [self categoryTitle: categoryId];
-//                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
-//                      [categories addObject:o];
-//                  }
-
                   NSString *conversionTitle = [self surveyConversionTitle:survey.conversionLevel ];
                   NSObject *conversionLevel = @{ @"id": [NSNumber numberWithInt:survey.conversionLevel], @"name": conversionTitle};
 
@@ -449,21 +440,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     if([rewards count] >0) {
         for(int i = 0; i < rewards.count; i++) {
             InBrainSurveyReward *reward = rewards[i];
-
-            //categories - optional
-
-
-//            NSMutableArray *categories = [NSMutableArray array];
-//            for(int y = 0; y < reward.categoryIds.count; y++) {
-//                int categoryId = [reward.categoryIds[y] intValue];
-//                NSString *title = [self categoryTitle: categoryId];
-//                NSObject* o = @{@"id": reward.categoryIds[y], @"name": title};
-//                [categories addObject:o];
-//            }
-//
             NSMutableArray *categories = [self mapCategories: reward.categoryIds];
-
-
             NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
             NSObject *outcomeType = @{ @"id": [NSNumber numberWithInt:reward.outcomeType], @"name": outcomeTitle};
 
