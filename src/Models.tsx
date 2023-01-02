@@ -138,21 +138,18 @@ export const ProfileMatchNames = {
 /**
  * Data returned with OnSurveysClose event
  */
-export type onCloseSurveysData = {
+export type OnCloseSurveysData = {
     byWebView: boolean,
     reward: InBrainSurveyReward[],
 };
 
 /**
- * Survey Outcome Type values
- */
-export const SurveyOutcomeTypeNames = {
-    completed:0,
-    terminated:1,
-};
-
-/**
  * Survey Outcome Type
+ *
+ *  Possible cases are:
+ *  0 = Completed;
+ *  1 = Terminated;
+ *
  */
 export type SurveyOutcomeType = {
     id: number;
