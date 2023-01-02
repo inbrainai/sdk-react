@@ -20,6 +20,7 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
+    namedCategories?: Category[];
     /**
      * All the possible cases are listed at `ConversionLevel` declaration
      */
