@@ -67,9 +67,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             notNull("clientSecret", clientSecret);
             notNull("userId", userId);
 
-            //hardcoded isS2S (always True)
-            Boolean isS2S = true;
-
             // Set the listener
             InBrain.getInstance().removeCallback(this);
             InBrain.getInstance().addCallback(this);
@@ -80,7 +77,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 public void run() {
                     try {
                         // Call Braintree sdk
-                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, isS2S, userId);
+                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true, userId);
                         // Everything went well, resolve the promise
                         promise.resolve(null);
                     } catch (Exception e) {
@@ -113,7 +110,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN SESSION ID *****
     // **********************************
     @ReactMethod
-    public void setSessionID(final String sessionId, Promise promise) {
+    public void setSessionID(final String sessionId) {
         //tmp data until android sdk new version
         this.sessionID = sessionId;
         HashMap<String, String> data = this.sessionData;
@@ -124,7 +121,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN DATA POINTS *****
     // **********************************
     @ReactMethod
-    public void setDataOptions(final ReadableMap data, Promise promise) {
+    public void setDataOptions(final ReadableMap data) {
         //tmp data until android sdk new version
         this.sessionData = toHashMap(data);
         String sessionId = this.sessionID;
@@ -504,7 +501,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ********************
     // ***** LISTENERS ****
     // ********************
-
     @Override
     public void surveysClosed(boolean byWebView, Optional<List<InBrainSurveyReward>> rewards) {
         String isByWebView = byWebView ? "OnClose" : "OnCloseFromPage";
@@ -514,25 +510,13 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         if(rewards.size()) {
             for(Reward reward :rewards) {
                 WritableMap map = Arguments.createMap();
-//                rewards.get()
-
                 map.putString("surveyId", reward.id);
                 map.putString("placementId", reward.placementId);
                 map.putString("outcomeType", outcomeTypeName(reward.outcomeType));
-
-//                //move to function
-//                WritableArray namedCategories = Arguments.createArray();
-//                for (SurveyCategory category:reward.categories) {
-//                    WritableMap categoryNamed = Arguments.createMap();
-//                    categoryNamed.putInt("id", category.getId());
-//                    categoryNamed.putString("name", categoriesMap(category.name()));
-//                    namedCategories.pushMap(categoryNamed);
-//                }
                 map.putArray("categories", mapCategories(reward.categories));
                 map.putString("userReward", reward.userReward);
                 array.pushMap(map);
             }
-
         }
 
         WritableMap response = Arguments.createMap();
@@ -542,7 +526,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         sendEvent(isByWebView, response);
 
     }
-
 
     @Override
     public boolean didReceiveInBrainRewards(List<Reward> rewards) {

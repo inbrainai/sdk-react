@@ -135,7 +135,7 @@ export const ProfileMatchNames = {
 };
 
 /**
- * data returned with onClose event
+ * Data returned with OnSurveysClose event
  */
 export type onCloseSurveysData = {
     byWebView: boolean,
@@ -143,7 +143,7 @@ export type onCloseSurveysData = {
 };
 
 /**
- * outcome type
+ * Survey Outcome Type
  */
 export const SurveyOutcomeType = {
     completed:0,
@@ -156,7 +156,7 @@ export const SurveyOutcomeType = {
 export type InBrainSurveyReward = {
     surveyId: string,
     placementId?: string,
-    categories?: number[],
+    categories?: Category[],
     userReward: number,
     outcomeType: number,
 }

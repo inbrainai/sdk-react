@@ -430,7 +430,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"OnClose", @"OnCloseFromPage", @"OnCloseServey"];
+  return @[@"OnClose", @"OnCloseFromPage", @"OnSurveysClose"];
 }
 
 - (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> *)rewards {

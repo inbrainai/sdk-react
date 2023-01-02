@@ -127,8 +127,8 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
 
 
-var serveyClose: (eventData: onCloseSurveysData) => void = () => { };
-inbrainEmitter.addListener('OnCloseServey', (eventData: onCloseSurveysData) => serveyClose && serveyClose(eventData));
+var onSurveysClose: (eventData: onCloseSurveysData) => void = () => { };
+inbrainEmitter.addListener('OnSurveysClose', (eventData: onCloseSurveysData) => onSurveysClose && onSurveysClose(eventData));
 
 /**
  * @deprecated
@@ -147,8 +147,8 @@ inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFr
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback callback to execute
  */
-const setSurveysCloseListener = (callback: (eventData: onCloseSurveysData) => void) => {
-    serveyClose = callback;
+const setOnSurveysCloseLister = (callback: (eventData: onCloseSurveysData) => void) => {
+    onSurveysClose = callback;
 };
 
 /**
@@ -206,5 +206,5 @@ export default {
     showNativeSurvey,
     setOnCloseListener,
     setOnCloseListenerFromPage,
-    setSurveysCloseListener,
+    setOnSurveysCloseLister,
 };
