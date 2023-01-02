@@ -105,6 +105,15 @@
   return @"Unknown";
 }
 
+- (NSString *)outcomeTypeTitle:(SurveyOutcomeType) OutcomeType {
+    switch (OutcomeType) {
+        case SurveyOutcomeTypeCompleted:
+            return @"Completed";
+        case SurveyOutcomeTypeTerminated:
+            return @"Terminated";
+    }
+    return @"Unknown";
+}
 
 // *********************************
 // ***** RN BRIDGE methods  ********
@@ -247,14 +256,14 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
               for(int i = 0; i < surveys.count; i++) {
                   InBrainNativeSurvey *survey = surveys[i];
 
-
-                  NSMutableArray *categories = [NSMutableArray array];
-                  for(int y = 0; y < survey.categoryIds.count; y++) {
-                      int categoryId = [survey.categoryIds[y] intValue];
-                      NSString *title = [self categoryTitle: categoryId];
-                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
-                      [categories addObject:o];
-                  }
+                  NSMutableArray *categories = [self mapCategories: survey.categoryIds];
+//                  NSMutableArray *categories = [NSMutableArray array];
+//                  for(int y = 0; y < survey.categoryIds.count; y++) {
+//                      int categoryId = [survey.categoryIds[y] intValue];
+//                      NSString *title = [self categoryTitle: categoryId];
+//                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
+//                      [categories addObject:o];
+//                  }
 
                   NSString *conversionTitle = [self surveyConversionTitle:survey.conversionLevel ];
                   NSObject *conversionLevel = @{ @"id": [NSNumber numberWithInt:survey.conversionLevel], @"name": conversionTitle};
@@ -433,14 +442,44 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
   return @[@"OnClose", @"OnCloseFromPage", @"OnCloseServey"];
 }
 
-- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey {
+- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> *)rewards {
     [self sendEventWithName:(byWebView ? @"OnCloseFromPage" : @"OnClose") body:@{}];
-    [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": @"H12"}];
-}
+    NSMutableArray *rewardList = [NSMutableArray array];
 
-//- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> *)rewards {
-//  [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": byWebView, @"rewards": rewards}];
-//}
+    if([rewards count] >0) {
+        for(int i = 0; i < rewards.count; i++) {
+            InBrainSurveyReward *reward = rewards[i];
+
+            //categories - optional
+
+
+//            NSMutableArray *categories = [NSMutableArray array];
+//            for(int y = 0; y < reward.categoryIds.count; y++) {
+//                int categoryId = [reward.categoryIds[y] intValue];
+//                NSString *title = [self categoryTitle: categoryId];
+//                NSObject* o = @{@"id": reward.categoryIds[y], @"name": title};
+//                [categories addObject:o];
+//            }
+//
+            NSMutableArray *categories = [self mapCategories: reward.categoryIds];
+
+
+            NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
+            NSObject *outcomeType = @{ @"id": [NSNumber numberWithInt:reward.outcomeType], @"name": outcomeTitle};
+
+            NSObject* rewardObject = @{ @"surveyId": reward.surveyId,
+                                        @"placementId": reward.placementId != nil ? reward.placementId:[NSNull null],
+                                        @"outcomeType": outcomeType,
+                                        @"categories": categories,
+                                        @"userReward": [NSNumber numberWithFloat:reward.userReward]};
+
+            [rewardList addObject:rewardObject];
+        }
+
+    }
+
+    [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": rewardList}];
+}
 
 - (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
     // Never used, we use getRewardsWithSuccess which has callbacks. This method is only used when getRewards is called.
@@ -472,6 +511,17 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     if( !toCheck ){
         [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
     }
+}
+
+- (NSMutableArray *)mapCategories:(NSArray *) categories {
+    NSMutableArray *mapedCategories = [NSMutableArray array];
+    for(int y = 0; y < categories.count; y++) {
+        int categoryId = [categories[y] intValue];
+        NSString *title = [self categoryTitle: categoryId];
+        NSObject* o = @{@"id": categories[y], @"name": title};
+        [mapedCategories addObject:o];
+    }
+    return mapedCategories;
 }
 
 @end

@@ -3,7 +3,7 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 
 import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
 import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, onCloseServeyData } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, onCloseSurveysData } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -127,8 +127,8 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
 
 
-var serveyClose: (eventData: onCloseServeyData) => void = () => { };
-inbrainEmitter.addListener('OnCloseServey', (eventData: onCloseServeyData) => serveyClose && serveyClose(eventData));
+var serveyClose: (eventData: onCloseSurveysData) => void = () => { };
+inbrainEmitter.addListener('OnCloseServey', (eventData: onCloseSurveysData) => serveyClose && serveyClose(eventData));
 
 /**
  * @deprecated
@@ -147,7 +147,7 @@ inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFr
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback callback to execute
  */
-const setServeyCloseListener = (callback: (eventData: onCloseServeyData) => void) => {
+const setSurveysCloseListener = (callback: (eventData: onCloseSurveysData) => void) => {
     serveyClose = callback;
 };
 
@@ -206,5 +206,5 @@ export default {
     showNativeSurvey,
     setOnCloseListener,
     setOnCloseListenerFromPage,
-    setServeyCloseListener,
+    setSurveysCloseListener,
 };

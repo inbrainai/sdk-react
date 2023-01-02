@@ -67,6 +67,9 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             notNull("clientSecret", clientSecret);
             notNull("userId", userId);
 
+            //hardcoded isS2S (always True)
+            Boolean isS2S = true;
+
             // Set the listener
             InBrain.getInstance().removeCallback(this);
             InBrain.getInstance().addCallback(this);
@@ -77,7 +80,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 public void run() {
                     try {
                         // Call Braintree sdk
-                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true, userId);
+                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, isS2S, userId);
                         // Everything went well, resolve the promise
                         promise.resolve(null);
                     } catch (Exception e) {
@@ -110,7 +113,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN SESSION ID *****
     // **********************************
     @ReactMethod
-    public void setSessionID(final String sessionId) {
+    public void setSessionID(final String sessionId, Promise promise) {
         //tmp data until android sdk new version
         this.sessionID = sessionId;
         HashMap<String, String> data = this.sessionData;
@@ -121,7 +124,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN DATA POINTS *****
     // **********************************
     @ReactMethod
-    public void setDataOptions(final ReadableMap data) {
+    public void setDataOptions(final ReadableMap data, Promise promise) {
         //tmp data until android sdk new version
         this.sessionData = toHashMap(data);
         String sessionId = this.sessionID;
@@ -501,20 +504,45 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ********************
     // ***** LISTENERS ****
     // ********************
-    @Override
-    public void surveysClosed() {
-        sendEvent("OnClose", null);
-    }
 
     @Override
-    public void surveysClosedFromPage() {
-        sendEvent("OnCloseFromPage", null);
+    public void surveysClosed(boolean byWebView, Optional<List<InBrainSurveyReward>> rewards) {
+        String isByWebView = byWebView ? "OnClose" : "OnCloseFromPage";
+        sendEvent(isByWebView, null);
+        WritableArray rewardMappingArray = Arguments.createArray();
+
+        if(rewards.size()) {
+            for(Reward reward :rewards) {
+                WritableMap map = Arguments.createMap();
+//                rewards.get()
+
+                map.putString("surveyId", reward.id);
+                map.putString("placementId", reward.placementId);
+                map.putString("outcomeType", outcomeTypeName(reward.outcomeType));
+
+//                //move to function
+//                WritableArray namedCategories = Arguments.createArray();
+//                for (SurveyCategory category:reward.categories) {
+//                    WritableMap categoryNamed = Arguments.createMap();
+//                    categoryNamed.putInt("id", category.getId());
+//                    categoryNamed.putString("name", categoriesMap(category.name()));
+//                    namedCategories.pushMap(categoryNamed);
+//                }
+                map.putArray("categories", mapCategories(reward.categories));
+                map.putString("userReward", reward.userReward);
+                array.pushMap(map);
+            }
+
+        }
+
+        WritableMap response = Arguments.createMap();
+        response.putBoolean("byWebView", byWebView);
+        response.putArray("rewards", rewardMappingArray);
+
+        sendEvent(isByWebView, response);
+
     }
 
-    @Override
-    public void OnCloseServey() {
-        sendEvent("OnCloseServey", null);
-    }
 
     @Override
     public boolean didReceiveInBrainRewards(List<Reward> rewards) {
@@ -638,6 +666,28 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             default:
                 return "Unknown";
         }
+    }
+
+    private String outcomeTypeName(Integer outcomeTypeId) {
+        switch (outcomeTypeId) {
+            case 0 :
+                return "Completed";
+            case 1 :
+                return "Terminated";
+            default:
+                return "Unknown";
+        }
+    }
+
+    private WritableArray mapCategories(ArrayList categories) {
+        WritableArray namedCategories = Arguments.createArray();
+        for (SurveyCategory category: categories) {
+            WritableMap categoryNamed = Arguments.createMap();
+            categoryNamed.putInt("id", category.getId());
+            categoryNamed.putString("name", categoriesMap(category.name()));
+            namedCategories.pushMap(categoryNamed);
+        }
+        return namedCategories;
     }
 
     private HashMap<String, String> toHashMap(ReadableMap data) {

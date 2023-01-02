@@ -137,9 +137,9 @@ export const ProfileMatchNames = {
 /**
  * data returned with onClose event
  */
-export type onCloseServeyData = {
+export type onCloseSurveysData = {
     byWebView: boolean,
-    reward: InBrainSurveyReward,
+    reward: InBrainSurveyReward[],
 };
 
 /**
