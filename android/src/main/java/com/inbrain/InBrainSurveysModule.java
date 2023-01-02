@@ -523,7 +523,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         response.putBoolean("byWebView", byWebView);
         response.putArray("rewards", rewardMappingArray);
 
-        sendEvent(isByWebView, response);
+        sendEvent("OnSurveysClose", response);
 
     }
 

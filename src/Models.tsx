@@ -144,12 +144,20 @@ export type onCloseSurveysData = {
 };
 
 /**
- * Survey Outcome Type
+ * Survey Outcome Type values
  */
-export const SurveyOutcomeType = {
+export const SurveyOutcomeTypeNames = {
     completed:0,
     terminated:1,
 };
+
+/**
+ * Survey Outcome Type
+ */
+export type SurveyOutcomeType = {
+    id: number;
+    name: string
+}
 
 /**
  * Survey reward interface
@@ -159,5 +167,5 @@ export type InBrainSurveyReward = {
     placementId?: string,
     categories?: Category[],
     userReward: number,
-    outcomeType: number,
+    outcomeType: SurveyOutcomeType,
 }
