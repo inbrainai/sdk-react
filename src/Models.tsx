@@ -146,7 +146,7 @@ export type OnCloseSurveysData = {
      * That means if the user complete a Native Survey, proceed to Survey Wall and complete one more survey -
      * only first reward will be delivered. In case of Survey Wall usage only - no rewards will be delivered.
      */
-    reward: InBrainSurveyReward[],
+    rewards?: InBrainSurveyReward[],
 };
 
 /**
@@ -167,8 +167,8 @@ export type SurveyOutcomeType = {
  */
 export type InBrainSurveyReward = {
     surveyId: string,
-    placementId?: string,
-    categories?: Category[],
     userReward: number,
     outcomeType: SurveyOutcomeType,
+    placementId?: string,
+    categories?: Category[],
 }
