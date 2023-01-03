@@ -510,9 +510,11 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     public void surveysClosed(boolean byWebView, List<InBrainSurveyReward> rewards) {
         String isByWebView = byWebView ? "OnClose" : "OnCloseFromPage";
         sendEvent(isByWebView, null);
-        WritableArray rewardMappingArray = Arguments.createArray();
 
+        WritableArray rewardMappingArray = null;
         if(rewards != null && rewards.size() > 0) {
+            rewardMappingArray = Arguments.createArray();
+
             for(InBrainSurveyReward reward : rewards) {
                 WritableMap map = Arguments.createMap();
                 map.putString("surveyId", reward.getSurveyId());
