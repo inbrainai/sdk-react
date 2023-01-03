@@ -443,7 +443,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     NSMutableArray *rewardList = [NSMutableArray array];
 
     if([rewards count] == 0) {
-        [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView]}];
+        [self sendEventWithName:@"OnSurveysClose" body:@{@"byWebView": [NSNumber numberWithBool:byWebView]}];
         return;
     }
 
@@ -463,11 +463,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
         [rewardList addObject:rewardObject];
     }
 
-    [self sendEventWithName:@"OnCloseServey" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": rewardList}];
-}
-
-- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-    // Never used, we use getRewardsWithSuccess which has callbacks. This method is only used when getRewards is called.
+    [self sendEventWithName:@"OnSurveysClose" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": rewardList}];
 }
 
 // ***************************
