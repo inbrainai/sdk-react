@@ -102,9 +102,18 @@
         case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
             return @"Fashion & Clothing - Department Store";
     }
-  return @"Unknown";
+    return @"Unknown";
 }
 
+- (NSString *)outcomeTypeTitle:(SurveyOutcomeType) OutcomeType {
+    switch (OutcomeType) {
+        case SurveyOutcomeTypeCompleted:
+            return @"Completed";
+        case SurveyOutcomeTypeTerminated:
+            return @"Terminated";
+    }
+    return @"Unknown";
+}
 
 // *********************************
 // ***** RN BRIDGE methods  ********
@@ -114,7 +123,7 @@ RCT_EXPORT_MODULE()
 + (BOOL)requiresMainQueueSetup
 {
 
-  return NO;  // only do this if your module initialization relies on calling UIKit!
+    return NO;  // only do this if your module initialization relies on calling UIKit!
 }
 
 // ***********************
@@ -192,14 +201,14 @@ RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
     @try {
         [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
             NSMutableArray *rewardList = [NSMutableArray array];
-                // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
-                // The result on the RN side is an array with null elements...
+            // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
+            // The result on the RN side is an array with null elements...
             for(int i = 0; i < rewards.count; i++) {
-                 NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:rewards[i].transactionId],
-                                  @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount],
-                                  @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
+                NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:rewards[i].transactionId],
+                                 @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount],
+                                 @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
 
-               [rewardList addObject:o];
+                [rewardList addObject:o];
             }
             resolve(rewardList);
         } failed:^(NSError * error){
@@ -234,42 +243,38 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
 // *******************************
 RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs:(NSArray* __nullable) categoryIDs
                   excludedCategoryIDs:(NSArray* __nullable) excludedCategoryIDs
-                 resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+                  resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-      InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
+        InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
 
-      [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
-              NSMutableArray *surveyList = [NSMutableArray array];
+        [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
+            NSMutableArray *surveyList = [NSMutableArray array];
 
-              // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
-              // The result on the RN side is an array with null elements...
-              for(int i = 0; i < surveys.count; i++) {
-                  InBrainNativeSurvey *survey = surveys[i];
+            // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
+            // The result on the RN side is an array with null elements...
+            for(int i = 0; i < surveys.count; i++) {
+                InBrainNativeSurvey *survey = surveys[i];
+                NSArray *categories = [self mapCategories: survey.categoryIds];
+                NSString *conversionTitle = [self surveyConversionTitle: survey.conversionLevel];
+                NSObject *conversionLevel = @{ @"id": [NSNumber numberWithLong: survey.conversionLevel],
+                                               @"name": conversionTitle};
 
+                NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId,
+                                 @"rank": [NSNumber numberWithLong:survey.rank],
+                                 @"time": [NSNumber numberWithLong:survey.time],
+                                 @"value": [NSNumber numberWithDouble:survey.value],
+                                 @"currencySale": [NSNumber numberWithBool:survey.currencySale],
+                                 @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
+                                 @"categories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds,
+                                 @"conversionLevel": conversionLevel,
+                                 @"namedCategories": categories == nil ? [NSNull null] : categories
+                };
+                [surveyList addObject:o];
+            }
 
-                  NSMutableArray *categories = [NSMutableArray array];
-                  for(int y = 0; y < survey.categoryIds.count; y++) {
-                      int categoryId = [survey.categoryIds[y] intValue];
-                      NSString *title = [self categoryTitle: categoryId];
-                      NSObject* o = @{@"id": survey.categoryIds[y], @"name": title};
-                      [categories addObject:o];
-                  }
-
-                  NSString *conversionTitle = [self surveyConversionTitle:survey.conversionLevel ];
-                  NSObject *conversionLevel = @{ @"id": [NSNumber numberWithInt:survey.conversionLevel], @"name": conversionTitle};
-
-                  NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId, @"rank": [NSNumber numberWithInt:survey.rank],
-                                   @"time": [NSNumber numberWithInt:survey.time], @"value": [NSNumber numberWithDouble:survey.value],
-                                   @"currencySale": [NSNumber numberWithBool:survey.currencySale],
-                                   @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
-                                   @"categories": survey.categoryIds, @"conversionLevel": conversionLevel, @"namedCategories": categories
-                                 };
-                     [surveyList addObject:o];
-              }
-
-              resolve(surveyList);
-      } failed:^(NSError * failed){
+            resolve(surveyList);
+        } failed:^(NSError * failed){
             reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
         }];
 
@@ -384,8 +389,8 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
                 style = 0; // UIStatusBarStyleDefault
         }
 
-       // Instantiate config object
-       InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
+        // Instantiate config object
+        InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
 
         // Forwarding to SDK
         [[InBrain shared] setStatusBarConfig:config];
@@ -401,6 +406,7 @@ RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseRe
 
 // ***********************
 // ***** SET LANGUAGE ****
+
 // ***********************
 RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -429,15 +435,35 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"OnClose", @"OnCloseFromPage"];
+  return @[@"OnClose", @"OnCloseFromPage", @"OnSurveysClose"];
 }
 
-- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey {
+- (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> * _Nullable)rewards {
     [self sendEventWithName:(byWebView ? @"OnCloseFromPage" : @"OnClose") body:@{}];
-}
+    NSMutableArray *rewardList = [NSMutableArray array];
 
-- (void)didReceiveInBrainRewardsWithRewardsArray:(NSArray<InBrainReward *> * _Nonnull)rewardsArray {
-    // Never used, we use getRewardsWithSuccess which has callbacks. This method is only used when getRewards is called.
+    if([rewards count] == 0) {
+        [self sendEventWithName:@"OnSurveysClose" body:@{@"byWebView": [NSNumber numberWithBool:byWebView]}];
+        return;
+    }
+
+    for(int i = 0; i < rewards.count; i++) {
+        InBrainSurveyReward *reward = rewards[i];
+        NSArray *categories = [self mapCategories: reward.categoryIds];
+        NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
+        NSObject *outcomeType = @{ @"id": [NSNumber numberWithLong: reward.outcomeType],
+                                   @"name": outcomeTitle};
+
+        NSObject* rewardObject = @{ @"surveyId": reward.surveyId,
+                                    @"placementId": reward.placementId == nil ? [NSNull null] : reward.placementId,
+                                    @"outcomeType": outcomeType,
+                                    @"categories": categories == nil ? [NSNull null] : categories,
+                                    @"userReward": [NSNumber numberWithFloat:reward.userReward] };
+
+        [rewardList addObject:rewardObject];
+    }
+
+    [self sendEventWithName:@"OnSurveysClose" body:@{@"byWebView": [NSNumber numberWithBool:byWebView], @"rewards": rewardList}];
 }
 
 // ***************************
@@ -466,6 +492,19 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     if( !toCheck ){
         [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
     }
+}
+
+- (NSArray * _Nullable)mapCategories:(NSArray *) categories {
+    if ([categories count] == 0) { return nil; }
+
+    NSMutableArray *mapedCategories = [NSMutableArray array];
+    for(int y = 0; y < categories.count; y++) {
+        int categoryId = [categories[y] intValue];
+        NSString *title = [self categoryTitle: categoryId];
+        NSObject* o = @{@"id": categories[y], @"name": title};
+        [mapedCategories addObject:o];
+    }
+    return mapedCategories;
 }
 
 @end

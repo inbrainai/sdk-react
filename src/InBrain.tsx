@@ -1,7 +1,9 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
+
+
 import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
 import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -11,15 +13,15 @@ const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
  * Init the SDK.
  * @param apiClientId Provided in inBrain.ai dashboard
  * @param apiSecret Provided in inBrain.ai dashboard
- * @param options Additional optional options
+ * @param opts Additional optional options
  */
 const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
 
     // Default and null-safe options
-    var options = setDefaultOptions(opts)
+    var options = setDefaultOptions(opts);
 
     // Validate
-    validateOptions(apiClientId, apiSecret, options)
+    validateOptions(apiClientId, apiSecret, options);
 
     // Call all options bridge methods
     InBrainSurveys.setSessionID(options.sessionUid);
@@ -83,7 +85,7 @@ const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
 
 /**
  * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
- * @param sessionUid the session identifiers
+ * @param sessionId the session identifiers
  */
 const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
 
@@ -112,7 +114,7 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 
 /**
  * Get Native Surveys
- * @param InBrainSurveyFilter an optional parameter
+ * @param filter an optional parameter
  */
  const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
 
@@ -120,19 +122,39 @@ const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.ch
 /**
  * Show a specific native survey
  * @param id the survey's identifier
- * @param searchId an mandatory identifier
+ * @param searchId a mandatory identifier
  */
 const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
 
+
+var onSurveysClose: (eventData: OnCloseSurveysData) => void = () => { };
+inbrainEmitter.addListener('OnSurveysClose', (eventData: OnCloseSurveysData) => onSurveysClose && onSurveysClose(eventData));
+
+/**
+ * @deprecated
+ */
 var onClose: () => void = () => { };
 inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 
+/**
+ * @deprecated
+ */
 var onCloseFromPage: () => void = () => { };
 inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
+
+
+/**
+ * Set the listener when the webview is dismissed or webview is dismissed from within the webview
+ * @param callback callback to execute
+ */
+const setOnSurveysCloseLister = (callback: (eventData: OnCloseSurveysData) => void) => {
+    onSurveysClose = callback;
+};
 
 /**
  * Set the listener when the webview is dismissed
  * @param callback callback to execute
+ * @deprecated
  */
 const setOnCloseListener = (callback: () => void) => {
     onClose = callback;
@@ -141,6 +163,7 @@ const setOnCloseListener = (callback: () => void) => {
 /**
  * Set the listener when the webview is dismissed from within the webview
  * @param callback callback to execute
+ * @deprecated
  */
 const setOnCloseListenerFromPage = (callback: () => void) => {
     onCloseFromPage = callback;
@@ -182,5 +205,6 @@ export default {
     getNativeSurveys,
     showNativeSurvey,
     setOnCloseListener,
-    setOnCloseListenerFromPage
+    setOnCloseListenerFromPage,
+    setOnSurveysCloseLister,
 };

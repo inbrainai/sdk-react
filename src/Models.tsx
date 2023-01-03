@@ -20,6 +20,7 @@ export type InBrainNativeSurveys = {
     value: number;
     currencySale: boolean;
     multiplier: number;
+    namedCategories?: Category[];
     /**
      * All the possible cases are listed at `ConversionLevel` declaration
      */
@@ -112,8 +113,7 @@ export const InBrainSurveyCategory = {
    VideoGames:30,
    FashionAndClothingOther:31,
    FashionAndClothingDepartmentStore:32,
-}
-
+};
 
 /**
  * @deprecated The type is not supported anymore
@@ -121,8 +121,7 @@ export const InBrainSurveyCategory = {
 export type ProfileMatch = {
     id: number;
     name: string
-}
-
+};
 
 /**
  * @deprecated The type is not supported anymore
@@ -134,4 +133,42 @@ export const ProfileMatchNames = {
     GoodProfileMatch:3,
     GreatProfileMatch:4,
     ExcellentProfileMatch:5,
+};
+
+/**
+ * Data returned with OnSurveysClose event
+ */
+export type OnCloseSurveysData = {
+    byWebView: boolean,
+
+    /**
+     * At the moment only first Native Survey reward is delivered.
+     * That means if the user complete a Native Survey, proceed to Survey Wall and complete one more survey -
+     * only first reward will be delivered. In case of Survey Wall usage only - no rewards will be delivered.
+     */
+    rewards?: InBrainSurveyReward[],
+};
+
+/**
+ * Survey Outcome Type
+ *
+ *  Possible cases are:
+ *  0 = Completed;
+ *  1 = Terminated;
+ *
+ */
+export type SurveyOutcomeType = {
+    id: number;
+    name: string
+}
+
+/**
+ * Survey reward interface
+ */
+export type InBrainSurveyReward = {
+    surveyId: string,
+    userReward: number,
+    outcomeType: SurveyOutcomeType,
+    placementId?: string,
+    categories?: Category[],
 }

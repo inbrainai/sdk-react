@@ -17,18 +17,23 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 import com.inbrain.sdk.InBrain;
+
 import com.inbrain.sdk.callback.GetNativeSurveysCallback;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.callback.SurveysAvailableCallback;
+
 import com.inbrain.sdk.config.StatusBarConfig;
 import com.inbrain.sdk.config.ToolBarConfig;
+
 import com.inbrain.sdk.model.Reward;
 import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
+import com.inbrain.sdk.model.InBrainSurveyReward;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -291,19 +296,14 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putDouble("value", survey.value);
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putDouble("multiplier", survey.multiplier);
+                        map.putArray("namedCategories", mapCategories(survey.categories));
 
                         WritableArray categories = Arguments.createArray();
-                        WritableArray namedCategories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
-                            WritableMap categoryNamed = Arguments.createMap();
-                            categoryNamed.putInt("id", category.getId());
-                            categoryNamed.putString("name", categoriesMap(category.name()));
-                            namedCategories.pushMap(categoryNamed);
-                            categories.pushInt(category.getId());
+                           categories.pushInt(category.getId());
                         }
 
                         map.putArray("categories", categories);
-                        map.putArray("namedCategories", namedCategories);
 
                         WritableMap conversionLevel = Arguments.createMap();
                         conversionLevel.putInt("id", survey.conversionThreshold);
@@ -502,13 +502,31 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** LISTENERS ****
     // ********************
     @Override
-    public void surveysClosed() {
-        sendEvent("OnClose", null);
-    }
+    public void surveysClosed(boolean byWebView, List<InBrainSurveyReward> rewards) {
+        String isByWebView = byWebView ? "OnClose" : "OnCloseFromPage";
+        sendEvent(isByWebView, null);
 
-    @Override
-    public void surveysClosedFromPage() {
-        sendEvent("OnCloseFromPage", null);
+        WritableArray rewardMappingArray = null;
+        if(rewards != null && rewards.size() > 0) {
+            rewardMappingArray = Arguments.createArray();
+
+            for(InBrainSurveyReward reward : rewards) {
+                WritableMap map = Arguments.createMap();
+                map.putString("surveyId", reward.getSurveyId());
+                map.putString("placementId", reward.getPlacementId());
+                map.putMap("outcomeType", mapOutcomeType(reward.getOutcomeType().getType()));
+                map.putArray("categories", mapCategories(reward.getCategories()));
+                map.putDouble("userReward", reward.getUserReward());
+
+                rewardMappingArray.pushMap(map);
+            }
+        }
+
+        WritableMap response = Arguments.createMap();
+        response.putBoolean("byWebView", byWebView);
+        response.putArray("rewards", rewardMappingArray);
+
+        sendEvent("OnSurveysClose", response);
     }
 
     @Override
@@ -633,6 +651,37 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             default:
                 return "Unknown";
         }
+    }
+
+    private String outcomeTypeName(Integer outcomeTypeId) {
+        switch (outcomeTypeId) {
+            case 0 :
+                return "Completed";
+            case 1 :
+                return "Terminated";
+            default:
+                return "Unknown";
+        }
+    }
+
+    private WritableMap mapOutcomeType(Integer outcomeTypeId) {
+        WritableMap categoryNamed = Arguments.createMap();
+        categoryNamed.putInt("id", outcomeTypeId);
+        categoryNamed.putString("name", outcomeTypeName(outcomeTypeId));
+        return categoryNamed;
+    }
+
+    private WritableArray mapCategories(List<SurveyCategory> categories) {
+        if (categories == null) { return null; }
+
+        WritableArray namedCategories = Arguments.createArray();
+        for (SurveyCategory category : categories) {
+            WritableMap categoryNamed = Arguments.createMap();
+            categoryNamed.putInt("id", category.getId());
+            categoryNamed.putString("name", categoriesMap(category.name()));
+            namedCategories.pushMap(categoryNamed);
+        }
+        return namedCategories;
     }
 
     private HashMap<String, String> toHashMap(ReadableMap data) {
