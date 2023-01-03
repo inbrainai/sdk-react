@@ -1,3 +1,15 @@
+##[2.8.0] 2023-01-02
+
+### Added
+- `OnSurveysClose` listener;
+- `InBrainSurveyReward` type, which represents information about completed survey and earned reward;
+- `OnCloseSurveysData` type, which contains close type and reward information.
+
+### Changed
+- `onClose` listener deprecated;
+- `onCloseFromPage` listener deprecated.
+---
+
 ## [2.7.0] 2022-12-29
 
 ### Added
@@ -191,7 +203,7 @@
 
 ## [1.1.1] 2020-11-19
 ### Fixed
-- Fix onClose listener not triggered when closing the webview displaying a native survey.
+- Fix `onClose` listener not triggered when closing the webview displaying a native survey.
 
 ### Changed
 - Simplified ObjC code and removed unnecessary view controller. 
