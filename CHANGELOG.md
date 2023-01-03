@@ -1,9 +1,9 @@
 ##[2.8.0] 2023-01-02
 
 ### Added
-- `onSurveysClose` listener;
+- `OnSurveysClose` listener;
 - `InBrainSurveyReward` type, which represents information about completed survey and earned reward;
-- `OnCloseSurveysData` type, which contains close type and reward information. 
+- `OnCloseSurveysData` type, which contains close type and reward information.
 
 ### Changed
 - `onClose` listener deprecated;

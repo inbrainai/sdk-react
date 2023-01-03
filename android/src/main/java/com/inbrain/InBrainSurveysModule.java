@@ -17,18 +17,23 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 import com.inbrain.sdk.InBrain;
+
 import com.inbrain.sdk.callback.GetNativeSurveysCallback;
 import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.callback.SurveysAvailableCallback;
+
 import com.inbrain.sdk.config.StatusBarConfig;
 import com.inbrain.sdk.config.ToolBarConfig;
+
 import com.inbrain.sdk.model.Reward;
 import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
+import com.inbrain.sdk.model.InBrainSurveyReward;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -502,20 +507,21 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** LISTENERS ****
     // ********************
     @Override
-    public void surveysClosed(boolean byWebView, Optional<List<InBrainSurveyReward>> rewards) {
+    public void surveysClosed(boolean byWebView, List<InBrainSurveyReward> rewards) {
         String isByWebView = byWebView ? "OnClose" : "OnCloseFromPage";
         sendEvent(isByWebView, null);
         WritableArray rewardMappingArray = Arguments.createArray();
 
-        if(rewards.size()) {
-            for(Reward reward :rewards) {
+        if(rewards != null && rewards.size() > 0) {
+            for(InBrainSurveyReward reward : rewards) {
                 WritableMap map = Arguments.createMap();
-                map.putString("surveyId", reward.id);
-                map.putString("placementId", reward.placementId);
-                map.putString("outcomeType", outcomeTypeName(reward.outcomeType));
-                map.putArray("categories", mapCategories(reward.categories));
-                map.putString("userReward", reward.userReward);
-                array.pushMap(map);
+                map.putString("surveyId", reward.getSurveyId());
+                map.putString("placementId", reward.getPlacementId());
+                map.putMap("outcomeType", mapOutcomeType(reward.getOutcomeType().getType()));
+                map.putArray("categories", mapCategories(reward.getCategories()));
+                map.putDouble("userReward", reward.getUserReward());
+
+                rewardMappingArray.pushMap(map);
             }
         }
 
@@ -524,7 +530,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         response.putArray("rewards", rewardMappingArray);
 
         sendEvent("OnSurveysClose", response);
-
     }
 
     @Override
@@ -662,9 +667,16 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
     }
 
-    private WritableArray mapCategories(ArrayList categories) {
+    private WritableMap mapOutcomeType(Integer outcomeTypeId) {
+        WritableMap categoryNamed = Arguments.createMap();
+        categoryNamed.putInt("id", outcomeTypeId);
+        categoryNamed.putString("name", outcomeTypeName(outcomeTypeId));
+        return categoryNamed;
+    }
+
+    private WritableArray mapCategories(List<SurveyCategory> categories) {
         WritableArray namedCategories = Arguments.createArray();
-        for (SurveyCategory category: categories) {
+        for (SurveyCategory category : categories) {
             WritableMap categoryNamed = Arguments.createMap();
             categoryNamed.putInt("id", category.getId());
             categoryNamed.putString("name", categoriesMap(category.name()));
