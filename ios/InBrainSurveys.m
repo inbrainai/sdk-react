@@ -129,22 +129,17 @@ RCT_EXPORT_MODULE()
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret)
 {
-    @try {
+    [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true];
+}
 
-        [self notNull:@"apiClientId" toCheck:apiClientId];
-        [self notNull:@"apiSecret" toCheck:apiSecret];
-        [self notNull:@"userId" toCheck:userId];
-
-        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true userID:userId];
-
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN", error.description, nil);
-    }
+// ***********************
+// ***** SET USER ID *****
+// ***********************
+RCT_EXPORT_METHOD(setUserID:(nonnull NSString *)userId)
+{
+   [self.inbrain setWithUserID: userId];
 }
 
 // **********************************

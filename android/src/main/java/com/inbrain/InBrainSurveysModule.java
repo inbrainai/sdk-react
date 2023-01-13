@@ -45,15 +45,10 @@ import javax.annotation.Nullable;
 public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
 
     private final ReactApplicationContext reactContext;
-    private HashMap sessionData;
-    private String sessionID;
 
     public InBrainSurveysModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        //TMP
-        this.sessionID = null;
-        this.sessionData = null;
     }
 
     @Override
@@ -65,50 +60,26 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SET INBRAIN *****
     // ***********************
     @ReactMethod
-    public void setInBrain(final String apiClientId, final String clientSecret, final String userId, final Promise promise) {
-        try {
-            // Validate parameters
-            notNull("apiClientId", apiClientId);
-            notNull("clientSecret", clientSecret);
-            notNull("userId", userId);
+    public void setInBrain(final String apiClientId, final String clientSecret) {
+        // Set the listener
+        InBrain.getInstance().removeCallback(this);
+        InBrain.getInstance().addCallback(this);
 
-            // Set the listener
-            InBrain.getInstance().removeCallback(this);
-            InBrain.getInstance().addCallback(this);
-
-            // Needs to be in main thread
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        // Call Braintree sdk
-                        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true, userId);
-                        // Everything went well, resolve the promise
-                        promise.resolve(null);
-                    } catch (Exception e) {
-                        promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            promise.reject("ERR_SET_INBRAIN", e.getMessage(), e);
-        }
+        // Needs to be in main thread
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true);
+            }
+        });
     }
 
     // **********************************
-    // ***** SET INBRAIN VALUES FOR *****
+    // ***** SET USER ID *****
     // **********************************
     @ReactMethod
-    public void setInBrainValuesFor(final String sessionId, final ReadableMap data, Promise promise) {
-
-        new InBrainSDKParamSetter<HashMap<String, String>>() {
-            @Override
-            public void setParam(HashMap<String, String> param) {
-                InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
-            }
-        }.apply(promise, "values", toHashMap(data), "ERR_SET_INBRAIN_VALUES");
-
+    public void setUserID( final String userId) {
+        InBrain.getInstance().setUserID(getReactApplicationContext(), userId);
     }
 
     // **********************************

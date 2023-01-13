@@ -1,8 +1,8 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 
 
-import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
-import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import { InitOptions, InitOptionName, StylingOptionName, DataPoints, StylingOptions } from './Options';
 import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
 
 const { InBrainSurveys } = NativeModules;
@@ -17,30 +17,31 @@ const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
  */
 const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
 
-    // Default and null-safe options
-    var options = setDefaultOptions(opts);
-
-    // Validate
-    validateOptions(apiClientId, apiSecret, options);
+    validateCliendData(apiClientId, apiSecret);
 
     // Call all options bridge methods
-    InBrainSurveys.setSessionID(options.sessionUid);
-    InBrainSurveys.setDataOptions(options.dataPoints);
+    if(opts?.sessionUid) {
+        InBrainSurveys.setSessionID(opts.sessionUid);
+    }
 
-    // -- call all the other properties one by one (styling options)
-    await callOptionSetters(options)
+    if(opts?.dataPoints) {
+        InBrainSurveys.setDataOptions(opts.dataPoints);
+    }
 
+    if(opts?.userId) {
+        InBrainSurveys.setUserID(opts.userId);
+    }
+
+    setOptions(opts);
     // return promise for init
-    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.userId));
-}
+    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret));
+};
 
 const setDefaultOptions = (options?: InitOptions) => {
     let internalOptions: any = options || {};
 
     // Defaults
     internalOptions.title = internalOptions.title || 'inBrain.ai Surveys'
-    internalOptions.userId = internalOptions.userId || ''
-    internalOptions.isS2S = internalOptions.isS2S || false
 
     // Ugly, but we have to populate the title in navigationBar as this is what Android uses (and not iOS)
     internalOptions.navigationBar = { ...internalOptions.navigationBar, title: internalOptions.title }
@@ -48,29 +49,31 @@ const setDefaultOptions = (options?: InitOptions) => {
     internalOptions.statusBar = { ...internalOptions.statusBar, statusBarColor: internalOptions.navigationBar?.backgroundColor }
 
     return internalOptions
-}
+};
 
+
+/**
+ * call setters for styling options
+ *  @param options a list of styling options
+ */
 const callOptionSetters = (options: InitOptions) => {
+    Object.keys(options).map((opt: InitOptionName)=> {
+        if(optionsActions[opt]) {
+            optionsActions[opt](options[opt]);
+        }
+    });
+};
 
-    // Generate the promise supplier
-    let provider: PromiseSupplier<any> = () => {
-        const optionPromises = Object.keys(options)
-            // From the options, extract the appropriate methodhandler, and the parameterof this method
-            .map((opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }))
-            // Then just call the method against the parameter
-            .map(pair => pair.method && pair.method(pair.param));
-
-        return Promise.all(optionPromises);
-    }
-
-    // Return and call the promise
-    return wrapPromise(provider);
-}
+/**
+ * set userID
+ *  @param userID the session identifiers
+ */
+const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
 
 /**
  * Show the surveys webview
  */
-const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
+const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
 
 /**
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
@@ -81,7 +84,22 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
 const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
     InBrainSurveys.setSessionID(sessionUid);
     InBrainSurveys.setDataOptions(dataPoints);
-}
+};
+
+/**
+ * Set setOptions. call be call to set styling options
+ * @param options The styling options
+ */
+const setOptions = (options: StylingOptions|undefined) => {
+    // Default and null-safe options
+    let defaultOptions = setDefaultOptions(options);
+
+    // Validate
+    validateOptions(defaultOptions);
+
+    // -- call all the other properties one by one (styling options)
+    callOptionSetters(defaultOptions);
+};
 
 /**
  * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
@@ -158,7 +176,7 @@ const setOnSurveysCloseLister = (callback: (eventData: OnCloseSurveysData) => vo
  */
 const setOnCloseListener = (callback: () => void) => {
     onClose = callback;
-}
+};
 
 /**
  * Set the listener when the webview is dismissed from within the webview
@@ -167,21 +185,26 @@ const setOnCloseListener = (callback: () => void) => {
  */
 const setOnCloseListenerFromPage = (callback: () => void) => {
     onCloseFromPage = callback;
-}
+};
+
+/**
+ * Validation for apiClientId and apiSecret.
+ * TODO: find any validation library
+ */
+const validateCliendData = (apiClientId: string, apiSecret: string) => {
+    assertNotNullNorEmpty("apiClientId", apiClientId);
+    assertNotNullNorEmpty("apiSecret", apiSecret);
+};
 
 /**
  * Validation for options.
  * TODO: find any validation library
  */
-const validateOptions = (apiClientId: string, apiSecret: string, options: InitOptions) => {
-
-    assertNotNullNorEmpty("apiClientId", apiClientId)
-    assertNotNullNorEmpty("apiSecret", apiSecret)
-
+const validateOptions = (options: StylingOptions) => {
     options.navigationBar?.backgroundColor && assertIsColor(options.navigationBar?.backgroundColor)
     options.navigationBar?.buttonsColor && assertIsColor(options.navigationBar?.buttonsColor)
     options.navigationBar?.titleColor && assertIsColor(options.navigationBar?.titleColor)
-}
+};
 
 /**
  * Map between <option name> and <corresponding SDK bridge method>
@@ -191,7 +214,7 @@ const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<an
     "language": InBrainSurveys.setLanguage,
     "statusBar": InBrainSurveys.setStatusBarConfig,
     "navigationBar": InBrainSurveys.setNavigationBarConfig,
-}
+};
 
 export default {
     init,
@@ -207,4 +230,6 @@ export default {
     setOnCloseListener,
     setOnCloseListenerFromPage,
     setOnSurveysCloseLister,
+    setUserID,
+    setOptions,
 };
