@@ -87,10 +87,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // **********************************
     @ReactMethod
     public void setSessionID(final String sessionId) {
-        //tmp data until android sdk new version
-        this.sessionID = sessionId;
-        HashMap<String, String> data = this.sessionData;
-        InBrain.getInstance().setInBrainValuesFor(sessionId, data);
+        InBrain.getInstance().setSessionId(sessionId);
     }
 
     // **********************************
@@ -98,10 +95,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // **********************************
     @ReactMethod
     public void setDataOptions(final ReadableMap data) {
-        //tmp data until android sdk new version
-        this.sessionData = toHashMap(data);
-        String sessionId = this.sessionID;
-        InBrain.getInstance().setInBrainValuesFor(sessionId, toHashMap(data));
+        InBrain.getInstance().setDataOptions(toHashMap(data));
     }
 
     // ************************

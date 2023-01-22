@@ -19,6 +19,7 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
 
     validateCliendData(apiClientId, apiSecret);
 
+
     // Call all options bridge methods
     if(opts?.sessionUid) {
         InBrainSurveys.setSessionID(opts.sessionUid);
