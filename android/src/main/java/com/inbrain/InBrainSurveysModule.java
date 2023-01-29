@@ -64,14 +64,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         // Set the listener
         InBrain.getInstance().removeCallback(this);
         InBrain.getInstance().addCallback(this);
-
-        // Needs to be in main thread
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true);
-            }
-        });
+        InBrain.getInstance().setInBrain(getReactApplicationContext(), apiClientId, clientSecret, true);
     }
 
     // **********************************

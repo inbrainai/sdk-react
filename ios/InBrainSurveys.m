@@ -122,7 +122,6 @@
 RCT_EXPORT_MODULE()
 + (BOOL)requiresMainQueueSetup
 {
-
     return NO;  // only do this if your module initialization relies on calling UIKit!
 }
 
@@ -166,7 +165,6 @@ RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
 
     [self.inbrain setDataOptions: mapped];
 }
-
 
 // ************************
 // ***** SHOW SURVEYS *****

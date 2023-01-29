@@ -46,7 +46,7 @@ export type StylingOptionType = {
     language?: String
     title?: String
     navigationBar?: NavigationBarOptionType
-    statusBar?: StatusBarOptionType
+    statusBar?: StatusBarOptions
 };
 export type StylingOptions = { [opt in StylingOptionName]?: StylingOptionType[opt] }
 

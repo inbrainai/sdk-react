@@ -16,42 +16,18 @@ const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
  * @param opts Additional optional options
  */
 const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
+    validateClientData(apiClientId, apiSecret);
 
-    validateCliendData(apiClientId, apiSecret);
+    InBrainSurveys.setSessionID(opts?.sessionUid);
+    InBrainSurveys.setDataOptions(opts?.dataPoints);
+    InBrainSurveys.setUserID(opts?.userId);
 
-
-    // Call all options bridge methods
-    if(opts?.sessionUid) {
-        InBrainSurveys.setSessionID(opts.sessionUid);
+    if(opts) {
+        setOptions(opts);
     }
-
-    if(opts?.dataPoints) {
-        InBrainSurveys.setDataOptions(opts.dataPoints);
-    }
-
-    if(opts?.userId) {
-        InBrainSurveys.setUserID(opts.userId);
-    }
-
-    setOptions(opts);
     // return promise for init
     return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret));
 };
-
-const setDefaultOptions = (options?: InitOptions) => {
-    let internalOptions: any = options || {};
-
-    // Defaults
-    internalOptions.title = internalOptions.title || 'inBrain.ai Surveys'
-
-    // Ugly, but we have to populate the title in navigationBar as this is what Android uses (and not iOS)
-    internalOptions.navigationBar = { ...internalOptions.navigationBar, title: internalOptions.title }
-    // And we have to populate this, as it's not possible to only set the status bar color on iOS
-    internalOptions.statusBar = { ...internalOptions.statusBar, statusBarColor: internalOptions.navigationBar?.backgroundColor }
-
-    return internalOptions
-};
-
 
 /**
  * call setters for styling options
@@ -91,15 +67,11 @@ const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
  * Set setOptions. call be call to set styling options
  * @param options The styling options
  */
-const setOptions = (options: StylingOptions|undefined) => {
-    // Default and null-safe options
-    let defaultOptions = setDefaultOptions(options);
-
+const setOptions = (options: StylingOptions) => {
     // Validate
-    validateOptions(defaultOptions);
-
+    validateOptions(options);
     // -- call all the other properties one by one (styling options)
-    callOptionSetters(defaultOptions);
+    callOptionSetters(options);
 };
 
 /**
@@ -190,16 +162,14 @@ const setOnCloseListenerFromPage = (callback: () => void) => {
 
 /**
  * Validation for apiClientId and apiSecret.
- * TODO: find any validation library
  */
-const validateCliendData = (apiClientId: string, apiSecret: string) => {
+const validateClientData = (apiClientId: string, apiSecret: string) => {
     assertNotNullNorEmpty("apiClientId", apiClientId);
     assertNotNullNorEmpty("apiSecret", apiSecret);
 };
 
 /**
  * Validation for options.
- * TODO: find any validation library
  */
 const validateOptions = (options: StylingOptions) => {
     options.navigationBar?.backgroundColor && assertIsColor(options.navigationBar?.backgroundColor)
