@@ -79,7 +79,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     // Inbrain Android SDK
-    implementation 'com.github.inbrainai:sdk-android:[2.1.2, 2.2.0)'
+    implementation 'com.github.inbrainai:sdk-android:[2.1.5, 2.2.0)'
 }
 
 def configureReactNativePom(def pom) {
