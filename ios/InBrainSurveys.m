@@ -136,7 +136,7 @@ RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString
 // ***********************
 // ***** SET USER ID *****
 // ***********************
-RCT_EXPORT_METHOD(setUserID:(nonnull NSString *)userId)
+RCT_EXPORT_METHOD(setUserID:(NSString *)userId)
 {
    [self.inbrain setWithUserID: userId];
 }
