@@ -20,13 +20,14 @@ const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions):
 
     InBrainSurveys.setSessionID(opts?.sessionUid);
     InBrainSurveys.setDataOptions(opts?.dataPoints);
-    InBrainSurveys.setUserID(opts?.userId);
 
     if(opts) {
         setOptions(opts);
     }
     // return promise for init
-    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret));
+    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret)).then(() => {
+        InBrainSurveys.setUserID(opts?.userId)
+    });
 };
 
 /**

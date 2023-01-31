@@ -33,9 +33,9 @@ export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseS
     try {
         return await promiseSupplier()
     } catch (err) {
-        // If error corresponds to null activity (happens occasionnally in Android), then we retry
+        // If error corresponds to null activity (happens occasionally in Android), then we retry
         if (err.code == 'ERR_NULL_CURRENT_ACTIVITY' && count < 10) {
-            await timeout(50) // -- sleep 50ms
+            await timeout(50); // -- sleep 50ms
             return wrapPromise(promiseSupplier, count + 1)
         }
 
