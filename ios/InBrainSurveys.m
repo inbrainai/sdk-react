@@ -313,55 +313,48 @@ RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveB
     }
 }
 
-// **************************
-// ***** SET VIEW TITLE *****
-// **************************
-RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try{
-        // Forwarding to SDK
-        [[InBrain shared] setNavigationBarTitle:title];
+// // **************************
+// // ***** SET VIEW TITLE *****
+// // **************************
+// RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+// {
+//     @try{
+//         // Forwarding to SDK
+//         [[InBrain shared] setNavigationBarTitle:title];
 
-        // Resolve the promise
-        resolve(@true);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_TITLE", error.description, nil);
-    }
-}
+//         // Resolve the promise
+//         resolve(@true);
+//     }
+//     @catch (NSException *error) {
+//         reject(@"ERR_SET_TITLE", error.description, nil);
+//     }
+// }
 
 // *************************************
 // ***** SET NAVIGATION BAR CONFIG *****
 // *************************************
-RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data)
 {
-    @try{
+    NSString *title = [data objectForKey: @"title"];
+    [[InBrain shared] setNavigationBarTitle:title];
 
-        // Extract parameters
-        NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
-        UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
+    // Extract parameters
+    NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
+    UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
 
-        NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
-        UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
+    NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
+    UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
 
-        NSString* titleColorString = [data objectForKey:@"titleColor"];
-        UIColor* titleColor = [self colorWithHexString:titleColorString];
+    NSString* titleColorString = [data objectForKey:@"titleColor"];
+    UIColor* titleColor = [self colorWithHexString:titleColorString];
 
-        BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
+    BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
 
-        // Instantiate config object
-        InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
+    // Instantiate config object
+    InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
 
-        // Forwarding to SDK
-        [[InBrain shared] setNavigationBarConfig:config];
-
-        // Resolve the promise
-        resolve(@true);
-
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_NAVIGATION_BAR_CONFIG", error.description, nil);
-    }
+    // Forwarding to SDK
+    [[InBrain shared] setNavigationBarConfig: config];
 }
 
 // *********************************
@@ -481,11 +474,11 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
 }
 
-- (void) notNull:(NSString* )name toCheck:(id)toCheck {
-    if( !toCheck ){
-        [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
-    }
-}
+// - (void) notNull:(NSString* )name toCheck:(id)toCheck {
+//     if( !toCheck ){
+//         [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
+//     }
+// }
 
 - (NSArray * _Nullable)mapCategories:(NSArray *) categories {
     if ([categories count] == 0) { return nil; }
