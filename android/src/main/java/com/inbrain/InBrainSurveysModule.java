@@ -1,8 +1,6 @@
 package com.inbrain;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -34,13 +32,14 @@ import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
 import com.inbrain.sdk.model.InBrainSurveyReward;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import static android.graphics.Color.parseColor;
 
 public class InBrainSurveysModule extends ReactContextBaseJavaModule implements InBrainCallback {
 
@@ -258,7 +257,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
                         WritableArray categories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
-                           categories.pushInt(category.getId());
+                            categories.pushInt(category.getId());
                         }
 
                         map.putArray("categories", categories);
@@ -320,116 +319,50 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
     }
 
-    // **************************
-    // ***** SET VIEW TITLE *****
-    // **************************
-    @ReactMethod
-    public void setTitle(final String title, Promise promise) {
-
-        new InBrainSDKParamSetter<String>() {
-            @Override
-            public void setParam(String param) {
-                // This method doesn't exist in the Android SDK as setting the title is part of setNavigationBarConfig
-                // This is just here so we don't have to add any condition in the RN code.
-            }
-        }.apply(promise, "title", title, "ERR_SET_TITLE");
-
-    }
-
-    // *************************************
+    // ************************************
     // ***** SET NAVIGATION BAR CONFIG *****
     // *************************************
     @ReactMethod
-    public void setNavigationBarConfig(final ReadableMap configMap, Promise promise) {
-        final ToolBarConfig config = new ToolBarConfig();
+    public void setNavigationBarConfig(@Nullable String backgroundHex, @Nullable String buttonsHex,
+                                       @Nullable String titleHex, @Nullable String title,
+                                       @Nullable boolean hasShadow)  {
+        ToolBarConfig config = new ToolBarConfig();
+        
+        if (backgroundHex != null) {
+            int backgroundColor = parseColor(backgroundHex);
+            config.setToolbarColor(backgroundColor);
+        }
 
+        if (buttonsHex != null) {
+            int buttonsColor = parseColor(buttonsHex);
+            config.setBackButtonColor(buttonsColor);
+        }
+        
+        if (titleHex != null) {
+            int titleColor = parseColor(titleHex);
+            config.setTitleColor(titleColor);
+        }
+            
+        config.setTitle(title);
+        config.setElevationEnabled(hasShadow);
 
-        // Forwarding to SDK
-        new InBrainSDKParamSetter<ToolBarConfig>() {
-            @Override
-            public void setParam(ToolBarConfig param) {
-
-                // Extract parameters
-                new ColorMapParamExtractor(configMap, "backgroundColor") {
-
-                    @Override
-                    public void setParam(Integer color) {
-                        config.setToolbarColor(color);
-                    }
-                };
-                new ColorMapParamExtractor(configMap, "buttonsColor") {
-
-                    @Override
-                    public void setParam(Integer color) {
-                        config.setBackButtonColor(color);
-                    }
-                };
-                new ColorMapParamExtractor(configMap, "titleColor") {
-
-                    @Override
-                    public void setParam(Integer color) {
-                        config.setTitleColor(color);
-                    }
-                };
-                new BooleanMapParamExtractor(configMap, "hasShadow") {
-
-                    @Override
-                    public void setParam(Boolean elevationEnabled) {
-                        config.setElevationEnabled(elevationEnabled);
-                    }
-                };
-                new StringMapParamExtractor(configMap, "title") {
-
-                    @Override
-                    public void setParam(String title) {
-                        config.setTitle(title);
-                    }
-                };
-
-                // Finally call InBrain
-                InBrain.getInstance().setToolbarConfig(param);
-            }
-        }.apply(promise, "navigationBarConfig", config, "ERR_SET_NAVIGATION_BAR_CONFIG");
-
+        InBrain.getInstance().setToolbarConfig(config);
     }
-
 
     // *********************************
     // ***** SET STATUS BAR CONFIG *****
     // *********************************
     @ReactMethod
-    public void setStatusBarConfig(final ReadableMap configMap, Promise promise) {
-        final StatusBarConfig config = new StatusBarConfig();
-
-
-        // Forwarding to SDK
-        new InBrainSDKParamSetter<StatusBarConfig>() {
-            @Override
-            public void setParam(StatusBarConfig param) {
-
-                // Extract parameters
-                new BooleanMapParamExtractor(configMap, "lightStatusBar") {
-
-                    @Override
-                    public void setParam(Boolean lightStatusBar) {
-                        config.setStatusBarIconsLight(lightStatusBar);
-                    }
-                };
-                new ColorMapParamExtractor(configMap, "statusBarColor") {
-
-                    @Override
-                    public void setParam(Integer color) {
-                        config.setStatusBarColor(color);
-                    }
-                };
-
-                // Finally call InBrain
-                InBrain.getInstance().setStatusBarConfig(param);
-            }
-        }.apply(promise, "statusBarConfig", config, "ERR_SET_STATUS_BAR_CONFIG");
-
+    public void setStatusBarConfig(final boolean lightStatusBar, @Nullable String backgroundHex) {
+        StatusBarConfig config = new StatusBarConfig();
+        config.setStatusBarIconsLight(lightStatusBar);
+        if (backgroundHex != null) {
+            int backgroundColor = parseColor(backgroundHex);
+            config.setStatusBarColor(backgroundColor);
+        }
+        
+        InBrain.getInstance().setStatusBarConfig(config);
     }
-
 
     @ReactMethod
     public void addListener(String eventName) {
@@ -446,14 +379,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***********************
     @ReactMethod
     public void setLanguage(final String language, Promise promise) {
-
         new InBrainSDKParamSetter<String>() {
             @Override
             public void setParam(String param) {
                 InBrain.getInstance().setLanguage(language);
             }
         }.apply(promise, "language", language, "ERR_SET_LANGUAGE");
-
     }
 
     // ********************
