@@ -1,6 +1,12 @@
 ##[2.8.0] 2023-01-02
 
 ### Added
+- `setUserID` the method, allows setting userID not only during initialization of sdk. 
+- `setOptions` the method allows setting StylingOptions not only during initialization of sdk.
+
+##[2.8.0] 2023-01-02
+
+### Added
 - `OnSurveysClose` listener;
 - `InBrainSurveyReward` type, which represents information about completed survey and earned reward;
 - `OnCloseSurveysData` type, which contains close type and reward information.

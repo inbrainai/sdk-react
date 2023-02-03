@@ -1,76 +1,140 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
 
 
-import { assertIsColor, assertNotNullNorEmpty, PromiseSupplier, wrapPromise } from './Utils';
-import { InitOptions, InitOptionName, StylingOptionName, DataPoints } from './Options';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import {
+    InitOptions,
+    DataPoints,
+    StylingOptions,
+    StatusBarConfig,
+    NavigationBarConfig,
+} from './Options';
 import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
 
+// ----------------------- Setup InBrain -------------------------------
+
 /**
- * Init the SDK.
- * @param apiClientId Provided in inBrain.ai dashboard
- * @param apiSecret Provided in inBrain.ai dashboard
+* Initial inBrain SDK configuration.
+* @param apiClientId The client ID provided in inBrain.ai dashboard
+* @param apiSecret The client secret provided in inBrain.ai dashboard
+* @param  userId: The string value that uniquely identifies each user within your application. Can be provided later, using `setUserID` method
+*/
+const setInBrain = (apiClientId: string, apiSecret: string, userId?: string) => {
+   validateClientData(apiClientId, apiSecret);
+   InBrainSurveys.setInBrain(apiClientId, apiSecret);
+   InBrainSurveys.setUserID(userId);
+};
+
+/**
+ *  Set uniq identifier of user within your application. If value not set (or empty) - `identifierForVendor` will be used
+ *  @param userID The string value that uniquely identifies each user within your application
+ */
+const setUserID = (userID: string | undefined) => InBrainSurveys.setUserID(userID);
+
+/**
+ * Set the value to track user session. This value is provided via S2S Callbacks as SessionId.
+ * @param sessionId Session identifier
+ */
+const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
+
+/**
+ * Provide information about the user
+ * @param dataPoints User information
+ */
+const setDataOptions = (dataPoints: DataPoints) => InBrainSurveys.setDataOptions(dataPoints);
+
+/**
+ * Customize Status Bar to match your application style
+ * @param config Status Bar configuration
+ */
+const setStatusBarConfig = (config: StatusBarConfig) => {
+    if (Platform.OS == 'ios') {
+        InBrainSurveys.setStatusBarLight(config.lightStatusBar ?? true);
+    } else {
+        config.statusBarColor && assertIsColor(config.statusBarColor);
+        InBrainSurveys.setStatusBarConfig(config.lightStatusBar ?? false, config.statusBarColor);
+    }
+};
+
+/**
+ * Customize Navigation Bar to match your application style
+ * @param config Navigation Bar configuration
+ */
+const setNavigationBarConfig = (config: NavigationBarConfig) => {
+    config.backgroundColor && assertIsColor(config.backgroundColor);
+    config.buttonsColor && assertIsColor(config.buttonsColor);
+    config.titleColor && assertIsColor(config.titleColor);
+
+    InBrainSurveys.setNavigationBarConfig(config.backgroundColor, config.buttonsColor,
+                                          config.titleColor, config.title,
+                                          config.hasShadow ?? false);
+};
+
+var onSurveysClose: (eventData: OnCloseSurveysData) => void = () => { };
+inbrainEmitter.addListener('OnSurveysClose', (eventData: OnCloseSurveysData) => onSurveysClose && onSurveysClose(eventData));
+/**
+ * Set the listener when the webview is dismissed or webview is dismissed from within the webview
+ * @param callback Callback to execute
+ */
+const setOnSurveysCloseLister = (callback: (eventData: OnCloseSurveysData) => void) => {
+    onSurveysClose = callback;
+};
+/**
+ * Check if surveys are available to show
+ */
+const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
+
+/**
+ * Show the Survey Wall. All the configs should be done `BEFORE` calling `showSurveys()`.
+ */
+const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
+
+/**
+ * Get Native Surveys
+ * @param filter an optional parameter
+ */
+ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
+
+/**
+ * Show a pecific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
+ * @param id the survey's identifier
+ * @param searchId a mandatory identifier
+ */
+const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId));
+
+/**
+ * Get the rewards
+ */
+const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards());
+
+/**
+ * Manually confirm a list of rewards
+ * @param rewards The rewards to confirm
+ */
+const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
+
+// ----------------------- Deprecated -------------------------------
+
+/**
+ * Initial inBrain SDK configuration.
+ * @param apiClientId The client ID provided in inBrain.ai dashboard
+ * @param apiSecret The client secret provided in inBrain.ai dashboard
  * @param opts Additional optional options
+ * @deprecated Please, use setInBrain fucntion instead
  */
 const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
+    setInBrain(apiClientId, apiSecret, opts?.userId);
+    InBrainSurveys.setSessionID(opts?.sessionUid);
+    InBrainSurveys.setDataOptions(opts?.dataPoints);
 
-    // Default and null-safe options
-    var options = setDefaultOptions(opts);
+    setTopBarsOptions(opts);
 
-    // Validate
-    validateOptions(apiClientId, apiSecret, options);
-
-    // Call all options bridge methods
-    InBrainSurveys.setSessionID(options.sessionUid);
-    InBrainSurveys.setDataOptions(options.dataPoints);
-
-    // -- call all the other properties one by one (styling options)
-    await callOptionSetters(options)
-
-    // return promise for init
-    return wrapPromise(() => InBrainSurveys.setInBrain(apiClientId, apiSecret, options.userId));
-}
-
-const setDefaultOptions = (options?: InitOptions) => {
-    let internalOptions: any = options || {};
-
-    // Defaults
-    internalOptions.title = internalOptions.title || 'inBrain.ai Surveys'
-    internalOptions.userId = internalOptions.userId || ''
-    internalOptions.isS2S = internalOptions.isS2S || false
-
-    // Ugly, but we have to populate the title in navigationBar as this is what Android uses (and not iOS)
-    internalOptions.navigationBar = { ...internalOptions.navigationBar, title: internalOptions.title }
-    // And we have to populate this, as it's not possible to only set the status bar color on iOS
-    internalOptions.statusBar = { ...internalOptions.statusBar, statusBarColor: internalOptions.navigationBar?.backgroundColor }
-
-    return internalOptions
-}
-
-const callOptionSetters = (options: InitOptions) => {
-
-    // Generate the promise supplier
-    let provider: PromiseSupplier<any> = () => {
-        const optionPromises = Object.keys(options)
-            // From the options, extract the appropriate methodhandler, and the parameterof this method
-            .map((opt: InitOptionName) => ({ method: optionsActions[opt], param: options[opt] }))
-            // Then just call the method against the parameter
-            .map(pair => pair.method && pair.method(pair.param));
-
-        return Promise.all(optionPromises);
-    }
-
-    // Return and call the promise
-    return wrapPromise(provider);
-}
-
-/**
- * Show the surveys webview
- */
-const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
+    return Promise.resolve();
+};
 
 /**
  * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
@@ -81,85 +145,23 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys())
 const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
     InBrainSurveys.setSessionID(sessionUid);
     InBrainSurveys.setDataOptions(dataPoints);
-}
-
-/**
- * Set setSessionID. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
- * @param sessionId the session identifiers
- */
-const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
-
-/**
- * Set setDataOptions. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
- * @param dataPoints The datapoints to be used
- */
-const setDataOptions = (dataPoints: DataPoints) => InBrainSurveys.setDataOptions(dataPoints);
-
-/**
- * Get the rewards
- */
-const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards())
-
-/**
- * Manually confirm a list of rewards
- * @param rewards The rewards to confirm
- */
-const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards))
-
-/**
- * Check if surveys are available to show
- */
-const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
-
-
-/**
- * Get Native Surveys
- * @param filter an optional parameter
- */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
-
-
-/**
- * Show a specific native survey
- * @param id the survey's identifier
- * @param searchId a mandatory identifier
- */
-const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
-
-
-var onSurveysClose: (eventData: OnCloseSurveysData) => void = () => { };
-inbrainEmitter.addListener('OnSurveysClose', (eventData: OnCloseSurveysData) => onSurveysClose && onSurveysClose(eventData));
-
-/**
- * @deprecated
- */
-var onClose: () => void = () => { };
-inbrainEmitter.addListener('OnClose', () => onClose && onClose());
-
-/**
- * @deprecated
- */
-var onCloseFromPage: () => void = () => { };
-inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
-
-
-/**
- * Set the listener when the webview is dismissed or webview is dismissed from within the webview
- * @param callback callback to execute
- */
-const setOnSurveysCloseLister = (callback: (eventData: OnCloseSurveysData) => void) => {
-    onSurveysClose = callback;
 };
 
+// ------ Callbacks -----
+
+var onClose: () => void = () => { };
+inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 /**
  * Set the listener when the webview is dismissed
  * @param callback callback to execute
- * @deprecated
+ * @deprecated Please, use setOnSurveysCloseLister instead
  */
 const setOnCloseListener = (callback: () => void) => {
     onClose = callback;
-}
+};
 
+var onCloseFromPage: () => void = () => { };
+inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 /**
  * Set the listener when the webview is dismissed from within the webview
  * @param callback callback to execute
@@ -167,44 +169,57 @@ const setOnCloseListener = (callback: () => void) => {
  */
 const setOnCloseListenerFromPage = (callback: () => void) => {
     onCloseFromPage = callback;
-}
+};
+
+// ----------------------- Private -------------------------------
 
 /**
- * Validation for options.
- * TODO: find any validation library
+ * Validation for apiClientId and apiSecret.
  */
-const validateOptions = (apiClientId: string, apiSecret: string, options: InitOptions) => {
-
-    assertNotNullNorEmpty("apiClientId", apiClientId)
-    assertNotNullNorEmpty("apiSecret", apiSecret)
-
-    options.navigationBar?.backgroundColor && assertIsColor(options.navigationBar?.backgroundColor)
-    options.navigationBar?.buttonsColor && assertIsColor(options.navigationBar?.buttonsColor)
-    options.navigationBar?.titleColor && assertIsColor(options.navigationBar?.titleColor)
-}
+const validateClientData = (apiClientId: string, apiSecret: string) => {
+    assertNotNullNorEmpty("apiClientId", apiClientId);
+    assertNotNullNorEmpty("apiSecret", apiSecret);
+};
 
 /**
- * Map between <option name> and <corresponding SDK bridge method>
+ * Set setOptions. call be call to set styling options
+ * @param options The styling options
  */
-const optionsActions: { [key in StylingOptionName]: ((params: any) => Promise<any>) | null } = {
-    "title": InBrainSurveys.setTitle,
-    "language": InBrainSurveys.setLanguage,
-    "statusBar": InBrainSurveys.setStatusBarConfig,
-    "navigationBar": InBrainSurveys.setNavigationBarConfig,
-}
+const setTopBarsOptions = (options?: StylingOptions) => {
+    if (!options) { return }
+
+   if (options.navigationBar || options.title) {
+     let config: NavigationBarConfig = { title: options.title, backgroundColor: options.navigationBar?.backgroundColor,
+                                         buttonsColor: options.navigationBar?.buttonsColor, titleColor: options.navigationBar?.titleColor,
+                                         hasShadow: options.navigationBar?.hasShadow };
+     setNavigationBarConfig(config);
+   }
+
+   let config: StatusBarConfig  = { lightStatusBar:options.statusBar?.lightStatusBar,
+                                    statusBarColor: options.navigationBar?.backgroundColor };
+   setStatusBarConfig(config);
+};
+
 
 export default {
-    init,
-    showSurveys,
+    setInBrain,
+    setUserID,
     setSessionID,
     setDataOptions,
-    setSessionParameters,
-    getRewards,
-    confirmRewards,
+    setStatusBarConfig,
+    setNavigationBarConfig,
+    setOnSurveysCloseLister,
+
     checkSurveysAvailable,
+    showSurveys,
     getNativeSurveys,
     showNativeSurvey,
+
+    getRewards,
+    confirmRewards,
+
+    init,
+    setSessionParameters,
     setOnCloseListener,
     setOnCloseListenerFromPage,
-    setOnSurveysCloseLister,
 };
