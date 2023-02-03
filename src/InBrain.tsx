@@ -2,7 +2,13 @@ import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
 
 
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
-import { InitOptions, DataPoints, StylingOptions, StatusBarConfig, NavigationBarConfig } from './Options';
+import {
+    InitOptions,
+    DataPoints,
+    StylingOptions,
+    StatusBarConfig,
+    NavigationBarConfig,
+} from './Options';
 import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
 
 const { InBrainSurveys } = NativeModules;
@@ -27,11 +33,11 @@ const setInBrain = (apiClientId: string, apiSecret: string, userId?: string) => 
  *  Set uniq identifier of user within your application. If value not set (or empty) - `identifierForVendor` will be used
  *  @param userID The string value that uniquely identifies each user within your application
  */
-const setUserID = (userID: string) => InBrainSurveys.setUserID(userID);
+const setUserID = (userID: string | undefined) => InBrainSurveys.setUserID(userID);
 
 /**
  * Set the value to track user session. This value is provided via S2S Callbacks as SessionId.
- * @param sessionId Session identifier 
+ * @param sessionId Session identifier
  */
 const setSessionID = (sessionId: string) => InBrainSurveys.setSessionID(sessionId);
 
@@ -52,7 +58,7 @@ const setStatusBarConfig = (config: StatusBarConfig) => {
         config.statusBarColor && assertIsColor(config.statusBarColor);
         InBrainSurveys.setStatusBarConfig(config.lightStatusBar ?? false, config.statusBarColor);
     }
-}; 
+};
 
 /**
  * Customize Navigation Bar to match your application style
@@ -64,7 +70,7 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
     config.titleColor && assertIsColor(config.titleColor);
 
     InBrainSurveys.setNavigationBarConfig(config.backgroundColor, config.buttonsColor,
-                                          config.titleColor, config.title, 
+                                          config.titleColor, config.title,
                                           config.hasShadow ?? false);
 };
 
@@ -91,25 +97,25 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds))
+ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
 
 /**
  * Show a pecific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
  */
-const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId))
+const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId));
 
 /**
  * Get the rewards
  */
-const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards())
+const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRewards());
 
 /**
  * Manually confirm a list of rewards
  * @param rewards The rewards to confirm
  */
-const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards))
+const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
 
 // ----------------------- Deprecated -------------------------------
 
@@ -121,15 +127,13 @@ const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InB
  * @deprecated Please, use setInBrain fucntion instead
  */
 const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
-    validateClientData(apiClientId, apiSecret);
     setInBrain(apiClientId, apiSecret, opts?.userId);
-
     InBrainSurveys.setSessionID(opts?.sessionUid);
     InBrainSurveys.setDataOptions(opts?.dataPoints);
 
     setTopBarsOptions(opts);
-    
-    return Promise.resolve()
+
+    return Promise.resolve();
 };
 
 /**
@@ -182,14 +186,14 @@ const validateClientData = (apiClientId: string, apiSecret: string) => {
  * @param options The styling options
  */
 const setTopBarsOptions = (options?: StylingOptions) => {
-    if (!options) { return };
+    if (!options) { return }
 
    if (options.navigationBar || options.title) {
      let config: NavigationBarConfig = { title: options.title, backgroundColor: options.navigationBar?.backgroundColor,
                                          buttonsColor: options.navigationBar?.buttonsColor, titleColor: options.navigationBar?.titleColor,
-                                         hasShadow: options.navigationBar?.hasShadow }
+                                         hasShadow: options.navigationBar?.hasShadow };
      setNavigationBarConfig(config);
-   };
+   }
 
    let config: StatusBarConfig  = { lightStatusBar:options.statusBar?.lightStatusBar,
                                     statusBarColor: options.navigationBar?.backgroundColor };
@@ -205,7 +209,7 @@ export default {
     setStatusBarConfig,
     setNavigationBarConfig,
     setOnSurveysCloseLister,
-    
+
     checkSurveysAvailable,
     showSurveys,
     getNativeSurveys,

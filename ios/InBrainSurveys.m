@@ -356,10 +356,10 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
 // *********************************
 // ***** SET STATUS BAR CONFIG *****
 // *********************************
-RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lighStatusBar) {
+RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
 
         UIStatusBarStyle style = 1;
-        if(!lighStatusBar) {
+        if(!lightStatusBar) {
             if(@available(iOS 13, *))
                 style = 3; // UIStatusBarStyleDarkContent
             else

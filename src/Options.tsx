@@ -3,17 +3,15 @@
  */
 
 export type NavigationBarConfig = {
-    title?: String,
-
-    backgroundColor?: String,
-    buttonsColor?: String,
-    titleColor?: String,
+    title?: string,
+    backgroundColor?: string,
+    buttonsColor?: string,
+    titleColor?: string,
     hasShadow?: boolean
 };
 
 export type StatusBarConfig = {
     lightStatusBar?: boolean,
-    
     /**
      * Android only option. Have no effect at iOS.
      */
@@ -64,8 +62,8 @@ export type StatusBarOptionType = {
  * @deprecated Please use `StatusBarConfig` with `setStatusBarConfig` and `NavigationBarConfig` with `setNavigationBarConfig` function instead
  */
 export type StylingOptionType = {
-    language?: String
-    title?: String
+    language?: string
+    title?: string
     navigationBar?: NavigationBarOptionType
     statusBar?: StatusBarOptions
 };
