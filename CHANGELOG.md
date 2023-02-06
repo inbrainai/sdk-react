@@ -1,3 +1,22 @@
+##[2.9.0] 2023-02-06
+
+### Added
+- `setInBrain` the method for initial inBrain SDK configuration.
+- `setDataOptions` the method allows setting information about user.
+- `setSessionID` the method, allows setting the value to track user session.
+- `setStatusBarConfig` the method, allows to customize Status Bar.
+- `StatusBarConfig` type, which contains information about Status Bar.
+- `setNavigationBarConfig` the method, allows to customize Navigation Bar.
+- `NavigationBarConfig` type, which contains information about Navigation Bar.
+
+### Changed
+- `init` method deprecated.
+- `setSessionParameters` method deprecated.
+- `ConfigOptions` type deprecated.
+- `NavitagionBarOptions` type deprecated.
+- `StatusBarOptions` type deprecated.
+- `StylingOptionType` type deprecated.
+
 ##[2.8.0] 2023-01-02
 
 ### Added
