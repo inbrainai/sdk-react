@@ -122,29 +122,23 @@
 RCT_EXPORT_MODULE()
 + (BOOL)requiresMainQueueSetup
 {
-
     return NO;  // only do this if your module initialization relies on calling UIKit!
 }
 
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret userId:(nonnull NSString *)userId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret)
 {
-    @try {
+    [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true];
+}
 
-        [self notNull:@"apiClientId" toCheck:apiClientId];
-        [self notNull:@"apiSecret" toCheck:apiSecret];
-        [self notNull:@"userId" toCheck:userId];
-
-        [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true userID:userId];
-
-        // Resolve
-        resolve(nil);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_INBRAIN", error.description, nil);
-    }
+// ***********************
+// ***** SET USER ID *****
+// ***********************
+RCT_EXPORT_METHOD(setUserID:(NSString *)userId)
+{
+   [self.inbrain setWithUserID: userId];
 }
 
 // **********************************
@@ -171,7 +165,6 @@ RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
 
     [self.inbrain setDataOptions: mapped];
 }
-
 
 // ************************
 // ***** SHOW SURVEYS *****
@@ -340,68 +333,41 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 // *************************************
 // ***** SET NAVIGATION BAR CONFIG *****
 // *************************************
-RCT_EXPORT_METHOD(setNavigationBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try{
+RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
+                  buttonsHex:(NSString * _Nullable)buttonsHex
+                  titleHex:(NSString * _Nullable)titleHex
+                  title:(NSString * _Nullable)title
+                  hasShadow:(BOOL)hasShadow) {
+   [[InBrain shared] setNavigationBarTitle: title];
 
-        // Extract parameters
-        NSString* backgroundColorString = [data objectForKey:@"backgroundColor"];
-        UIColor* backgroundColor = [self colorWithHexString:backgroundColorString];
+    UIColor* backgroundColor = [self colorWithHexString:backgroundHex];
+    UIColor* buttonsColor = [self colorWithHexString:buttonsHex];
+    UIColor* titleColor = [self colorWithHexString:titleHex];
 
-        NSString* buttonsColorString = [data objectForKey:@"buttonsColor"];
-        UIColor* buttonsColor = [self colorWithHexString:buttonsColorString];
+    InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc]
+                                   initWithBackgroundColor: backgroundColor
+                                   buttonsColor:buttonsColor titleColor:titleColor
+                                   isTranslucent:false hasShadow: hasShadow];
 
-        NSString* titleColorString = [data objectForKey:@"titleColor"];
-        UIColor* titleColor = [self colorWithHexString:titleColorString];
-
-        BOOL hasShadow = [[data objectForKey:@"hasShadow"] boolValue];
-
-        // Instantiate config object
-        InBrainNavBarConfig* config = [[InBrainNavBarConfig alloc] initWithBackgroundColor:backgroundColor buttonsColor:buttonsColor titleColor:titleColor isTranslucent:false hasShadow:hasShadow];
-
-        // Forwarding to SDK
-        [[InBrain shared] setNavigationBarConfig:config];
-
-        // Resolve the promise
-        resolve(@true);
-
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_NAVIGATION_BAR_CONFIG", error.description, nil);
-    }
+    [[InBrain shared] setNavigationBarConfig:config];
 }
 
 // *********************************
 // ***** SET STATUS BAR CONFIG *****
 // *********************************
-RCT_EXPORT_METHOD(setStatusBarConfig:(NSDictionary *)data resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try{
-
-        // Extract parameters
-        BOOL lighStatusBar = [[data objectForKey:@"lightStatusBar"] boolValue];
+RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
 
         UIStatusBarStyle style = 1;
-        if(!lighStatusBar) {
+        if(!lightStatusBar) {
             if(@available(iOS 13, *))
                 style = 3; // UIStatusBarStyleDarkContent
             else
                 style = 0; // UIStatusBarStyleDefault
         }
 
-        // Instantiate config object
-        InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc] initWithStatusBarStyle:style hideStatusBar:false];
-
-        // Forwarding to SDK
+        InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc]
+                                          initWithStatusBarStyle:style hideStatusBar: false];
         [[InBrain shared] setStatusBarConfig:config];
-
-        // Resolve the promise
-        resolve(@true);
-
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_STATUS_BAR_CONFIG", error.description, nil);
-    }
 }
 
 // ***********************
@@ -508,4 +474,3 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 }
 
 @end
-
