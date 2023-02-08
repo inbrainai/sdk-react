@@ -338,8 +338,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
                   titleHex:(NSString * _Nullable)titleHex
                   title:(NSString * _Nullable)title
                   hasShadow:(BOOL)hasShadow) {
-    NSString *navigationBarTitle = [title length] > 0 ? title : @"inBrain.ai Surveys";
-    [[InBrain shared] setNavigationBarTitle: navigationBarTitle];
+   [[InBrain shared] setNavigationBarTitle: title];
 
     UIColor* backgroundColor = [self colorWithHexString:backgroundHex];
     UIColor* buttonsColor = [self colorWithHexString:buttonsHex];

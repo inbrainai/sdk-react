@@ -1,27 +1,21 @@
-##[2.9.0] 2023-02-06
+##[2.9.0] 2023-02-07
 
 ### Added
-- `setInBrain` the method for initial inBrain SDK configuration.
-- `setDataOptions` the method allows setting information about user.
-- `setSessionID` the method, allows setting the value to track user session.
-- `setStatusBarConfig` the method, allows to customize Status Bar.
-- `StatusBarConfig` type, which contains information about Status Bar.
-- `setNavigationBarConfig` the method, allows to customize Navigation Bar.
-- `NavigationBarConfig` type, which contains information about Navigation Bar.
+- `setInBrain` the method for initial inBrain SDK configuration;
+- `setUserID` the method to set userID separetely from initialization of the sdk; 
+- `setSessionID` the method to set the value to track user session;
+- `setStatusBarConfig` the method to customize Status Bar;
+- `setNavigationBarConfig` the method to customize Navigation Bar;
+- `StatusBarConfig` type, represents Status Bar configuration;
+- `NavigationBarConfig` type, represents Navigation Bar configuration.
 
 ### Changed
-- `init` method deprecated.
-- `setSessionParameters` method deprecated.
-- `ConfigOptions` type deprecated.
-- `NavitagionBarOptions` type deprecated.
-- `StatusBarOptions` type deprecated.
+- `init` method deprecated;
+- `setSessionParameters` method deprecated;
+- `ConfigOptions` type deprecated;
+- `NavitagionBarOptions` type deprecated;
+- `StatusBarOptions` type deprecated;
 - `StylingOptionType` type deprecated.
-
-##[2.8.0] 2023-01-02
-
-### Added
-- `setUserID` the method, allows setting userID not only during initialization of sdk. 
-- `setOptions` the method allows setting StylingOptions not only during initialization of sdk.
 
 ##[2.8.0] 2023-01-02
 
