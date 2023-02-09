@@ -1,9 +1,8 @@
-##[2.9.0] 2023-02-07
+##[2.9.0] 2023-02-08
 
 ### Added
 - `setInBrain` the method for initial inBrain SDK configuration;
 - `setUserID` the method to set userID separetely from initialization of the sdk; 
-- `setSessionID` the method to set the value to track user session;
 - `setStatusBarConfig` the method to customize Status Bar;
 - `setNavigationBarConfig` the method to customize Navigation Bar;
 - `StatusBarConfig` type, represents Status Bar configuration;
