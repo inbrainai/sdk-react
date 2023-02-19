@@ -1,6 +1,5 @@
 import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
 
-
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
 import {
     InitOptions,
@@ -14,7 +13,6 @@ import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveys
 const { InBrainSurveys } = NativeModules;
 
 const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
-
 // ----------------------- Setup InBrain -------------------------------
 
 /**
