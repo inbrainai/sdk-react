@@ -19,7 +19,7 @@ const inbrainEmitter = new NativeEventEmitter(InBrainSurveys);
 * Initial inBrain SDK configuration.
 * @param apiClientId The client ID provided in inBrain.ai dashboard
 * @param apiSecret The client secret provided in inBrain.ai dashboard
-* @param  userId: The string value that uniquely identifies each user within your application. Can be provided later, using `setUserID` method
+* @param userId: The string value that uniquely identifies each user within your application. Can be provided later, using `setUserID` method
 */
 const setInBrain = (apiClientId: string, apiSecret: string, userId?: string) => {
    validateClientData(apiClientId, apiSecret);
@@ -28,7 +28,7 @@ const setInBrain = (apiClientId: string, apiSecret: string, userId?: string) => 
 };
 
 /**
- *  Set uniq identifier of user within your application. If value not set (or empty) - `identifierForVendor` will be used
+ *  Set uniq identifier of user within your application. If value not set (or empty) - `deviceId` will be used
  *  @param userID The string value that uniquely identifies each user within your application
  */
 const setUserID = (userID: string | undefined) => InBrainSurveys.setUserID(userID);
