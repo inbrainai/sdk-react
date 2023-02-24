@@ -32,7 +32,7 @@ export type PromiseSupplier<T> = () => Promise<T>
 export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseSupplier<T>, count = 0): Promise<T> => {
     try {
         return await promiseSupplier()
-    } catch (err) {
+    } catch (err: any) {
         // If error corresponds to null activity (happens occasionally in Android), then we retry
         if (err.code == 'ERR_NULL_CURRENT_ACTIVITY' && count < 10) {
             await timeout(50); // -- sleep 50ms
