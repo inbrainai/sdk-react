@@ -50,7 +50,7 @@ export type InBrainNativeSurvey = InBrainNativeSurveys
  *  1 = Very Poor Conversion;
  *  2 = Poor Conversion;
  *  3 = Fair Conversion
- *  4 = Good Profile Match;
+ *  4 = Good Conversion;
  *  5 = Very Good Conversion;
  *  6 = Excellent Conversion
  *
