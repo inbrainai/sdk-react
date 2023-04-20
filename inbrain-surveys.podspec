@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency "React"
 
-  s.dependency 'InBrainSurveys', '~> 2.2.1'
+  s.dependency 'InBrainSurveys', '~> 2.2.2'
 
   # Require for now for XCode 12.
   # See https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios for details
