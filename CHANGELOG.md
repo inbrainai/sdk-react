@@ -1,3 +1,8 @@
+##[2.11.0] 2023-05-17
+
+### Changed
+- Migrate from jcenter to Maven Repository.
+
 ##[2.10.0] 2023-02-23
 
 ### Changed
