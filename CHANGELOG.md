@@ -1,7 +1,13 @@
+##[2.11.0] 2023-05-22
+
+### Changed
+- Migrate from jcenter to Maven Repository;
+- Removed `checkSurveysAvailable` country check from SDK, now all the logic handled by back-end. 
+
 ##[2.10.0] 2023-02-23
 
 ### Changed
-- Updated React Native version to 0.71.3 .
+- Updated React Native version to 0.71.3 
 
 ##[2.9.0] 2023-02-08
 
