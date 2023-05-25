@@ -1,3 +1,8 @@
+##[2.11.1] 2023-05-25
+
+### Fixed
+- Fixed `checkSurveysAvailable` crash.
+
 ##[2.11.0] 2023-05-22
 
 ### Changed
