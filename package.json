@@ -43,11 +43,9 @@
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "dependencies": {
-    "react": "18.2.0",
-    "react-native": "0.71.3"
-  },
   "devDependencies": {
+    "react": "18.2.0",
+    "react-native": "0.71.3",
     "@types/react-native": "^0.70.4",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
@@ -67,6 +65,10 @@
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
     "typescript": "4.8.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   },
   "files": [
     "android",
