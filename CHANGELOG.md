@@ -1,3 +1,11 @@
+##[2.11.2] 2023-06-05
+
+### Fixed
+- Fixed `onClose` event not fire issue.
+
+### Changed
+- Changed project npm dependency config.
+
 ##[2.11.1] 2023-05-25
 
 ### Fixed
