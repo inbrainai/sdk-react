@@ -1,15 +1,15 @@
 ##[2.11.2] 2023-06-05
 
 ### Fixed
-- Fixed `onClose` event not fire issue.
+- `onClose` event not fired.
 
 ### Changed
-- Changed project npm dependency config.
+- Updated project npm dependency config.
 
 ##[2.11.1] 2023-05-25
 
 ### Fixed
-- Fixed `checkSurveysAvailable` crash.
+- `checkSurveysAvailable` crash.
 
 ##[2.11.0] 2023-05-22
 
