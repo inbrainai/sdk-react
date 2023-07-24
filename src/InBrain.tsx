@@ -1,4 +1,4 @@
-import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
+import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
 import {
@@ -72,15 +72,15 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
                                           config.hasShadow ?? false);
 };
 
-var onSurveysClose: (eventData: OnCloseSurveysData) => void = () => { };
-inbrainEmitter.addListener('OnSurveysClose', (eventData: OnCloseSurveysData) => onSurveysClose && onSurveysClose(eventData));
 /**
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback Callback to execute
  */
-const setOnSurveysCloseLister = (callback: (eventData: OnCloseSurveysData) => void) => {
-    onSurveysClose = callback;
-};
+const setOnSurveysCloseLister = (
+    callback: (result: OnCloseSurveysData) => void
+  ): EmitterSubscription => {
+    return inbrainEmitter.addListener('OnSurveysClose', callback);
+}
 /**
  * Check if surveys are available to show
  */
@@ -147,28 +147,27 @@ const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
 
 // ------ Callbacks -----
 
-var onClose: () => void = () => { };
-inbrainEmitter.addListener('OnClose', () => onClose && onClose());
 /**
  * Set the listener when the webview is dismissed
  * @param callback callback to execute
  * @deprecated Please, use setOnSurveysCloseLister instead
  */
-const setOnCloseListener = (callback: () => void) => {
-    onClose = callback;
-};
+const setOnCloseListener = (
+    callback: () => void
+  ): EmitterSubscription => {
+    return inbrainEmitter.addListener('OnClose', callback);
+}
 
-var onCloseFromPage: () => void = () => { };
-inbrainEmitter.addListener('OnCloseFromPage', () => onCloseFromPage && onCloseFromPage());
 /**
  * Set the listener when the webview is dismissed from within the webview
  * @param callback callback to execute
  * @deprecated
  */
-const setOnCloseListenerFromPage = (callback: () => void) => {
-    onCloseFromPage = callback;
-};
-
+const setOnCloseListenerFromPage = (
+    callback: () => void
+  ): EmitterSubscription => {
+    return inbrainEmitter.addListener('OnCloseFromPage', callback);
+}
 // ----------------------- Private -------------------------------
 
 /**
