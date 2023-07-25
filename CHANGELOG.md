@@ -1,3 +1,13 @@
+##[2.11.4] 2023-07-24
+
+### Changed
+- `setOnSurveysCloseLister` - now return NativeEventEmitter.
+
+##[2.11.3] 2023-06-27
+
+### Fixed
+- Android dependencies.
+
 ##[2.11.2] 2023-06-05
 
 ### Fixed
