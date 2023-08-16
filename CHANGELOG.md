@@ -1,4 +1,4 @@
-##[2.11.4] 2023-08-13
+##[2.11.5] 2023-08-16
 
 ### Fixed
 - `sendEventWithName` - added check to see if it was EventListener added on js side.
