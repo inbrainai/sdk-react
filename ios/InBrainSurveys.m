@@ -1,8 +1,9 @@
 #import "InBrainSurveys.h"
 #import <InBrainSurveys/InBrainSurveys.h>
 #import <React/RCTConvert.h>
-@implementation InBrainSurveys
-
+@implementation InBrainSurveys {
+    bool hasListeners;
+}
 // ***********************************
 // ***** UTILS methods *****
 // ***********************************
@@ -399,13 +400,25 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 // ***** LISTENERS ****
 // ********************
 
+- (void)startObserving {
+  hasListeners = YES;
+}
+
+- (void)stopObserving {
+  hasListeners = NO;
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[@"OnClose", @"OnCloseFromPage", @"OnSurveysClose"];
 }
 
 - (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> * _Nullable)rewards {
-    [self sendEventWithName:(byWebView ? @"OnCloseFromPage" : @"OnClose") body:@{}];
+    
+    if (!hasListeners) { 
+        return;
+    }
+    
     NSMutableArray *rewardList = [NSMutableArray array];
 
     if([rewards count] == 0) {
