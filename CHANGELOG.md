@@ -1,3 +1,8 @@
+##[2.10.0] 2023-02-23
+
+### Changed
+- Updated React Native version to 0.72.4 
+
 ##[2.11.5] 2023-08-16
 
 ### Fixed
