@@ -1,3 +1,9 @@
+##[2.11.6] 2023-09-26
+
+### Changed
+- Updated android sdk version to 2.1.18;
+- Updated peerDependencies for support more early versions of React Native. 
+
 ##[2.11.5] 2023-08-16
 
 ### Fixed
