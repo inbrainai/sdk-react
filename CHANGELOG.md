@@ -1,7 +1,14 @@
-##[2.10.0] 2023-02-23
+##[2.12.0] 2023-10-10
 
 ### Changed
 - Updated React Native version to 0.72.4 
+
+##[2.11.6] 2023-09-26
+
+### Changed
+- Updated android sdk version to 2.1.18;
+- Updated peerDependencies for support more early versions of React Native. 
+>>>>>>> master
 
 ##[2.11.5] 2023-08-16
 
