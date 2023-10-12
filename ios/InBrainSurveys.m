@@ -262,7 +262,8 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                                  @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
                                  @"categories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds,
                                  @"conversionLevel": conversionLevel,
-                                 @"namedCategories": categories == nil ? [NSNull null] : categories
+                                 @"namedCategories": categories == nil ? [NSNull null] : categories,
+                                 @"isProfilerSurvey": [NSNumber numberWithBool:survey.isProfilerSurvey],
                 };
                 [surveyList addObject:o];
             }
