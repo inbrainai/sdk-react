@@ -1,3 +1,12 @@
+##[2.12.0] 2023-10-12
+
+### Added
+- `isProfilerSurvey` property to `InBrainNativeSurvey`.
+
+### Changed
+- Updated android sdk version to 2.2.0;
+- Updated ios sdk version to 2.3.0;
+
 ##[2.11.6] 2023-09-26
 
 ### Changed
