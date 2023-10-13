@@ -21,6 +21,7 @@ export type InBrainNativeSurveys = {
     currencySale: boolean;
     multiplier: number;
     namedCategories?: Category[];
+    isProfilerSurvey: boolean;
     /**
      * All the possible cases are listed at `ConversionLevel` declaration
      */
