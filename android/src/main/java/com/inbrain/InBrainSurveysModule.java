@@ -562,7 +562,9 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
     private WritableArray mapCategories(List<SurveyCategory> categories) {
-        if (categories == null) { return null; }
+        if (categories == null || categories.isEmpty()) { 
+            return null; 
+        }
 
         WritableArray namedCategories = Arguments.createArray();
         for (SurveyCategory category : categories) {
