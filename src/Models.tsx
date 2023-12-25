@@ -173,3 +173,17 @@ export type InBrainSurveyReward = {
     placementId?: string,
     categories?: Category[],
 }
+
+
+/**
+ * Survey Currency Sale interface
+ */
+// export type InBrainCurrencySale = InBrainCurrencySaleObj | null; 
+
+export type InBrainCurrencySale = {
+    title: string,
+    multiplier: number,
+    description: string,
+    startOn: Date,
+    endOn: Date,
+}

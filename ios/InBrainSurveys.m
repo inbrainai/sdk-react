@@ -374,7 +374,6 @@ RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
 
 // ***********************
 // ***** SET LANGUAGE ****
-
 // ***********************
 RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -396,6 +395,33 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     }
 }
 
+// ****************************
+// ***** GET CURRENCY SALE ****
+// ****************************
+RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [[InBrain shared] getCurrencySaleWithSuccess:^(InBrainCurrencySale * currencySale){
+        
+        if(!currencySale) {
+            resolve(nil);
+            return;
+        }
+        
+        NSDateFormatter *dateFormat=[[NSDateFormatter alloc]init];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        [dateFormat setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss"];
+       
+        NSObject* currencySaleForJS = @{ @"title": currencySale.title,
+                         @"multiplier": [NSNumber numberWithDouble:currencySale.multiplier],
+                         @"startOn": [dateFormat stringFromDate:currencySale.startOn],
+                         @"endOn": [dateFormat stringFromDate:currencySale.endOn],
+        };
+        resolve(currencySaleForJS);
+
+    } failed:^(NSError * failed){
+        reject(@"ERR_GET_CURRENY_SALE", failed.localizedDescription, failed);
+    }];
+}
 
 // ********************
 // ***** LISTENERS ****

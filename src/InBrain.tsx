@@ -8,7 +8,7 @@ import {
     StatusBarConfig,
     NavigationBarConfig,
 } from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -115,6 +115,14 @@ const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRe
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
 
+
+/**
+ * Get Currency Sale
+ * @param filter an optional parameter
+ */
+const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
+
+
 // ----------------------- Deprecated -------------------------------
 
 /**
@@ -211,6 +219,7 @@ export default {
     showSurveys,
     getNativeSurveys,
     showNativeSurvey,
+    getCurrencySale,
 
     getRewards,
     confirmRewards,

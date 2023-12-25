@@ -1,3 +1,8 @@
+##[2.12.0] 2023-12-25
+
+### Added
+- `getCurrencySale` new method to get Currency Sale information.
+
 
 ##[2.13.0] 2023-11-06
 
