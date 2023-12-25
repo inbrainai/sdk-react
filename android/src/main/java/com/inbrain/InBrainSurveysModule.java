@@ -377,7 +377,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
     // ***********************
-    // ***** SET LANGUAGE **** deprecated
+    // ***** SET LANGUAGE **** 
     // ***********************
     @ReactMethod
     public void setLanguage(final String language, Promise promise) {
@@ -401,6 +401,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
                     if(currencySale == null) { 
                         promise.resolve(currencySale);
+                        return;
                     }
 
                     WritableMap currencySaleForJS = Arguments.createMap();

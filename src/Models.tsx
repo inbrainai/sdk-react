@@ -178,8 +178,6 @@ export type InBrainSurveyReward = {
 /**
  * Survey Currency Sale interface
  */
-// export type InBrainCurrencySale = InBrainCurrencySaleObj | null; 
-
 export type InBrainCurrencySale = {
     title: string,
     multiplier: number,
