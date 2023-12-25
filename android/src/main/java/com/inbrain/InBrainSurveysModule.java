@@ -414,7 +414,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
             });
 
         } catch (Exception e) {
-            promise.reject("ERR_GET_CURRENY_SALE", e.getMessage(), e);
+            promise.reject("ERR_GET_CURRENCY_SALE", e.getMessage(), e);
         }
     }
 
