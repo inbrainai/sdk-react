@@ -181,7 +181,6 @@ export type InBrainSurveyReward = {
 export type InBrainCurrencySale = {
     title: string,
     multiplier: number,
-    description: string,
     startOn: Date,
     endOn: Date,
 }
