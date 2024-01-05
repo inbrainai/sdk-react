@@ -1,7 +1,7 @@
-##[2.12.0] 2023-12-25
+##[2.14.0] 2024-01-04
 
 ### Added
-- `getCurrencySale` new method to get Currency Sale information.
+- Get active pusblisher's `Currency Sale`.
 
 
 ##[2.13.0] 2023-11-06

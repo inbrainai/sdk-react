@@ -98,7 +98,7 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
 
 /**
- * Show a pecific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
+ * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
  */
