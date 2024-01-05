@@ -118,7 +118,6 @@ const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InB
 
 /**
  * Get Currency Sale
- * @param filter an optional parameter
  */
 const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
 
