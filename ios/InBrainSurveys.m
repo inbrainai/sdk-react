@@ -193,7 +193,7 @@ RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
+        [self.inbrain getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
             NSMutableArray *rewardList = [NSMutableArray array];
             // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
             // The result on the RN side is an array with null elements...
@@ -222,7 +222,7 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
 {
 
     @try{
-        [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
+        [self.inbrain checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
             if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
             else resolve(@(available));
         }];
@@ -242,7 +242,7 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
     @try {
         InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
 
-        [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
+        [self.inbrain getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
             NSMutableArray *surveyList = [NSMutableArray array];
 
             // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
@@ -287,7 +287,7 @@ RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId r
     @try {
         // This requires the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[InBrain shared] showNativeSurveyWithId:id searchId:searchId from:NULL];
+            [self.inbrain showNativeSurveyWithId:id searchId:searchId from:NULL];
             resolve(@true);
         });
     }
@@ -305,7 +305,7 @@ RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveB
     @try{
         // Mapping to list of ids and forwarding to SDK
         NSArray* ids = [rewards valueForKey:@"transactionId"];
-        [[InBrain shared] confirmRewardsWithTxIdArray:ids];
+        [self.inbrain confirmRewardsWithTxIdArray:ids];
 
         // Resolve the promise
         resolve(@true);
@@ -322,7 +322,7 @@ RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)re
 {
     @try{
         // Forwarding to SDK
-        [[InBrain shared] setNavigationBarTitle:title];
+        [self.inbrain setNavigationBarTitle:title];
 
         // Resolve the promise
         resolve(@true);
@@ -340,7 +340,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
                   titleHex:(NSString * _Nullable)titleHex
                   title:(NSString * _Nullable)title
                   hasShadow:(BOOL)hasShadow) {
-   [[InBrain shared] setNavigationBarTitle: title];
+   [self.inbrain setNavigationBarTitle: title];
 
     UIColor* backgroundColor = [self colorWithHexString:backgroundHex];
     UIColor* buttonsColor = [self colorWithHexString:buttonsHex];
@@ -351,7 +351,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
                                    buttonsColor:buttonsColor titleColor:titleColor
                                    isTranslucent:false hasShadow: hasShadow];
 
-    [[InBrain shared] setNavigationBarConfig:config];
+    [self.inbrain setNavigationBarConfig:config];
 }
 
 // *********************************
@@ -369,7 +369,7 @@ RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
 
         InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc]
                                           initWithStatusBarStyle:style hideStatusBar: false];
-        [[InBrain shared] setStatusBarConfig:config];
+        [self.inbrain setStatusBarConfig:config];
 }
 
 // ***********************
@@ -381,7 +381,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
         // Forwarding to SDK
         NSError *error = nil;
-        [[InBrain shared] setLanguage:language error:&error];
+        [self.inbrain setLanguage:language error:&error];
         if (error != nil) {
             reject(@"ERR_SET_LANGUAGE", error.description, nil);
         }
@@ -400,7 +400,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 // ****************************
 RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[InBrain shared] getCurrencySaleWithSuccess:^(InBrainCurrencySale * currencySale){
+    [self.inbrain getCurrencySaleWithSuccess:^(InBrainCurrencySale * currencySale){
         
         if(!currencySale) {
             resolve(nil);
@@ -411,12 +411,12 @@ RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCT
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         [dateFormat setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss"];
        
-        NSObject* currencySaleForJS = @{ @"title": currencySale.title,
+        NSObject* currencySaleForRN = @{ @"title": currencySale.title,
                          @"multiplier": [NSNumber numberWithDouble:currencySale.multiplier],
                          @"startOn": [dateFormat stringFromDate:currencySale.startOn],
                          @"endOn": [dateFormat stringFromDate:currencySale.endOn],
         };
-        resolve(currencySaleForJS);
+        resolve(currencySaleForRN);
 
     } failed:^(NSError * failed){
         reject(@"ERR_GET_CURRENY_SALE", failed.localizedDescription, failed);
