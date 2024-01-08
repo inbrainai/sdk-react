@@ -130,6 +130,7 @@ const getCategoryName = (categoryId: number): string => {
     }
 };
 
+
 /**
  *
  * @param categories
@@ -137,25 +138,9 @@ const getCategoryName = (categoryId: number): string => {
 export const mapCategories = (categories: []): { id: number, name: string }[] => {
 
     // @TODO ADD NULL CHECK 
-
     let namedCategories = categories.map( (categoryId) => {
         return { id: categoryId, name: getCategoryName(categoryId)};
-    })
-
-    return namedCategories;
-};
-
-/**
- *
- * @param categories
- */
-export const updateData = (categories: []): { id: number, name: string }[] => {
-
-    // @TODO ADD NULL CHECK 
-
-    let namedCategories = categories.map( (categoryId) => {
-        return { id: categoryId, name: getCategoryName(categoryId)};
-    })
+    });
 
     return namedCategories;
 };

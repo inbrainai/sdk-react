@@ -78,10 +78,14 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  */
 const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
 
-    const preCallback = (result: OnCloseSurveysData) => {
-        // check of exist 
-        result.rewards = 
-        callback(result);
+    const preCallback = (data: OnCloseSurveysData) => {
+        // check if exist 
+        let callBackData = data;
+
+        if(callBackData?.rewards?.categories) {
+            callBackData?.rewards?.categories = mapCategories(data?.rewards?.categories);
+        }
+        callback(callBackData);
     }
 
     return inbrainEmitter.addListener('OnSurveysClose', preCallback);
@@ -110,9 +114,17 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * @param filter an optional parameter
  */
 const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( () => { 
-    let nativeSurvetys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
-    nativeSurvetys.namedCategories = mapCategories(nativeSurvetys.categories);
-    return nativeSurvetys;
+    // let nativeSurvetys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
+    // nativeSurvetys.namedCategories = mapCategories(nativeSurvetys.categories);
+    // return nativeSurvetys;
+    let nativeSurveys:InBrainNativeSurvey[] = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
+
+    let nativeSurveyss: InBrainNativeSurvey[] = nativeSurveys.map( (survey) => {
+        return survey.namedCategories = mapCategories(survey.categories);
+    });
+
+    // nativeSurveys.namedCategories = mapCategories(nativeSurveys.categories);
+    return nativeSurveys;
 });
 
 /**
