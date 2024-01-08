@@ -1,6 +1,6 @@
 import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
-import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise, mapCategories } from './Utils';
 import {
     InitOptions,
     DataPoints,
@@ -76,11 +76,25 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback Callback to execute
  */
-const setOnSurveysCloseLister = (
-    callback: (result: OnCloseSurveysData) => void
-  ): EmitterSubscription => {
-    return inbrainEmitter.addListener('OnSurveysClose', callback);
+const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
+
+    const preCallback = (result: OnCloseSurveysData) => {
+        // check of exist 
+        result.rewards = 
+        callback(result);
+    }
+
+    return inbrainEmitter.addListener('OnSurveysClose', preCallback);
 }
+
+// const setOnSurveysCloseLister = (callback) => {
+
+//     const callBackMiddleware = (result) => {
+//         callback(result);
+//     }
+
+//     return inbrainEmitter.addListener('OnSurveysClose', callBackMiddleware);
+// }
 /**
  * Check if surveys are available to show
  */
@@ -95,7 +109,11 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
+const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( () => { 
+    let nativeSurvetys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
+    nativeSurvetys.namedCategories = mapCategories(nativeSurvetys.categories);
+    return nativeSurvetys;
+});
 
 /**
  * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.

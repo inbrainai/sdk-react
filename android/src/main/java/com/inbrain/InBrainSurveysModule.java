@@ -255,7 +255,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putBoolean("isProfilerSurvey", survey.isProfilerSurvey);
                         map.putDouble("multiplier", survey.multiplier);
-                        map.putArray("namedCategories", mapCategories(survey.categories));
+                       
 
                         WritableArray categories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
@@ -435,7 +435,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 map.putString("surveyId", reward.getSurveyId());
                 map.putString("placementId", reward.getPlacementId());
                 map.putMap("outcomeType", mapOutcomeType(reward.getOutcomeType().getType()));
-                map.putArray("categories", mapCategories(reward.getCategories()));
+                // map.putArray("categories", mapCategories(reward.getCategories()));
                 map.putDouble("userReward", reward.getUserReward());
 
                 rewardMappingArray.pushMap(map);
@@ -480,78 +480,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         return activity;
     }
 
-    private String categoriesMap(String categoryName) {
-        switch (categoryName) {
-            case "Automotive" :
-                return "Automotive";
-            case "BeveragesAlcoholic" :
-                return "Beverages Alcoholic";
-            case "BeveragesNonAlcoholic" :
-                return "Beverages Non Alcoholic";
-            case "Business" :
-                return "Business";
-            case "ChildrenAndParenting" :
-                return "Children & Parenting";
-            case "CoalitionLoyaltyPrograms" :
-                return "Coalition Loyalty Programs";
-            case "DestinationsAndTourism" :
-                return "Destinations & Tourism";
-            case "Education" :
-                return "Education";
-            case "ElectronicsComputerSoftware" :
-                return "Electronics, Computer Software";
-            case "EntertainmentAndLeisure" :
-                return "Entertainment And Leisure";
-            case "FinanceBankingInvestingAndInsurance" :
-                return "Finance, Banking, Investing & Insurance";
-            case "Food" :
-                return "Food";
-            case "GamblingLottery" :
-                return "Gambling, Lottery";
-            case "GovernmentAndPolitics" :
-                return "Government & Politics";
-            case "HealthCare" :
-                return "HealthCare";
-            case "Home" :
-                return "Home";
-            case "MediaAndPublishing" :
-                return "Media & Publishing";
-            case "PersonalCare" :
-                return "Personal Care";
-            case "Restaurants" :
-                return "Restaurants";
-            case "SensitiveExplicitContent" :
-                return "Sensitive & Explicit Content";
-            case "SmokingTobacco" :
-                return "Smoking & Tobacco";
-            case "SocialResearch" :
-                return "Social Research";
-            case "SportsRecreationFitness" :
-                return "Sports Recreation Fitness";
-            case "Telecommunications" :
-                return "Telecommunications";
-            case "Transportation" :
-                return "Transportation";
-            case "TravelAirlines" :
-                return "Travel - Airlines";
-            case "TravelHotels" :
-                return "Travel - Hotels";
-            case "TravelServicesAgencyBooking" :
-                return "Travel - Services, Agency, Booking";
-            case "CreditCards" :
-                return "Credit Cards";
-            case "VideoGames" :
-                return "Video Games";
-            case "FashionAndClothingOther" :
-                return "Fashion & Clothing - Other";
-            case "FashionAndClothingDepartmentStore" :
-                return "Fashion & Clothing - Department Store";
-            default:
-                return "Unknown";
-        }
-    }
-
-
     private String conversionMap(Integer conversionId) {
         switch (conversionId) {
             case 0 :
@@ -589,21 +517,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         categoryNamed.putInt("id", outcomeTypeId);
         categoryNamed.putString("name", outcomeTypeName(outcomeTypeId));
         return categoryNamed;
-    }
-
-    private WritableArray mapCategories(List<SurveyCategory> categories) {
-        if (categories == null || categories.isEmpty()) { 
-            return null; 
-        }
-
-        WritableArray namedCategories = Arguments.createArray();
-        for (SurveyCategory category : categories) {
-            WritableMap categoryNamed = Arguments.createMap();
-            categoryNamed.putInt("id", category.getId());
-            categoryNamed.putString("name", categoriesMap(category.name()));
-            namedCategories.pushMap(categoryNamed);
-        }
-        return namedCategories;
     }
 
     private HashMap<String, String> toHashMap(ReadableMap data) {
