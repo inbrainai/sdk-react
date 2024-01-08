@@ -8,7 +8,7 @@ import {
     StatusBarConfig,
     NavigationBarConfig,
 } from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -98,7 +98,7 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
 
 /**
- * Show a pecific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
+ * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
  */
@@ -114,6 +114,13 @@ const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRe
  * @param rewards The rewards to confirm
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
+
+
+/**
+ * Get Currency Sale
+ */
+const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
+
 
 // ----------------------- Deprecated -------------------------------
 
@@ -211,6 +218,7 @@ export default {
     showSurveys,
     getNativeSurveys,
     showNativeSurvey,
+    getCurrencySale,
 
     getRewards,
     confirmRewards,

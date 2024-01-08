@@ -1,3 +1,8 @@
+##[2.14.0] 2024-01-04
+
+### Added
+- Get active pusblisher's `Currency Sale`.
+
 
 ##[2.13.0] 2023-11-06
 

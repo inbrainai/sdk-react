@@ -23,6 +23,7 @@ import com.inbrain.sdk.callback.GetRewardsCallback;
 import com.inbrain.sdk.callback.InBrainCallback;
 import com.inbrain.sdk.callback.StartSurveysCallback;
 import com.inbrain.sdk.callback.SurveysAvailableCallback;
+import com.inbrain.sdk.callback.GetCurrencySaleCallback;
 
 import com.inbrain.sdk.config.StatusBarConfig;
 import com.inbrain.sdk.config.ToolBarConfig;
@@ -32,6 +33,7 @@ import com.inbrain.sdk.model.Survey;
 import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
 import com.inbrain.sdk.model.InBrainSurveyReward;
+import com.inbrain.sdk.model.CurrencySale;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -203,7 +205,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     @ReactMethod
     public void checkSurveysAvailable(final Promise promise) {
         try {
-
             InBrain.getInstance().areSurveysAvailable(getReactApplicationContext(), new SurveysAvailableCallback() {
                 @Override
                 public void onSurveysAvailable(boolean available) {
@@ -376,7 +377,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
     // ***********************
-    // ***** SET LANGUAGE ****
+    // ***** SET LANGUAGE **** 
     // ***********************
     @ReactMethod
     public void setLanguage(final String language, Promise promise) {
@@ -386,6 +387,35 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 InBrain.getInstance().setLanguage(language);
             }
         }.apply(promise, "language", language, "ERR_SET_LANGUAGE");
+    }
+
+    // ****************************
+    // ***** GET CURRENCY SALE **** 
+    // ****************************
+    @ReactMethod
+    public void getCurrencySale(final Promise promise) {
+        try {
+            InBrain.getInstance().getCurrencySale(new GetCurrencySaleCallback() {
+                @Override
+                public void currencySaleReceived(CurrencySale currencySale) {
+
+                    if(currencySale == null) { 
+                        promise.resolve(currencySale);
+                        return;
+                    }
+
+                    WritableMap currencySaleForJS = Arguments.createMap();
+                    currencySaleForJS.putString("title", currencySale.description);
+                    currencySaleForJS.putDouble("multiplier", currencySale.multiplier);
+                    currencySaleForJS.putString("startOn", currencySale.startOn);
+                    currencySaleForJS.putString("endOn", currencySale.endOn);
+                    promise.resolve(currencySaleForJS);
+                }
+            });
+
+        } catch (Exception e) {
+            promise.reject("ERR_GET_CURRENCY_SALE", e.getMessage(), e);
+        }
     }
 
     // ********************
