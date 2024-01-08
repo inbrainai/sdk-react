@@ -135,7 +135,7 @@ const getCategoryName = (categoryId: number): string => {
  *
  * @param categories
  */
-export const mapCategories = (categories: []): { id: number, name: string }[] => {
+export const mapCategories = (categories: number[]): { id: number, name: string }[] => {
 
     // @TODO ADD NULL CHECK 
     let namedCategories = categories.map( (categoryId) => {

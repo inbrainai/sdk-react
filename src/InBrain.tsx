@@ -114,16 +114,16 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * @param filter an optional parameter
  */
 const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( () => { 
-    // let nativeSurvetys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
-    // nativeSurvetys.namedCategories = mapCategories(nativeSurvetys.categories);
-    // return nativeSurvetys;
-    let nativeSurveys:InBrainNativeSurvey[] = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
 
-    let nativeSurveyss: InBrainNativeSurvey[] = nativeSurveys.map( (survey) => {
-        return survey.namedCategories = mapCategories(survey.categories);
+    let nativeSurveys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
+
+    nativeSurveys = nativeSurveys.map( (survey:InBrainNativeSurvey) => {
+         if(survey.namedCategories) {
+            survey.namedCategories = mapCategories(survey.namedCategories);
+         }
+         return survey;
     });
 
-    // nativeSurveys.namedCategories = mapCategories(nativeSurveys.categories);
     return nativeSurveys;
 });
 
