@@ -1,6 +1,6 @@
 import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
-import { assertIsColor, assertNotNullNorEmpty, wrapPromise, mapCategories } from './Utils';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise, createNativeSurveys, createNativeReward } from './Utils';
 import {
     InitOptions,
     DataPoints,
@@ -78,27 +78,17 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  */
 const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
 
-    const preCallback = (data: OnCloseSurveysData) => {
-        // check if exist 
-        let callBackData = data;
-
-        if(callBackData?.rewards?.categories) {
-            callBackData?.rewards?.categories = mapCategories(data?.rewards?.categories);
+    const preCallback = (data: any) => {
+        let inbrainOnCloseData: OnCloseSurveysData = {...data};
+        if(data?.rewards) {
+            inbrainOnCloseData.rewards = createNativeReward(data?.rewards);
         }
-        callback(callBackData);
+        callback(inbrainOnCloseData);
     }
-
+    
     return inbrainEmitter.addListener('OnSurveysClose', preCallback);
 }
 
-// const setOnSurveysCloseLister = (callback) => {
-
-//     const callBackMiddleware = (result) => {
-//         callback(result);
-//     }
-
-//     return inbrainEmitter.addListener('OnSurveysClose', callBackMiddleware);
-// }
 /**
  * Check if surveys are available to show
  */
@@ -113,18 +103,9 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
-const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( () => { 
-
-    let nativeSurveys = InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds);
-
-    nativeSurveys = nativeSurveys.map( (survey:InBrainNativeSurvey) => {
-         if(survey.namedCategories) {
-            survey.namedCategories = mapCategories(survey.namedCategories);
-         }
-         return survey;
-    });
-
-    return nativeSurveys;
+const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( async () => { 
+    let nativeSurveys = await InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds).then((nativeSurveys: InBrainNativeSurvey[]) => nativeSurveys);
+    return createNativeSurveys(nativeSurveys);
 });
 
 /**

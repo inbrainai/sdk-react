@@ -255,7 +255,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putBoolean("isProfilerSurvey", survey.isProfilerSurvey);
                         map.putDouble("multiplier", survey.multiplier);
-                       
 
                         WritableArray categories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
@@ -268,6 +267,11 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         conversionLevel.putInt("id", survey.conversionThreshold);
                         conversionLevel.putString("name", conversionMap(survey.conversionThreshold));
                         map.putMap("conversionLevel", conversionLevel);
+
+                        WritableMap profileMatch = Arguments.createMap();
+                        profileMatch.putInt("id", survey.conversionThreshold);
+                        profileMatch.putString("name", profileMatchMap(survey.conversionThreshold));
+                        map.putMap("profileMatch", profileMatch);
 
                         array.pushMap(map);
                     }
@@ -435,7 +439,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 map.putString("surveyId", reward.getSurveyId());
                 map.putString("placementId", reward.getPlacementId());
                 map.putMap("outcomeType", mapOutcomeType(reward.getOutcomeType().getType()));
-                // map.putArray("categories", mapCategories(reward.getCategories()));
+                map.putArray("categories", reward.getCategories());
                 map.putDouble("userReward", reward.getUserReward());
 
                 rewardMappingArray.pushMap(map);

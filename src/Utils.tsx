@@ -1,6 +1,6 @@
 
 import { enhanceError } from './Errors';
-
+import { InBrainNativeSurvey, InBrainSurveyReward, Category } from './Models';
 
 /**
  * Assert the color is an hex color (e.g #ffffff)
@@ -135,13 +135,46 @@ const getCategoryName = (categoryId: number): string => {
  *
  * @param categories
  */
-export const mapCategories = (categories: number[]): { id: number, name: string }[] => {
+export const mapCategories = (categories: number[]): Category[] => {
 
-    // @TODO ADD NULL CHECK 
     let namedCategories = categories.map( (categoryId) => {
         return { id: categoryId, name: getCategoryName(categoryId)};
     });
 
     return namedCategories;
 };
+
+/**
+ *
+ * @param InBrainNativeSurveyPartial
+ */
+export const createNativeSurveys = (nativeSurveys: any): InBrainNativeSurvey[] => {
+
+    let InBrainNativeSurveys:InBrainNativeSurvey[] = nativeSurveys.map( (survey: any) => {
+
+         if(survey.namedCategories) {
+            survey.namedCategories = mapCategories(survey.namedCategories);
+         }
+         return survey;
+    });
+
+    return InBrainNativeSurveys;
+};
+
+/**
+ *
+ * @param InBrainNativeReward
+ */
+export const createNativeReward = (nativeRewards: any): InBrainSurveyReward[] => {
+
+    let InBrainNativeRewards:InBrainSurveyReward[] = nativeRewards.map( (reward: any) => {
+        if(reward.categories) {
+            reward.categories = mapCategories(reward.categories);
+        }
+        return reward;
+    });
+
+    return InBrainNativeRewards;
+};
+
 

@@ -36,77 +36,6 @@
     return @"Unknown";
 }
 
-
-- (NSString *)categoryTitle:(InBrainSurveyCategory) category {
-    switch (category) {
-        case InBrainSurveyCategoryAutomotive:
-            return @"Automotive";
-        case InBrainSurveyCategoryBeveragesAlcoholic:
-            return @"Beverages Alcoholic";
-        case InBrainSurveyCategoryBeveragesNonAlcoholic:
-            return @"Beverages Non Alcoholic";
-        case InBrainSurveyCategoryBusiness:
-            return @"Business";
-        case InBrainSurveyCategoryChildrenAndParenting:
-            return @"Children & Parenting";
-        case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
-            return @"Coalition Loyalty Programs";
-        case InBrainSurveyCategoryDestinationsAndTourism:
-            return @"Destinations & Tourism";
-        case InBrainSurveyCategoryEducation:
-            return @"Education";
-        case InBrainSurveyCategoryElectronicsComputerSoftware:
-            return @"Electronics, Computer Software";
-        case InBrainSurveyCategoryEntertainmentAndLeisure:
-            return @"Entertainment And Leisure";
-        case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
-            return @"Finance, Banking, Investing & Insurance";
-        case InBrainSurveyCategoryFood:
-            return @"Food";
-        case InBrainSurveyCategoryGamblingLottery:
-            return @"Gambling, Lottery";
-        case InBrainSurveyCategoryGovernmentAndPolitics:
-            return @"Government & Politics";
-        case InBrainSurveyCategoryHealthCare:
-            return @"HealthCare";
-        case InBrainSurveyCategoryHome:
-            return @"Home";
-        case InBrainSurveyCategoryMediaAndPublishing:
-            return @"Media & Publishing";
-        case InBrainSurveyCategoryPersonalCare:
-            return @"Personal Care";
-        case InBrainSurveyCategoryRestaurants:
-            return @"Restaurants";
-        case InBrainSurveyCategorySensitiveExplicitContent:
-            return @"Sensitive & Explicit Content";
-        case InBrainSurveyCategorySmokingTobacco:
-            return @"Smoking & Tobacco";
-        case InBrainSurveyCategorySocialResearch:
-            return @"Social Research";
-        case InBrainSurveyCategorySportsRecreationFitness:
-            return @"Sports Recreation Fitness";
-        case InBrainSurveyCategoryTelecommunications:
-            return @"Telecommunications";
-        case InBrainSurveyCategoryTransportation:
-            return @"Transportation";
-        case InBrainSurveyCategoryTravelAirlines:
-            return @"Travel - Airlines";
-        case InBrainSurveyCategoryTravelHotels:
-            return @"Travel - Hotels";
-        case InBrainSurveyCategoryTravelServicesAgencyBooking:
-            return @"Travel - Services, Agency, Booking";
-        case InBrainSurveyCategoryCreditCards:
-            return @"Credit Cards";
-        case InBrainSurveyCategoryVideoGames:
-            return @"Video Games";
-        case InBrainSurveyCategoryFashionAndClothingOther:
-            return @"Fashion & Clothing - Other";
-        case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
-            return @"Fashion & Clothing - Department Store";
-    }
-    return @"Unknown";
-}
-
 - (NSString *)outcomeTypeTitle:(SurveyOutcomeType) OutcomeType {
     switch (OutcomeType) {
         case SurveyOutcomeTypeCompleted:
@@ -250,7 +179,6 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
             // The result on the RN side is an array with null elements...
             for(int i = 0; i < surveys.count; i++) {
                 InBrainNativeSurvey *survey = surveys[i];
-                NSArray *categories = [self mapCategories: survey.categoryIds];
                 NSString *conversionTitle = [self surveyConversionTitle: survey.conversionLevel];
                 NSObject *conversionLevel = @{ @"id": [NSNumber numberWithLong: survey.conversionLevel],
                                                @"name": conversionTitle};
@@ -262,8 +190,9 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
                                  @"currencySale": [NSNumber numberWithBool:survey.currencySale],
                                  @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
                                  @"categories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds,
+                                 @"namedCategories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds,
                                  @"conversionLevel": conversionLevel,
-                                 @"namedCategories": categories == nil ? [NSNull null] : categories,
+                                 @"profileMatch": conversionLevel,
                                  @"isProfilerSurvey": [NSNumber numberWithBool:survey.isProfilerSurvey],
                 };
                 [surveyList addObject:o];
@@ -456,7 +385,6 @@ RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCT
 
     for(int i = 0; i < rewards.count; i++) {
         InBrainSurveyReward *reward = rewards[i];
-        NSArray *categories = [self mapCategories: reward.categoryIds];
         NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
         NSObject *outcomeType = @{ @"id": [NSNumber numberWithLong: reward.outcomeType],
                                    @"name": outcomeTitle};
@@ -464,7 +392,7 @@ RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCT
         NSObject* rewardObject = @{ @"surveyId": reward.surveyId,
                                     @"placementId": reward.placementId == nil ? [NSNull null] : reward.placementId,
                                     @"outcomeType": outcomeType,
-                                    @"categories": categories == nil ? [NSNull null] : categories,
+                                    @"categories": reward.categoryIds,
                                     @"userReward": [NSNumber numberWithFloat:reward.userReward] };
 
         [rewardList addObject:rewardObject];
@@ -499,19 +427,6 @@ RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCT
     if( !toCheck ){
         [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
     }
-}
-
-- (NSArray * _Nullable)mapCategories:(NSArray *) categories {
-    if ([categories count] == 0) { return nil; }
-
-    NSMutableArray *mapedCategories = [NSMutableArray array];
-    for(int y = 0; y < categories.count; y++) {
-        int categoryId = [categories[y] intValue];
-        NSString *title = [self categoryTitle: categoryId];
-        NSObject* o = @{@"id": categories[y], @"name": title};
-        [mapedCategories addObject:o];
-    }
-    return mapedCategories;
 }
 
 @end
