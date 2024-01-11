@@ -255,6 +255,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                         map.putBoolean("currencySale", survey.currencySale);
                         map.putBoolean("isProfilerSurvey", survey.isProfilerSurvey);
                         map.putDouble("multiplier", survey.multiplier);
+                        map.putArray("namedCategories", survey.categories);
 
                         WritableArray categories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
