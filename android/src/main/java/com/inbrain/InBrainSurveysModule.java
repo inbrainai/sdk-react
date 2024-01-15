@@ -97,39 +97,24 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ************************
     @ReactMethod
     public void showSurveys(final Promise promise) {
-        try {
+        // Build the callback
+        final StartSurveysCallback callback = new StartSurveysCallback() {
+            public void onSuccess() {
+                promise.resolve(null);
+            }
 
-            // Build the callback
-            final StartSurveysCallback callback = new StartSurveysCallback() {
-                public void onSuccess() {
-                    promise.resolve(null);
-                }
+            public void onFail(String message) {
+                promise.reject("ERR_SHOW_SURVEYS", message);
+            }
+        };
 
-                public void onFail(String message) {
-                    promise.reject("ERR_SHOW_SURVEYS", message);
-                }
-
-            };
-
-            // Call braintree SDK
-            // Needs to be on the UI Thread. Errors were reported when not:
-            // java.lang.IllegalStateException: Calling View methods on another thread than the UI thread.
-            UiThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
-                    } catch (NullCurrentActivityException e) {
-                        promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-                    } catch (Exception e) {
-                        promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            promise.reject("ERR_SHOW_SURVEYS", e.getMessage(), e);
-        }
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
+            } catch (NullCurrentActivityException e) {
+                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+            }
+        });
     }
 
 
@@ -138,37 +123,31 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ************************
     @ReactMethod
     public void getRewards(final Promise promise) {
-        try {
+        InBrain.getInstance().getRewards(new GetRewardsCallback() {
+            @Override
+            public boolean handleRewards(List<Reward> rewards) {
 
-            InBrain.getInstance().getRewards(new GetRewardsCallback() {
-                @Override
-                public boolean handleRewards(List<Reward> rewards) {
-
-                    WritableArray array = Arguments.createArray();
-                    for (Reward reward : rewards) {
-                        WritableMap map = Arguments.createMap();
-                        map.putInt("transactionId", (int) reward.transactionId); // ENHANCE possible loss conversion
-                        map.putDouble("amount", reward.amount);
-                        map.putString("currency", reward.currency);
-                        map.putInt("transactionType", reward.transactionType);
-                        array.pushMap(map);
-                    }
-
-                    // Resolve promise with the list of rewards
-                    promise.resolve(array);
-
-                    return false;
+                WritableArray array = Arguments.createArray();
+                for (Reward reward : rewards) {
+                    WritableMap map = Arguments.createMap();
+                    map.putInt("transactionId", (int) reward.transactionId);
+                    map.putDouble("amount", reward.amount);
+                    map.putString("currency", reward.currency);
+                    map.putInt("transactionType", reward.transactionType);
+                    array.pushMap(map);
                 }
 
-                @Override
-                public void onFailToLoadRewards(Throwable error) {
-                    promise.reject("ERR_GET_REWARDS", error.getMessage(), error);
-                }
-            });
+                // Resolve promise with the list of rewards
+                promise.resolve(array);
 
-        } catch (Exception e) {
-            promise.reject("ERR_GET_REWARDS", e.getMessage(), e);
-        }
+                return false;
+            }
+
+            @Override
+            public void onFailToLoadRewards(Throwable error) {
+                promise.reject("ERR_GET_REWARDS", error.getMessage(), error);
+            }
+        });
     }
 
     // ***************************
@@ -176,27 +155,16 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***************************
     @ReactMethod
     public void confirmRewards(ReadableArray rewardsArray, final Promise promise) {
-        try {
+        long[] rewards = new long[rewardsArray.size()];
 
-            List<Reward> rewards = new ArrayList<>();
-            for (int i = 0; i < rewardsArray.size(); i++) {
-                ReadableMap rewardMap = rewardsArray.getMap(i);
-
-                Long transactionId = (long) rewardMap.getInt("transactionId");
-                Float amount = (float) rewardMap.getDouble("amount"); // ENHANCE another way to do conversion ?
-                String currency = rewardMap.getString("currency");
-                int transactionType = rewardMap.getInt("transactionType");
-
-                Reward reward = new Reward(transactionId, amount, currency, transactionType);
-                rewards.add(reward);
-            }
-
-            InBrain.getInstance().confirmRewards(rewards);
-            promise.resolve(true);
-
-        } catch (Exception e) {
-            promise.reject("ERR_CONFIRM_REWARDS", e.getMessage(), e);
+        for (int i = 0; i < rewardsArray.size(); i++) {
+            ReadableMap rewardMap = rewardsArray.getMap(i);
+            long transactionId = (long) rewardMap.getInt("transactionId");
+            rewards[i] = transactionId;
         }
+
+        InBrain.getInstance().confirmRewards(rewards);
+        promise.resolve(true);
     }
 
     // ***********************************
@@ -204,17 +172,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***********************************
     @ReactMethod
     public void checkSurveysAvailable(final Promise promise) {
-        try {
-            InBrain.getInstance().areSurveysAvailable(getReactApplicationContext(), new SurveysAvailableCallback() {
-                @Override
-                public void onSurveysAvailable(boolean available) {
-                    promise.resolve(available);
-                }
-            });
-
-        } catch (Exception e) {
-            promise.reject("ERR_CHECK_SURVEYS_AVAILABLE", e.getMessage(), e);
-        }
+        InBrain.getInstance().areSurveysAvailable(getReactApplicationContext(), new SurveysAvailableCallback() {
+            @Override
+            public void onSurveysAvailable(boolean available) {
+                promise.resolve(available);
+            }
+        });
     }
 
     // *******************************
@@ -222,70 +185,59 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // *******************************
     @ReactMethod
     public void getNativeSurveys(final String placementId, ReadableArray categoryIds, ReadableArray excludedCategoryIds, final Promise promise) {
-        try {
-            SurveyFilter filter = new SurveyFilter();
-            filter.placementId = placementId;
-            if (categoryIds != null && categoryIds.size() > 0) {
-                filter.includeCategories = new ArrayList<>();
-                for (int i = 0; i < categoryIds.size(); i++) {
-                    filter.includeCategories.add(SurveyCategory.fromId(categoryIds.getInt(i)));
-                }
+        SurveyFilter filter = new SurveyFilter();
+        filter.placementId = placementId;
+        if (categoryIds != null && categoryIds.size() > 0) {
+            filter.includeCategories = new ArrayList<>();
+            for (int i = 0; i < categoryIds.size(); i++) {
+                filter.includeCategories.add(SurveyCategory.fromId(categoryIds.getInt(i)));
             }
+        }
 
-            if (excludedCategoryIds != null && excludedCategoryIds.size() > 0) {
-                filter.excludeCategories = new ArrayList<>();
-                for (int i = 0; i < excludedCategoryIds.size(); i++) {
-                    filter.excludeCategories.add(SurveyCategory.fromId(excludedCategoryIds.getInt(i)));
-                }
+        if (excludedCategoryIds != null && excludedCategoryIds.size() > 0) {
+            filter.excludeCategories = new ArrayList<>();
+            for (int i = 0; i < excludedCategoryIds.size(); i++) {
+                filter.excludeCategories.add(SurveyCategory.fromId(excludedCategoryIds.getInt(i)));
             }
+        }
 
-            InBrain.getInstance().getNativeSurveys(filter, new GetNativeSurveysCallback() {
-                @Override
-                public void nativeSurveysReceived(List<Survey> surveys) {
+        InBrain.getInstance().getNativeSurveys(filter, new GetNativeSurveysCallback() {
+            @Override
+            public void nativeSurveysReceived(List<Survey> surveys) {
 
-                    WritableArray array = Arguments.createArray();
-                    for (Survey survey : surveys) {
-                        WritableMap map = Arguments.createMap();
+                WritableArray array = Arguments.createArray();
+                for (Survey survey : surveys) {
+                    WritableMap map = Arguments.createMap();
 
-                        map.putString("id", survey.id);
-                        map.putString("searchId", survey.searchId);
-                        map.putInt("rank", (int) survey.rank);
-                        map.putInt("time", (int) survey.time);
-                        map.putDouble("value", survey.value);
-                        map.putBoolean("currencySale", survey.currencySale);
-                        map.putBoolean("isProfilerSurvey", survey.isProfilerSurvey);
-                        map.putDouble("multiplier", survey.multiplier);
-                        map.putArray("namedCategories", survey.categories);
+                    map.putString("id", survey.id);
+                    map.putString("searchId", survey.searchId);
+                    map.putInt("rank", (int) survey.rank);
+                    map.putInt("time", (int) survey.time);
+                    map.putDouble("value", survey.value);
+                    map.putBoolean("currencySale", survey.currencySale);
+                    map.putBoolean("isProfilerSurvey", survey.isProfilerSurvey);
+                    map.putDouble("multiplier", survey.multiplier);
 
+                    map.putInt("conversionLevel", survey.conversionLevel.getLevel());
+
+                    // Android SDK returns an empty array if no categories;
+                    // However there is no reason to create an empty array for RN.
+                    if (survey.categories != null && !survey.categories.isEmpty() ) {
                         WritableArray categories = Arguments.createArray();
                         for (SurveyCategory category:survey.categories) {
                             categories.pushInt(category.getId());
                         }
 
                         map.putArray("categories", categories);
-
-                        WritableMap conversionLevel = Arguments.createMap();
-                        conversionLevel.putInt("id", survey.conversionThreshold);
-                        conversionLevel.putString("name", conversionMap(survey.conversionThreshold));
-                        map.putMap("conversionLevel", conversionLevel);
-
-                        WritableMap profileMatch = Arguments.createMap();
-                        profileMatch.putInt("id", survey.conversionThreshold);
-                        profileMatch.putString("name", profileMatchMap(survey.conversionThreshold));
-                        map.putMap("profileMatch", profileMatch);
-
-                        array.pushMap(map);
                     }
 
-                    // Resolve promise with the list of surveys
-                    promise.resolve(array);
-
+                    array.pushMap(map);
                 }
-            });
 
-        } catch (Exception e) {
-            promise.reject("ERR_GET_NATIVE_SURVEYS", e.getMessage(), e);
-        }
+                // Resolve promise with the list of surveys
+                promise.resolve(array);
+            }
+        });
     }
 
     // *******************************
@@ -293,37 +245,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // *******************************
     @ReactMethod
     public void showNativeSurvey(final String id, final String searchId, final Promise promise) {
-        try {
+        final StartSurveysCallback callback = new StartSurveysCallback() {
+            public void onSuccess() {
+                promise.resolve(null);
+            }
 
-            // Call braintree SDK
-            // Needs to be on the UI Thread. Errors were reported when not:
-            // java.lang.IllegalStateException: Calling View methods on another thread than the UI thread.
-            UiThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, new StartSurveysCallback() {
-                            @Override
-                            public void onSuccess() {
-                                promise.resolve(true);
-                            }
+            public void onFail(String message) {
+                promise.reject("ERR_SHOW_SURVEYS", message);
+            }
+        };
 
-                            @Override
-                            public void onFail(String message) {
-                                promise.reject("ERR_SHOW_NATIVE_SURVEY", message);
-                            }
-                        });
-                    } catch (NullCurrentActivityException e) {
-                        promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-                    } catch (Exception e) {
-                        promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            promise.reject("ERR_SHOW_NATIVE_SURVEY", e.getMessage(), e);
-        }
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, callback);
+            } catch (NullCurrentActivityException e) {
+                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+            }
+        });
     }
 
     // ************************************
@@ -399,28 +337,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ****************************
     @ReactMethod
     public void getCurrencySale(final Promise promise) {
-        try {
-            InBrain.getInstance().getCurrencySale(new GetCurrencySaleCallback() {
-                @Override
-                public void currencySaleReceived(CurrencySale currencySale) {
+        InBrain.getInstance().getCurrencySale(new GetCurrencySaleCallback() {
+            @Override
+            public void currencySaleReceived(CurrencySale currencySale) {
 
-                    if(currencySale == null) { 
-                        promise.resolve(currencySale);
-                        return;
-                    }
-
-                    WritableMap currencySaleForJS = Arguments.createMap();
-                    currencySaleForJS.putString("title", currencySale.description);
-                    currencySaleForJS.putDouble("multiplier", currencySale.multiplier);
-                    currencySaleForJS.putString("startOn", currencySale.startOn);
-                    currencySaleForJS.putString("endOn", currencySale.endOn);
-                    promise.resolve(currencySaleForJS);
+                if(currencySale == null) {
+                    promise.resolve(null);
+                    return;
                 }
-            });
 
-        } catch (Exception e) {
-            promise.reject("ERR_GET_CURRENCY_SALE", e.getMessage(), e);
-        }
+                WritableMap currencySaleForJS = Arguments.createMap();
+                currencySaleForJS.putString("title", currencySale.description);
+                currencySaleForJS.putDouble("multiplier", currencySale.multiplier);
+                currencySaleForJS.putString("startOn", currencySale.startOn);
+                currencySaleForJS.putString("endOn", currencySale.endOn);
+                promise.resolve(currencySaleForJS);
+            }
+        });
     }
 
     // ********************
@@ -439,10 +372,18 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
                 WritableMap map = Arguments.createMap();
                 map.putString("surveyId", reward.getSurveyId());
                 map.putString("placementId", reward.getPlacementId());
-                map.putMap("outcomeType", mapOutcomeType(reward.getOutcomeType().getType()));
-                map.putArray("categories", reward.getCategories());
+                map.putInt("outcomeType", reward.getOutcomeType().getType());
                 map.putDouble("userReward", reward.getUserReward());
-
+    
+                var categories = reward.getCategories();
+                if (categories != null && !categories.isEmpty() ) {
+                    WritableArray ids = Arguments.createArray();
+                    for (SurveyCategory category:categories) {
+                        ids.pushInt(category.getId());
+                    }
+                    map.putArray("categories", ids);
+                }
+                
                 rewardMappingArray.pushMap(map);
             }
         }
@@ -483,45 +424,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         }
 
         return activity;
-    }
-
-    private String conversionMap(Integer conversionId) {
-        switch (conversionId) {
-            case 0 :
-                return "New Survey";
-            case 1 :
-                return "Very Poor Conversion";
-            case 2 :
-                return "Poor Conversion";
-            case 3 :
-                return "Fair Conversion";
-            case 4 :
-                return "Good Conversion";
-            case 5 :
-                return "Very Good Conversion";
-            case 6 :
-                return "Excellent Conversion";
-            default:
-                return "Unknown";
-        }
-    }
-
-    private String outcomeTypeName(Integer outcomeTypeId) {
-        switch (outcomeTypeId) {
-            case 0 :
-                return "Completed";
-            case 1 :
-                return "Terminated";
-            default:
-                return "Unknown";
-        }
-    }
-
-    private WritableMap mapOutcomeType(Integer outcomeTypeId) {
-        WritableMap categoryNamed = Arguments.createMap();
-        categoryNamed.putInt("id", outcomeTypeId);
-        categoryNamed.putString("name", outcomeTypeName(outcomeTypeId));
-        return categoryNamed;
     }
 
     private HashMap<String, String> toHashMap(ReadableMap data) {

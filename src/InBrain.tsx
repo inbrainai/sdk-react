@@ -1,6 +1,8 @@
 import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
-import { assertIsColor, assertNotNullNorEmpty, wrapPromise, createNativeSurveys, createNativeReward } from './Utils';
+import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import { mapRewards, mapSurveys } from './MappingUtils'
+
 import {
     InitOptions,
     DataPoints,
@@ -77,16 +79,12 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  * @param callback Callback to execute
  */
 const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
-
-    const preCallback = (data: any) => {
-        let inbrainOnCloseData: OnCloseSurveysData = {...data};
+    return inbrainEmitter.addListener('OnSurveysClose', (data: any) => {
         if(data?.rewards) {
-            inbrainOnCloseData.rewards = createNativeReward(data?.rewards);
+            data.rewards = mapRewards(data?.rewards);
         }
-        callback(inbrainOnCloseData);
-    }
-    
-    return inbrainEmitter.addListener('OnSurveysClose', preCallback);
+        callback(data);
+    });
 }
 
 /**
@@ -103,9 +101,11 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
-const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>( async () => { 
-    let nativeSurveys = await InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds).then((nativeSurveys: InBrainNativeSurvey[]) => nativeSurveys);
-    return createNativeSurveys(nativeSurveys);
+const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => { 
+    return InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds)
+        .then((surveys: Array<[string: any]>) => {
+            return mapSurveys(surveys)
+        });
 });
 
 /**
