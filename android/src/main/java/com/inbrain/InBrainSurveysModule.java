@@ -184,23 +184,9 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** GET NATIVE SURVEYS ******
     // *******************************
     @ReactMethod
-    public void getNativeSurveys(final String placementId, ReadableArray categoryIds, ReadableArray excludedCategoryIds, final Promise promise) {
-        SurveyFilter filter = new SurveyFilter();
-        filter.placementId = placementId;
-        if (categoryIds != null && categoryIds.size() > 0) {
-            filter.includeCategories = new ArrayList<>();
-            for (int i = 0; i < categoryIds.size(); i++) {
-                filter.includeCategories.add(SurveyCategory.fromId(categoryIds.getInt(i)));
-            }
-        }
-
-        if (excludedCategoryIds != null && excludedCategoryIds.size() > 0) {
-            filter.excludeCategories = new ArrayList<>();
-            for (int i = 0; i < excludedCategoryIds.size(); i++) {
-                filter.excludeCategories.add(SurveyCategory.fromId(excludedCategoryIds.getInt(i)));
-            }
-        }
-
+    public void getNativeSurveys(final String placementId, ReadableArray includedCategoryIds, ReadableArray excludedCategoryIds, final Promise promise) {
+        SurveyFilter filter = createSurveyFilter(placementId, includedCategoryIds, excludedCategoryIds);
+        
         InBrain.getInstance().getNativeSurveys(filter, new GetNativeSurveysCallback() {
             @Override
             public void nativeSurveysReceived(List<Survey> surveys) {
@@ -470,5 +456,30 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         if (toCheck == null) {
             throw new IllegalArgumentException(name + " must not be null");
         }
+    }
+
+
+    private SurveyFilter createSurveyFilter(final String placementId, ReadableArray includedCategoryIds, ReadableArray excludedCategoryIds) {
+        SurveyFilter filter = new SurveyFilter();
+        filter.placementId = placementId;
+
+        if (includedCategoryIds != null && includedCategoryIds.size() > 0) {
+            filter.includeCategories = getSurveyCategories(includedCategoryIds);
+        }
+
+        if (excludedCategoryIds != null && excludedCategoryIds.size() > 0) {
+            filter.excludeCategories = getSurveyCategories(excludedCategoryIds);
+        }
+
+        return filter;
+    }
+
+    private ArrayList<SurveyCategory> getSurveyCategories(ReadableArray categoryIds) {
+        ArrayList<SurveyCategory> mapCategories = new ArrayList<>();
+        for (int i = 0; i < categoryIds.size(); i++) {
+            mapCategories.add(SurveyCategory.fromId(categoryIds.getInt(i)));
+        }
+
+        return mapCategories;
     }
 }
