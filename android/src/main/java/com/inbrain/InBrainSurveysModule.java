@@ -310,12 +310,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***********************
     @ReactMethod
     public void setLanguage(final String language, Promise promise) {
-        new InBrainSDKParamSetter<String>() {
-            @Override
-            public void setParam(String param) {
-                InBrain.getInstance().setLanguage(language);
-            }
-        }.apply(promise, "language", language, "ERR_SET_LANGUAGE");
+        InBrain.getInstance().setLanguage(language);
+        promise.resolve(null);
     }
 
     // ****************************
@@ -432,36 +428,8 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         return datMap;
     }
 
-    protected abstract class InBrainSDKParamSetter<T> {
-
-        public abstract void setParam(T param);
-
-        public void apply(Promise promise, String name, T param, String errorCode) {
-            try {
-                // Validate parameters
-                notNull(name, param);
-
-                // Call Braintree sdk
-                setParam(param);
-
-                // Everything went well, resolve the promise
-                promise.resolve(null);
-            } catch (Exception e) {
-                promise.reject(errorCode, e.getMessage(), e);
-            }
-        }
-    }
-
-    private void notNull(String name, Object toCheck) {
-        if (toCheck == null) {
-            throw new IllegalArgumentException(name + " must not be null");
-        }
-    }
-
-
     private SurveyFilter createSurveyFilter(final String placementId, ReadableArray includedCategoryIds, ReadableArray excludedCategoryIds) {
-        SurveyFilter filter = new SurveyFilter();
-        filter.placementId = placementId;
+        SurveyFilter filter = new SurveyFilter(placementId);
 
         if (includedCategoryIds != null && includedCategoryIds.size() > 0) {
             filter.includeCategories = getSurveyCategories(includedCategoryIds);
