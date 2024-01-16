@@ -1,4 +1,3 @@
-
 import { enhanceError } from './Errors';
 
 
@@ -51,5 +50,3 @@ export const wrapPromise = async <T extends {} | void>(promiseSupplier: PromiseS
 const timeout = (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms))
 };
-
-

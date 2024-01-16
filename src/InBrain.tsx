@@ -1,6 +1,8 @@
 import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import { mapRewards, mapSurveys } from './MappingUtils'
+
 import {
     InitOptions,
     DataPoints,
@@ -76,11 +78,15 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback Callback to execute
  */
-const setOnSurveysCloseLister = (
-    callback: (result: OnCloseSurveysData) => void
-  ): EmitterSubscription => {
-    return inbrainEmitter.addListener('OnSurveysClose', callback);
+const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
+    return inbrainEmitter.addListener('OnSurveysClose', (data: any) => {
+        if(data?.rewards) {
+            data.rewards = mapRewards(data?.rewards);
+        }
+        callback(data);
+    });
 }
+
 /**
  * Check if surveys are available to show
  */
@@ -95,7 +101,12 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
+const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => { 
+    return InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds)
+        .then((surveys: Array<[string: any]>) => {
+            return mapSurveys(surveys)
+        });
+});
 
 /**
  * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
