@@ -1,7 +1,8 @@
-##[2.14.0] 2024-01-04
+##[2.14.0] 2024-01-23
 
 ### Added
-- Get active pusblisher's `Currency Sale`.
+- Get active pusblisher's `Currency Sale`;
+- arm64 arch for simulators (podspec won't exclude arm64 for iPhone simulators anymore).
 
 
 ##[2.13.0] 2023-11-06
