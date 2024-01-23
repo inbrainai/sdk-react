@@ -1,15 +1,12 @@
 ##[2.15.0] 2024-01-23
 
-### Changed
-- Updated android sdk version to 2.4.0;
-- Updated ios sdk version to 2.4.0;
-
-
-##[2.14.0] 2024-01-23
-
 ### Added
 - Get active `Currency Sale` with the higher multiplier;
 - arm64 arch for iOS simulators (podspec won't exclude arm64 for iPhone simulators anymore).
+
+### Changed
+- Updated android sdk version to 2.4.0;
+- Updated ios sdk version to 2.4.0.
 
 
 ##[2.13.0] 2023-11-06
