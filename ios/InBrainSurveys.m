@@ -2,6 +2,7 @@
 #import <InBrainSurveys/InBrainSurveys.h>
 #import <React/RCTConvert.h>
 @implementation InBrainSurveys {
+    InBrain* _inbrain;
     bool hasListeners;
 }
 // ***********************************
@@ -10,110 +11,9 @@
 - (instancetype)init
 {
     self = [super init];
-    self.inbrain = [InBrain shared];
-    [self.inbrain setInBrainDelegate:self];
+    _inbrain = [InBrain shared];
+    [_inbrain setInBrainDelegate: self];
     return self;
-}
-
-- (NSString *)surveyConversionTitle:(SurveyConversionLevel) SurveyConversion {
-    switch (SurveyConversion) {
-        case SurveyConversionLevelNewSurvey:
-            return @"New Survey";
-        case SurveyConversionLevelVeryPoorConversion:
-            return @"Very Poor Conversion";
-        case SurveyConversionLevelPoorConversion:
-            return @"Poor Conversion";
-        case SurveyConversionLevelFairConversion:
-            return @"Fair Conversion";
-        case SurveyConversionLevelGoodConversion:
-            return @"Good Conversion";
-        case SurveyConversionLevelVeryGoodConversion:
-            return @"Very Good Conversion";
-        case SurveyConversionLevelExcellentConversion:
-            return @"Excellent Conversion";
-    }
-    return @"Unknown";
-}
-
-
-- (NSString *)categoryTitle:(InBrainSurveyCategory) category {
-    switch (category) {
-        case InBrainSurveyCategoryAutomotive:
-            return @"Automotive";
-        case InBrainSurveyCategoryBeveragesAlcoholic:
-            return @"Beverages Alcoholic";
-        case InBrainSurveyCategoryBeveragesNonAlcoholic:
-            return @"Beverages Non Alcoholic";
-        case InBrainSurveyCategoryBusiness:
-            return @"Business";
-        case InBrainSurveyCategoryChildrenAndParenting:
-            return @"Children & Parenting";
-        case InBrainSurveyCategoryCoalitionLoyaltyPrograms:
-            return @"Coalition Loyalty Programs";
-        case InBrainSurveyCategoryDestinationsAndTourism:
-            return @"Destinations & Tourism";
-        case InBrainSurveyCategoryEducation:
-            return @"Education";
-        case InBrainSurveyCategoryElectronicsComputerSoftware:
-            return @"Electronics, Computer Software";
-        case InBrainSurveyCategoryEntertainmentAndLeisure:
-            return @"Entertainment And Leisure";
-        case InBrainSurveyCategoryFinanceBankingInvestingAndInsurance:
-            return @"Finance, Banking, Investing & Insurance";
-        case InBrainSurveyCategoryFood:
-            return @"Food";
-        case InBrainSurveyCategoryGamblingLottery:
-            return @"Gambling, Lottery";
-        case InBrainSurveyCategoryGovernmentAndPolitics:
-            return @"Government & Politics";
-        case InBrainSurveyCategoryHealthCare:
-            return @"HealthCare";
-        case InBrainSurveyCategoryHome:
-            return @"Home";
-        case InBrainSurveyCategoryMediaAndPublishing:
-            return @"Media & Publishing";
-        case InBrainSurveyCategoryPersonalCare:
-            return @"Personal Care";
-        case InBrainSurveyCategoryRestaurants:
-            return @"Restaurants";
-        case InBrainSurveyCategorySensitiveExplicitContent:
-            return @"Sensitive & Explicit Content";
-        case InBrainSurveyCategorySmokingTobacco:
-            return @"Smoking & Tobacco";
-        case InBrainSurveyCategorySocialResearch:
-            return @"Social Research";
-        case InBrainSurveyCategorySportsRecreationFitness:
-            return @"Sports Recreation Fitness";
-        case InBrainSurveyCategoryTelecommunications:
-            return @"Telecommunications";
-        case InBrainSurveyCategoryTransportation:
-            return @"Transportation";
-        case InBrainSurveyCategoryTravelAirlines:
-            return @"Travel - Airlines";
-        case InBrainSurveyCategoryTravelHotels:
-            return @"Travel - Hotels";
-        case InBrainSurveyCategoryTravelServicesAgencyBooking:
-            return @"Travel - Services, Agency, Booking";
-        case InBrainSurveyCategoryCreditCards:
-            return @"Credit Cards";
-        case InBrainSurveyCategoryVideoGames:
-            return @"Video Games";
-        case InBrainSurveyCategoryFashionAndClothingOther:
-            return @"Fashion & Clothing - Other";
-        case InBrainSurveyCategoryFashionAndClothingDepartmentStore:
-            return @"Fashion & Clothing - Department Store";
-    }
-    return @"Unknown";
-}
-
-- (NSString *)outcomeTypeTitle:(SurveyOutcomeType) OutcomeType {
-    switch (OutcomeType) {
-        case SurveyOutcomeTypeCompleted:
-            return @"Completed";
-        case SurveyOutcomeTypeTerminated:
-            return @"Terminated";
-    }
-    return @"Unknown";
 }
 
 // *********************************
@@ -121,40 +21,36 @@
 // *********************************
 
 RCT_EXPORT_MODULE()
-+ (BOOL)requiresMainQueueSetup
-{
-    return NO;  // only do this if your module initialization relies on calling UIKit!
+
++ (BOOL)requiresMainQueueSetup {
+    return NO; 
 }
 
 // ***********************
 // ***** SET INBRAIN *****
 // ***********************
-RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret)
-{
-    [self.inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true];
+RCT_EXPORT_METHOD(setInBrain:(NSString *)apiClientId apiSecret:(nonnull NSString *)apiSecret) {
+    [_inbrain setInBrainWithApiClientID:apiClientId apiSecret:apiSecret isS2S:true];
 }
 
 // ***********************
 // ***** SET USER ID *****
 // ***********************
-RCT_EXPORT_METHOD(setUserID:(NSString *)userId)
-{
-   [self.inbrain setWithUserID: userId];
+RCT_EXPORT_METHOD(setUserID:(NSString *)userId) {
+   [_inbrain setWithUserID: userId];
 }
 
 // **********************************
 // ***** SET INBRAIN SESSION ID *****
 // **********************************
-RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionId)
-{
-    [self.inbrain setSessionID:sessionId];
+RCT_EXPORT_METHOD(setSessionID:(NSString *)sessionId) {
+    [_inbrain setSessionID:sessionId];
 }
 
 // **********************************
 // ***** SET INBRAIN DATA POINTS *****
 // **********************************
-RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
-{
+RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data) {
     // Convert map to array of single entry maps
     // e.g {age: 25, gender: male} will become [{age: 25}, {gender: male}]
     NSArray* keys=[data allKeys];
@@ -164,72 +60,48 @@ RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data)
         [mapped addObject:@{ obj : [data objectForKey:obj]}];
     }];
 
-    [self.inbrain setDataOptions: mapped];
+    [_inbrain setDataOptions: mapped];
 }
 
 // ************************
 // ***** SHOW SURVEYS *****
 // ************************
-RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-
+RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     // This requires the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        @try {
-            [self.inbrain showSurveysFrom:NULL];
-            resolve(nil);
-        }
-        @catch (NSException *error) {
-            reject(@"ERR_SHOW_SURVEYS", error.description, nil);
-        }
+        [[InBrain shared] showSurveysFrom:NULL];
+        resolve(nil);
     });
-
 }
 
 // ************************
 // ***** GET REWARDS ******
 // ************************
-RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        [[InBrain shared] getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
-            NSMutableArray *rewardList = [NSMutableArray array];
-            // The mapping is necessary. Resolving the promise directly with 'rewards' array doesn't work
-            // The result on the RN side is an array with null elements...
-            for(int i = 0; i < rewards.count; i++) {
-                NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:rewards[i].transactionId],
-                                 @"currency": rewards[i].currency, @"amount": [NSNumber numberWithDouble:rewards[i].amount],
-                                 @"transactionType": [NSNumber numberWithFloat:rewards[i].transactionType]};
+RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [_inbrain getRewardsWithSuccess:^(NSArray<InBrainReward *> * rewards){
+        NSMutableArray *rewardList = [NSMutableArray array];
+        for(int i = 0; i < rewards.count; i++) {
+            InBrainReward *reward = rewards[i];
+            NSObject* o = @{ @"transactionId": [NSNumber numberWithLong:  reward.transactionId],
+                                @"currency": reward.currency, @"amount": [NSNumber numberWithDouble: reward.amount],
+                                @"transactionType": [NSNumber numberWithFloat: reward.transactionType]};
 
-                [rewardList addObject:o];
-            }
-            resolve(rewardList);
-        } failed:^(NSError * error){
-            reject(@"ERR_GET_REWARDS", error.localizedDescription, error);
-        }];
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_GET_REWARDS", error.description, nil);
-    }
-
+            [rewardList addObject:o];
+        }
+        resolve(rewardList);
+    } failed:^(NSError * error){
+        reject(@"ERR_GET_REWARDS", error.localizedDescription, error);
+    }];
 }
 
 // ***********************************
 // ***** CHECK SURVEYS AVAILABLE *****
 // ***********************************
-RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-
-    @try{
-        [[InBrain shared] checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
-            if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
-            else resolve(@(available));
-        }];
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.description, nil);
-    }
+RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [_inbrain checkForAvailableSurveysWithCompletion:^(BOOL available, NSError * error) {
+        if(error) reject(@"ERR_CHECK_SURVEYS_AVAILABLE", error.localizedDescription, nil);
+        else resolve(@(available));
+    }];
 }
 
 // *******************************
@@ -237,99 +109,61 @@ RCT_EXPORT_METHOD(checkSurveysAvailable:(RCTPromiseResolveBlock)resolve rejecter
 // *******************************
 RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs:(NSArray* __nullable) categoryIDs
                   excludedCategoryIDs:(NSArray* __nullable) excludedCategoryIDs
-                  resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
+                  resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    InBrainSurveyFilter *filterObj = [[InBrainSurveyFilter alloc] initWithPlacementId:placementId categoryIDs:categoryIDs excludedCategoryIDs:excludedCategoryIDs];
 
-        [[InBrain shared] getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
-            NSMutableArray *surveyList = [NSMutableArray array];
+    [_inbrain getNativeSurveysWithFilter:filterObj success:^  (NSArray<InBrainNativeSurvey *> * surveys) {
+        NSMutableArray *surveyList = [NSMutableArray array];
 
-            // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
-            // The result on the RN side is an array with null elements...
-            for(int i = 0; i < surveys.count; i++) {
-                InBrainNativeSurvey *survey = surveys[i];
-                NSArray *categories = [self mapCategories: survey.categoryIds];
-                NSString *conversionTitle = [self surveyConversionTitle: survey.conversionLevel];
-                NSObject *conversionLevel = @{ @"id": [NSNumber numberWithLong: survey.conversionLevel],
-                                               @"name": conversionTitle};
+        // The mapping is necessary. Resolving the promise directly with 'surveys' array doesn't work
+        // The result on the RN side is an array with null elements...
+        for(int i = 0; i < surveys.count; i++) {
+            InBrainNativeSurvey *survey = surveys[i];
+            int conversionLevel = survey.conversionLevel;
+            NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId,
+                                @"rank": [NSNumber numberWithInt: survey.rank],
+                                @"time": [NSNumber numberWithInt: survey.time],
+                                @"value": [NSNumber numberWithDouble: survey.value],
+                                @"currencySale": [NSNumber numberWithBool: survey.currencySale],
+                                @"isProfilerSurvey": [NSNumber numberWithBool: survey.isProfilerSurvey],
+                                @"multiplier": [NSNumber numberWithDouble: survey.multiplier],
+                                @"conversionLevel": [NSNumber numberWithInt: conversionLevel],
+                                @"categories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds };
+            
+            [surveyList addObject:o];
+        }
 
-                NSObject* o = @{ @"id": survey.id, @"searchId": survey.searchId,
-                                 @"rank": [NSNumber numberWithLong:survey.rank],
-                                 @"time": [NSNumber numberWithLong:survey.time],
-                                 @"value": [NSNumber numberWithDouble:survey.value],
-                                 @"currencySale": [NSNumber numberWithBool:survey.currencySale],
-                                 @"multiplier": [NSNumber numberWithDouble:survey.multiplier],
-                                 @"categories": survey.categoryIds == nil ? [NSNull null] : survey.categoryIds,
-                                 @"conversionLevel": conversionLevel,
-                                 @"namedCategories": categories == nil ? [NSNull null] : categories,
-                                 @"isProfilerSurvey": [NSNumber numberWithBool:survey.isProfilerSurvey],
-                };
-                [surveyList addObject:o];
-            }
-
-            resolve(surveyList);
-        } failed:^(NSError * failed){
-            reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
-        }];
-
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_GET_NATIVE_SURVEYS", error.description, nil);
-    }
+        resolve(surveyList);
+    } failed:^(NSError * failed){
+        reject(@"ERR_GET_NATIVE_SURVEYS", failed.localizedDescription, failed);
+    }];
 }
 
 // *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        // This requires the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[InBrain shared] showNativeSurveyWithId:id searchId:searchId from:NULL];
-            resolve(@true);
-        });
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SHOW_NATIVE_SURVEY", error.description, nil);
-    }
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_inbrain showNativeSurveyWithId:id searchId:searchId from:NULL];
+        resolve(@true);
+    });
 }
 
 // ***************************
 // ***** CONFIRM REWARDS *****
 // ***************************
-RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-
-    @try{
-        // Mapping to list of ids and forwarding to SDK
-        NSArray* ids = [rewards valueForKey:@"transactionId"];
-        [[InBrain shared] confirmRewardsWithTxIdArray:ids];
-
-        // Resolve the promise
-        resolve(@true);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_CONFIRM_REWARDS", error.description, nil);
-    }
+RCT_EXPORT_METHOD(confirmRewards:(NSArray *)rewards resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    NSArray* ids = [rewards valueForKey:@"transactionId"];
+    [_inbrain confirmRewardsWithTxIdArray:ids];
+    resolve(@true);
 }
 
 // **************************
 // ***** SET VIEW TITLE *****
 // **************************
-RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try{
-        // Forwarding to SDK
-        [[InBrain shared] setNavigationBarTitle:title];
-
-        // Resolve the promise
-        resolve(@true);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_TITLE", error.description, nil);
-    }
+RCT_EXPORT_METHOD(setTitle:(NSString *)title resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [_inbrain setNavigationBarTitle:title];
+    resolve(@true);
 }
 
 // *************************************
@@ -340,7 +174,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
                   titleHex:(NSString * _Nullable)titleHex
                   title:(NSString * _Nullable)title
                   hasShadow:(BOOL)hasShadow) {
-   [[InBrain shared] setNavigationBarTitle: title];
+   [_inbrain setNavigationBarTitle: title];
 
     UIColor* backgroundColor = [self colorWithHexString:backgroundHex];
     UIColor* buttonsColor = [self colorWithHexString:buttonsHex];
@@ -351,7 +185,7 @@ RCT_EXPORT_METHOD(setNavigationBarConfig:(NSString * _Nullable)backgroundHex
                                    buttonsColor:buttonsColor titleColor:titleColor
                                    isTranslucent:false hasShadow: hasShadow];
 
-    [[InBrain shared] setNavigationBarConfig:config];
+    [_inbrain setNavigationBarConfig:config];
 }
 
 // *********************************
@@ -369,33 +203,52 @@ RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
 
         InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc]
                                           initWithStatusBarStyle:style hideStatusBar: false];
-        [[InBrain shared] setStatusBarConfig:config];
+        [_inbrain setStatusBarConfig:config];
 }
 
 // ***********************
 // ***** SET LANGUAGE ****
-
 // ***********************
-RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
+RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    // The single method which can produce throw, so needs to use try-catch here
     @try{
-
-        // Forwarding to SDK
         NSError *error = nil;
-        [[InBrain shared] setLanguage:language error:&error];
+        [_inbrain setLanguage:language error:&error];
         if (error != nil) {
             reject(@"ERR_SET_LANGUAGE", error.description, nil);
         }
-
-        // Resolve the promise
         resolve(@true);
-
     }
     @catch (NSException *error) {
         reject(@"ERR_SET_LANGUAGE", error.description, nil);
     }
 }
 
+// ****************************
+// ***** GET CURRENCY SALE ****
+// ****************************
+RCT_EXPORT_METHOD(getCurrencySale: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [_inbrain getCurrencySaleWithSuccess:^(InBrainCurrencySale * currencySale) {
+        if(!currencySale) {
+            resolve(nil);
+            return;
+        }
+        
+        NSDateFormatter *dateFormat=[[NSDateFormatter alloc]init];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        [dateFormat setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss"];
+       
+        NSObject* currencySaleForRN = @{ @"title": currencySale.title,
+                         @"multiplier": [NSNumber numberWithDouble:currencySale.multiplier],
+                         @"startOn": [dateFormat stringFromDate:currencySale.startOn],
+                         @"endOn": [dateFormat stringFromDate:currencySale.endOn],
+        };
+        resolve(currencySaleForRN);
+
+    } failed:^(NSError * failed){
+        reject(@"ERR_GET_CURRENY_SALE", failed.localizedDescription, failed);
+    }];
+}
 
 // ********************
 // ***** LISTENERS ****
@@ -409,13 +262,11 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
   hasListeners = NO;
 }
 
-- (NSArray<NSString *> *)supportedEvents
-{
+- (NSArray<NSString *> *)supportedEvents {
   return @[@"OnClose", @"OnCloseFromPage", @"OnSurveysClose"];
 }
 
 - (void)surveysClosedByWebView:(BOOL)byWebView completedSurvey:(BOOL)completedSurvey rewards:(NSArray<InBrainSurveyReward *> * _Nullable)rewards {
-    
     if (!hasListeners) { 
         return;
     }
@@ -429,15 +280,11 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 
     for(int i = 0; i < rewards.count; i++) {
         InBrainSurveyReward *reward = rewards[i];
-        NSArray *categories = [self mapCategories: reward.categoryIds];
-        NSString *outcomeTitle = [self outcomeTypeTitle:reward.outcomeType];
-        NSObject *outcomeType = @{ @"id": [NSNumber numberWithLong: reward.outcomeType],
-                                   @"name": outcomeTitle};
 
         NSObject* rewardObject = @{ @"surveyId": reward.surveyId,
                                     @"placementId": reward.placementId == nil ? [NSNull null] : reward.placementId,
-                                    @"outcomeType": outcomeType,
-                                    @"categories": categories == nil ? [NSNull null] : categories,
+                                    @"outcomeType": [NSNumber numberWithInt:  reward.outcomeType],
+                                    @"categories": reward.categoryIds == nil ? [NSNull null] : reward.categoryIds,
                                     @"userReward": [NSNumber numberWithFloat:reward.userReward] };
 
         [rewardList addObject:rewardObject];
@@ -453,8 +300,7 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
 /**
  * Convert from a hexadecimal color string to UIColor
  */
-- (UIColor *)colorWithHexString:(NSString *)stringToConvert
-{
+- (UIColor *)colorWithHexString:(NSString *)stringToConvert {
     NSString *noHashString = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""]; // remove the #
     NSScanner *scanner = [NSScanner scannerWithString:noHashString];
     [scanner setCharactersToBeSkipped:[NSCharacterSet symbolCharacterSet]]; // remove + and $
@@ -466,25 +312,6 @@ RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBl
     int b = (hex) & 0xFF;
 
     return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
-}
-
-- (void) notNull:(NSString* )name toCheck:(id)toCheck {
-    if( !toCheck ){
-        [NSException raise:@"Invalid parameter value" format:@"%@ must not be null", name];
-    }
-}
-
-- (NSArray * _Nullable)mapCategories:(NSArray *) categories {
-    if ([categories count] == 0) { return nil; }
-
-    NSMutableArray *mapedCategories = [NSMutableArray array];
-    for(int y = 0; y < categories.count; y++) {
-        int categoryId = [categories[y] intValue];
-        NSString *title = [self categoryTitle: categoryId];
-        NSObject* o = @{@"id": categories[y], @"name": title};
-        [mapedCategories addObject:o];
-    }
-    return mapedCategories;
 }
 
 @end

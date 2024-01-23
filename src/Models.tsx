@@ -8,6 +8,7 @@ export type InBrainReward = {
     transactionType: number;
 }
 
+
 /**
  * Native Surveys interface
  * @deprecated use InBrainNativeSurvey instead
@@ -172,4 +173,14 @@ export type InBrainSurveyReward = {
     outcomeType: SurveyOutcomeType,
     placementId?: string,
     categories?: Category[],
+}
+
+/**
+ * Survey Currency Sale interface
+ */
+export type InBrainCurrencySale = {
+    title: string,
+    multiplier: number,
+    startOn: Date,
+    endOn: Date,
 }

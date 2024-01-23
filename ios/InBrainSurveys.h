@@ -5,6 +5,4 @@
 
 @interface InBrainSurveys : RCTEventEmitter <RCTBridgeModule, InBrainDelegate>
 
-@property(nonatomic) InBrain* inbrain; // InBrain instance
- 
 @end

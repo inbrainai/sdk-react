@@ -1,6 +1,8 @@
 import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from 'react-native';
 
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
+import { mapRewards, mapSurveys } from './MappingUtils'
+
 import {
     InitOptions,
     DataPoints,
@@ -8,7 +10,7 @@ import {
     StatusBarConfig,
     NavigationBarConfig,
 } from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -76,11 +78,15 @@ const setNavigationBarConfig = (config: NavigationBarConfig) => {
  * Set the listener when the webview is dismissed or webview is dismissed from within the webview
  * @param callback Callback to execute
  */
-const setOnSurveysCloseLister = (
-    callback: (result: OnCloseSurveysData) => void
-  ): EmitterSubscription => {
-    return inbrainEmitter.addListener('OnSurveysClose', callback);
+const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void ): EmitterSubscription => {
+    return inbrainEmitter.addListener('OnSurveysClose', (data: any) => {
+        if(data?.rewards) {
+            data.rewards = mapRewards(data?.rewards);
+        }
+        callback(data);
+    });
 }
+
 /**
  * Check if surveys are available to show
  */
@@ -95,10 +101,15 @@ const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
  * Get Native Surveys
  * @param filter an optional parameter
  */
- const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds));
+const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNativeSurvey[]>(() => { 
+    return InBrainSurveys.getNativeSurveys(filter?.placementId, filter?.categoryIds, filter?.excludedCategoryIds)
+        .then((surveys: Array<[string: any]>) => {
+            return mapSurveys(surveys)
+        });
+});
 
 /**
- * Show a pecific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
+ * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
  */
@@ -114,6 +125,13 @@ const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRe
  * @param rewards The rewards to confirm
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
+
+
+/**
+ * Get Currency Sale
+ */
+const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
+
 
 // ----------------------- Deprecated -------------------------------
 
@@ -211,6 +229,7 @@ export default {
     showSurveys,
     getNativeSurveys,
     showNativeSurvey,
+    getCurrencySale,
 
     getRewards,
     confirmRewards,
