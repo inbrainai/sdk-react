@@ -1,3 +1,10 @@
+##[2.15.0] 2024-01-23
+
+### Changed
+- Updated android sdk version to 2.4.0;
+- Updated ios sdk version to 2.4.0;
+
+
 ##[2.14.0] 2024-01-23
 
 ### Added

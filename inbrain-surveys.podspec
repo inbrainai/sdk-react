@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.source_files = "ios/*.{h,m,swift}"
 
   s.dependency "React"
-  s.dependency 'InBrainSurveys', '~> 2.3.0'
+  s.dependency 'InBrainSurveys', '~> 2.4.0'
 
 end
