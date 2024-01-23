@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.name         = package["name"]
   s.version      = package["version"]
   s.description  = package["description"]
-  s.summary      = package["Monetization surveys for apps, powered by inBrain.ai."]
+  s.summary      = "Monetization surveys for apps, powered by inBrain.ai."
 
   s.license      = package["license"]
 
