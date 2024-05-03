@@ -2,14 +2,7 @@ import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from
 
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
 import { mapRewards, mapSurveys } from './MappingUtils'
-
-import {
-    InitOptions,
-    DataPoints,
-    StylingOptions,
-    StatusBarConfig,
-    NavigationBarConfig,
-} from './Options';
+import {DataPoints, StatusBarConfig, NavigationBarConfig} from './Options';
 import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale } from './Models';
 
 const { InBrainSurveys } = NativeModules;
@@ -126,7 +119,6 @@ const getRewards = () => wrapPromise<InBrainReward[]>(() => InBrainSurveys.getRe
  */
 const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InBrainSurveys.confirmRewards(rewards));
 
-
 /**
  * Get Currency Sale
  */
@@ -136,56 +128,27 @@ const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurv
 // ----------------------- Deprecated -------------------------------
 
 /**
- * Initial inBrain SDK configuration.
- * @param apiClientId The client ID provided in inBrain.ai dashboard
- * @param apiSecret The client secret provided in inBrain.ai dashboard
- * @param opts Additional optional options
  * @deprecated Please, use setInBrain fucntion instead
  */
-const init = async (apiClientId: string, apiSecret: string, opts?: InitOptions): Promise<void> => {
-    setInBrain(apiClientId, apiSecret, opts?.userId);
-    InBrainSurveys.setSessionID(opts?.sessionUid);
-    InBrainSurveys.setDataOptions(opts?.dataPoints);
-
-    setTopBarsOptions(opts);
-
-    return Promise.resolve();
-};
+const init = () => {};
 
 /**
- * Set parameters related to session. Can be called each time before 'showSurveys' or 'showNativeSurvey' with new values
- * @param sessionUid the session identifiers
- * @param dataPoints datapoints
  * @deprecated Please, use setSessionID and setDataOptions instead
  */
-const setSessionParameters = (sessionUid: string, dataPoints: DataPoints) => {
-    InBrainSurveys.setSessionID(sessionUid);
-    InBrainSurveys.setDataOptions(dataPoints);
-};
+const setSessionParameters = () => {};
 
 // ------ Callbacks -----
 
 /**
- * Set the listener when the webview is dismissed
- * @param callback callback to execute
  * @deprecated Please, use setOnSurveysCloseLister instead
  */
-const setOnCloseListener = (
-    callback: () => void
-  ): EmitterSubscription => {
-    return inbrainEmitter.addListener('OnClose', callback);
-}
+const setOnCloseListener = () => {};
 
 /**
- * Set the listener when the webview is dismissed from within the webview
- * @param callback callback to execute
  * @deprecated
  */
-const setOnCloseListenerFromPage = (
-    callback: () => void
-  ): EmitterSubscription => {
-    return inbrainEmitter.addListener('OnCloseFromPage', callback);
-}
+const setOnCloseListenerFromPage = () => {};
+
 // ----------------------- Private -------------------------------
 
 /**
@@ -194,25 +157,6 @@ const setOnCloseListenerFromPage = (
 const validateClientData = (apiClientId: string, apiSecret: string) => {
     assertNotNullNorEmpty("apiClientId", apiClientId);
     assertNotNullNorEmpty("apiSecret", apiSecret);
-};
-
-/**
- * Set setOptions. call be call to set styling options
- * @param options The styling options
- */
-const setTopBarsOptions = (options?: StylingOptions) => {
-    if (!options) { return }
-
-   if (options.navigationBar || options.title) {
-     let config: NavigationBarConfig = { title: options.title, backgroundColor: options.navigationBar?.backgroundColor,
-                                         buttonsColor: options.navigationBar?.buttonsColor, titleColor: options.navigationBar?.titleColor,
-                                         hasShadow: options.navigationBar?.hasShadow };
-     setNavigationBarConfig(config);
-   }
-
-   let config: StatusBarConfig  = { lightStatusBar:options.statusBar?.lightStatusBar,
-                                    statusBarColor: options.navigationBar?.backgroundColor };
-   setStatusBarConfig(config);
 };
 
 

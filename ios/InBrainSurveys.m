@@ -19,7 +19,6 @@
 // *********************************
 // ***** RN BRIDGE methods  ********
 // *********************************
-
 RCT_EXPORT_MODULE()
 
 + (BOOL)requiresMainQueueSetup {
@@ -204,24 +203,6 @@ RCT_EXPORT_METHOD(setStatusBarLight:(BOOL)lightStatusBar) {
         InBrainStatusBarConfig* config = [[InBrainStatusBarConfig alloc]
                                           initWithStatusBarStyle:style hideStatusBar: false];
         [_inbrain setStatusBarConfig:config];
-}
-
-// ***********************
-// ***** SET LANGUAGE ****
-// ***********************
-RCT_EXPORT_METHOD(setLanguage:(NSString *)language resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    // The single method which can produce throw, so needs to use try-catch here
-    @try{
-        NSError *error = nil;
-        [_inbrain setLanguage:language error:&error];
-        if (error != nil) {
-            reject(@"ERR_SET_LANGUAGE", error.description, nil);
-        }
-        resolve(@true);
-    }
-    @catch (NSException *error) {
-        reject(@"ERR_SET_LANGUAGE", error.description, nil);
-    }
 }
 
 // ****************************

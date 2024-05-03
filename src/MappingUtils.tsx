@@ -10,7 +10,7 @@ export const mapSurveys = (nativeSurveys: Array<[string: any]>): InBrainNativeSu
             survey.categories = [];
          }
 
-         var conversionId = survey.conversionLevel;
+         let conversionId = survey.conversionLevel;
          survey.conversionLevel = { id: conversionId, name: getConversionName(conversionId) };
 
          // The field is deprecated, however keeping it for the backward compatibility

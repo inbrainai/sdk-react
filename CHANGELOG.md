@@ -1,3 +1,17 @@
+##[3.0.0] 2024-05-02
+
+### Changed
+- React Native version updated to 0.74.0
+- `init` deprecated method - only method declaration lefted;
+- `setSessionParameters` deprecated method - only method declaration lefted;
+- `setOnCloseListener` deprecated method - only method declaration lefted;
+- `setOnCloseListenerFromPage` deprecated method - only method declaration lefted;
+- `ConfigOptions` deprecated type - removed;
+- `NavitagionBarOptions` deprecated type - removed;
+- `StatusBarOptions` deprecated type - removed;
+- `StylingOptionType` deprecated type - removed;
+
+
 ##[2.15.0] 2024-01-23
 
 ### Added
