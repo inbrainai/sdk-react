@@ -13,9 +13,6 @@ export const mapSurveys = (nativeSurveys: Array<[string: any]>): InBrainNativeSu
          let conversionId = survey.conversionLevel;
          survey.conversionLevel = { id: conversionId, name: getConversionName(conversionId) };
 
-         // The field is deprecated, however keeping it for the backward compatibility
-         if (conversionId > 1) { conversionId -= 1 }
-         survey.profileMatch = { id: conversionId, name: getProfileMatchName(conversionId) }
          return survey;
     });
 };
@@ -145,24 +142,4 @@ const getCategoryName = (categoryId: number): string => {
             return "Unknown";
     
     }
-};
-
-// Get profile match name by it's id (deprecated and will be removed later).
-const getProfileMatchName = (matchId: number): string => {
-       switch (matchId) {
-           case 0 :
-               return "New Survey";
-           case 1 :
-               return "Poor Profile Match";
-           case 2 :
-               return "Fair Profile Match";
-           case 3 :
-               return "Good Profile Match";
-           case 4 :
-               return "Great Profile Match";
-           case 5 :
-               return "Excellent Profile Match";
-           default:
-               return "Unknown";
-       }
 };

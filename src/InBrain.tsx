@@ -128,30 +128,30 @@ const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurv
 // ----------------------- Deprecated -------------------------------
 
 /**
- * @deprecated Please, use setInBrain fucntion instead
+ * @unsupported Please, use setInBrain fucntion instead
  */
 const init = () => {};
 
 /**
- * @deprecated Please, use setSessionID and setDataOptions instead
+ * @unsupported Please, use setSessionID and setDataOptions instead
  */
 const setSessionParameters = () => {};
 
 // ------ Callbacks -----
 
 /**
- * @deprecated Please, use setOnSurveysCloseLister instead
+ * @unsupported Please, use setOnSurveysCloseLister instead
  */
 const setOnCloseListener = () => {};
 
 /**
- * @deprecated
+ * @unsupported
  */
 const setOnCloseListenerFromPage = () => {};
 
 // ----------------------- Private -------------------------------
 
-/**
+/** 
  * Validation for apiClientId and apiSecret.
  */
 const validateClientData = (apiClientId: string, apiSecret: string) => {

@@ -11,10 +11,11 @@ export type NavigationBarConfig = {
 
 export type StatusBarConfig = {
     lightStatusBar?: boolean,
-    statusBarColor?: string, // Android only option. Have no effect at iOS. 
+    /**
+     * Android only option. Have no effect at iOS.
+     */
+    statusBarColor?: string, 
 };
 
-/**
- * Option: Data points
- */
+
 export type DataPoints = { [key: string]: string };

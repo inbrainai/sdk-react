@@ -1,16 +1,18 @@
-##[3.0.0] 2024-05-02
+##[3.0.0] 2024-05-13
 
 ### Changed
 - React Native version updated to 0.74.0
-- `init` deprecated method - only method declaration lefted;
-- `setSessionParameters` deprecated method - only method declaration lefted;
-- `setOnCloseListener` deprecated method - only method declaration lefted;
-- `setOnCloseListenerFromPage` deprecated method - only method declaration lefted;
-- `ConfigOptions` deprecated type - removed;
-- `NavitagionBarOptions` deprecated type - removed;
-- `StatusBarOptions` deprecated type - removed;
-- `StylingOptionType` deprecated type - removed;
-
+- `init` - no longer supported;
+- `setSessionParameters` no longer supported;
+- `setOnCloseListener` no longer supported;
+- `setOnCloseListenerFromPage` no longer supported;
+- `ConfigOptions` removed;
+- `NavitagionBarOptions` removed;
+- `StatusBarOptions` removed;
+- `StylingOptionType` removed;
+- `InBrainNativeSurveys` no longer supported;
+- `ProfileMatch` no longer supported;
+- `ProfileMatchNames` no longer supported;
 
 ##[2.15.0] 2024-01-23
 
