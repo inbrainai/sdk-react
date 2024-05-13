@@ -17,5 +17,7 @@ export type StatusBarConfig = {
     statusBarColor?: string, 
 };
 
-
+/**
+ * Option: Data points
+ */
 export type DataPoints = { [key: string]: string };
