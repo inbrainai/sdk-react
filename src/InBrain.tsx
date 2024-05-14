@@ -125,7 +125,7 @@ const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InB
 const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
 
 
-// ----------------------- Deprecated -------------------------------
+// ----------------------- Unsupported -------------------------------
 
 /**
  * @unsupported Please, use setInBrain fucntion instead
@@ -145,7 +145,7 @@ const setSessionParameters = () => {};
 const setOnCloseListener = () => {};
 
 /**
- * @unsupported
+ * @unsupported Please, use setOnSurveysCloseLister instead
  */
 const setOnCloseListenerFromPage = () => {};
 

@@ -148,7 +148,7 @@ export type InBrainCurrencySale = {
 }
 
 /**
- * @unsupported use InBrainNativeSurvey instead
+ * @unsupported Please, use InBrainNativeSurvey instead
  */
 export type InBrainNativeSurveys = {}
 
