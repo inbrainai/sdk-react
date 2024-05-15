@@ -74,5 +74,3 @@ dependencies {
     // Inbrain Android SDK
     implementation 'com.github.inbrainai:sdk-android:[2.4.0, 2.5.0)'
 }
-
-apply plugin: "com.facebook.react.rootproject"
