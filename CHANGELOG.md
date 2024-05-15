@@ -1,3 +1,19 @@
+##[3.0.0] 2024-05-13
+
+### Changed
+- React Native version updated to 0.74.0
+- `init` - no longer supported;
+- `setSessionParameters` no longer supported;
+- `setOnCloseListener` no longer supported;
+- `setOnCloseListenerFromPage` no longer supported;
+- `ConfigOptions` removed;
+- `NavitagionBarOptions` removed;
+- `StatusBarOptions` removed;
+- `StylingOptionType` removed;
+- `InBrainNativeSurveys` no longer supported;
+- `ProfileMatch` no longer supported;
+- `ProfileMatchNames` no longer supported;
+
 ##[2.15.0] 2024-01-23
 
 ### Added

@@ -305,15 +305,6 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         // Keep: Required for RN built in Event Emitter Calls.
     }
 
-    // ***********************
-    // ***** SET LANGUAGE **** 
-    // ***********************
-    @ReactMethod
-    public void setLanguage(final String language, Promise promise) {
-        InBrain.getInstance().setLanguage(language);
-        promise.resolve(null);
-    }
-
     // ****************************
     // ***** GET CURRENCY SALE **** 
     // ****************************

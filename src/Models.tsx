@@ -1,19 +1,7 @@
 /**
- * InBrainReward interface
- */
-export type InBrainReward = {
-    transactionId: number;
-    amount: number;
-    currency: string;
-    transactionType: number;
-}
-
-
-/**
  * Native Surveys interface
- * @deprecated use InBrainNativeSurvey instead
  */
-export type InBrainNativeSurveys = {
+export type InBrainNativeSurvey = {
     id: string;
     searchId: string;
     rank: number;
@@ -27,22 +15,25 @@ export type InBrainNativeSurveys = {
      * All the possible cases are listed at `ConversionLevel` declaration
      */
     conversionLevel: ConversionLevel;
-
-    /**
-     * @deprecated not supported anymore. Use conversionLevel instead
-     */
-    profileMatch: ProfileMatch;
-
-    /**
-     * @deprecated use namedCategories instead
-     */
-    categories: number[],
 }
 
 /**
- * Native Surveys interface
+ * Native Survey's Category interface
  */
-export type InBrainNativeSurvey = InBrainNativeSurveys
+export type Category = {
+    id: number;
+    name: string
+}
+
+/**
+ * InBrainReward interface
+ */
+export type InBrainReward = {
+    transactionId: number;
+    amount: number;
+    currency: string;
+    transactionType: number;
+}
 
 /**
  * ConversionLevel interface
@@ -58,14 +49,6 @@ export type InBrainNativeSurvey = InBrainNativeSurveys
  *
  */
 export type ConversionLevel = {
-    id: number;
-    name: string
-}
-
-/**
- * Native Survey's Category interface
- */
-export type Category = {
     id: number;
     name: string
 }
@@ -118,31 +101,10 @@ export const InBrainSurveyCategory = {
 };
 
 /**
- * @deprecated The type is not supported anymore
- */
-export type ProfileMatch = {
-    id: number;
-    name: string
-};
-
-/**
- * @deprecated The type is not supported anymore
- */
-export const ProfileMatchNames = {
-    NewSurvey:0,
-    PoorProfileMatch:1,
-    FairProfileMatch:2,
-    GoodProfileMatch:3,
-    GreatProfileMatch:4,
-    ExcellentProfileMatch:5,
-};
-
-/**
  * Data returned with OnSurveysClose event
  */
 export type OnCloseSurveysData = {
     byWebView: boolean,
-
     /**
      * At the moment only first Native Survey reward is delivered.
      * That means if the user complete a Native Survey, proceed to Survey Wall and complete one more survey -
@@ -184,3 +146,18 @@ export type InBrainCurrencySale = {
     startOn: Date,
     endOn: Date,
 }
+
+/**
+ * @unsupported Please, use InBrainNativeSurvey instead
+ */
+export type InBrainNativeSurveys = {}
+
+/**
+ * @unsupported The type is not supported anymore
+ */
+export type ProfileMatch = {};
+
+/**
+ * @unsupported The type is not supported anymore
+ */
+export const ProfileMatchNames = {};
