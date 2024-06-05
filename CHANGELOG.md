@@ -1,3 +1,8 @@
+##[3.1.0] 2024-06-06
+
+### Added
+- Added an example app to the project.
+
 ##[3.0.0] 2024-05-13
 
 ### Changed
