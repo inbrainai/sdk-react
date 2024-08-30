@@ -23,8 +23,12 @@ Find the `inbrain-config.js` file at `example` folder, copy it file with name `i
 ## Run the app:
 
 ### iOS
-Go to the `ios/` folder and run `pod install`.
-Go back to the `example` folder and run the application from the command line using `npm run ios`.
+Go to the `ios/` folder and run `pod install`. After that there are two options to launch the app:
+1) Go back to the `example` folder and run the application from the command line using `npx react-native run-ios --simulator="iPhone 15"` or any other simulator you would like.
+* Due to the issue with the cli - `npx react-native run-ios` without specifiyng the simulator may not work.
+
+2) Open the `example/ios/InbrainReactNativeExample.xcworkspace` file in XCode, select the run destination and run the application by pressing `Command (⌘) R`
+
 
 ### Android
 Simply run `npm run android` within `example` folder.
