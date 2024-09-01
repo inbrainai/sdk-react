@@ -2,12 +2,6 @@
 #
 .DS_Store
 
-# node.js
-#
-**/node_modules/
-npm-debug.log
-yarn-error.log
-
 # Xcode
 #
 build/
@@ -26,11 +20,10 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
 **/.xcode.env.local
+ 
 
 # Android/IntelliJ
-#
 build/
 .idea
 .gradle
@@ -41,18 +34,25 @@ local.properties
 *.keystore
 !debug.keystore
 
-lib/
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
 
-scripts/*.vars
-scripts/APP
-scripts/cli/package-lock.json
-APP*.tar.gz
- 
-*.log
-inbrain-surveys*.tgz
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+**/Pods/
+/ios/Podfile.lock
+/vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+# testing
+/coverage
 
 # Yarn
 .yarn/*
@@ -61,3 +61,7 @@ inbrain-surveys*.tgz
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+
+# config
+inbrain-config.js
