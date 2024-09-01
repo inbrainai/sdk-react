@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "inbrain-surveys": [
+        "../"
+      ]
+    }
+  },
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
