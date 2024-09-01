@@ -1,9 +1,10 @@
-##[3.1.0] 2024-06-06
+##[3.1.0] 2024-08-01
 
 ### Added
-- Added an example app to the project.
+- Added an example app to the project;
+- Updated ios sdk version to 2.4.2;
 
-##[3.0.0] 2024-05-13
+##[3.0.0] 2024-05-13    
 
 ### Changed
 - React Native version updated to 0.74.0
@@ -27,7 +28,7 @@
 
 ### Changed
 - Updated android sdk version to 2.4.0;
-- Updated ios sdk version to 2.4.0.
+- Updated ios sdk version to 2.4.0;
 
 
 ##[2.13.0] 2023-11-06
