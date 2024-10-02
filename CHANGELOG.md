@@ -1,8 +1,19 @@
+##[2.1.1] 2023-01-02
+
+### Added
+- Support of the new "offers" feature.
+
+### Changed
+- Updated native iOS SDK to 2.4.3;
+- Updated native Android SDK to 2.4.5.
+
 ##[3.1.0] 2024-08-01
 
 ### Added
-- Added an example app to the project;
-- Updated ios sdk version to 2.4.2;
+- An example app to the project;
+
+### Changed
+- Updated native iOS SDK to 2.4.2;
 
 ##[3.0.0] 2024-05-13    
 
@@ -27,9 +38,11 @@
 - arm64 arch for iOS simulators (podspec won't exclude arm64 for iPhone simulators anymore).
 
 ### Changed
-- Updated android sdk version to 2.4.0;
-- Updated ios sdk version to 2.4.0;
+- Updated native Android SDK to 2.4.0;
+- Updated native iOS SDK to 2.4.0.
 
+### Fixed:
+- Performance and stability improvements.
 
 ##[2.13.0] 2023-11-06
 
