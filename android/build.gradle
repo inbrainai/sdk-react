@@ -46,6 +46,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    namespace 'com.inbrain.sdk-rn'
 }
 
 repositories {
