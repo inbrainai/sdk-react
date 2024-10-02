@@ -1,4 +1,4 @@
-##[3.1.1] 2023-01-02
+##[3.1.1] 2024-10-02
 
 ### Added
 - Support of the new "offers" feature.
