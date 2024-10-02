@@ -5,7 +5,8 @@
 
 ### Changed
 - Updated native iOS SDK to 2.4.3;
-- Updated native Android SDK to 2.4.5.
+- Updated native Android SDK to 2.4.5;
+- Deny insecure connections for Android - `cleartextTrafficPermitted` is `false`;
 
 ##[3.1.0] 2024-08-01
 
