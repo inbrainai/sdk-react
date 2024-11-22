@@ -1,6 +1,7 @@
 #import "InBrainSurveys.h"
 #import <InBrainSurveys/InBrainSurveys.h>
 #import <React/RCTConvert.h>
+
 @implementation InBrainSurveys {
     InBrain* _inbrain;
     bool hasListeners;
@@ -139,11 +140,21 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
 }
 
 // *******************************
+// ***** OPEN WALL ******
+// *******************************
+RCT_EXPORT_METHOD(openWall:(NSInteger)option resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_inbrain openWallWith:(InBrainWallOption)option from:nil];
+        resolve(@true);
+    });
+}
+
+// *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id searchId:(NSString*)searchId showOffers:(BOOL)showOffers resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_inbrain showNativeSurveyWithId:id searchId:searchId from:NULL];
+        [_inbrain showNativeSurveyWithId:id searchId:searchId offersEnabled:showOffers from:nil];
         resolve(@true);
     });
 }

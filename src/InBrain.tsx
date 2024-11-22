@@ -3,7 +3,7 @@ import { Platform, NativeModules, NativeEventEmitter, EmitterSubscription } from
 import { assertIsColor, assertNotNullNorEmpty, wrapPromise } from './Utils';
 import { mapRewards, mapSurveys } from './MappingUtils'
 import {DataPoints, StatusBarConfig, NavigationBarConfig} from './Options';
-import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale } from './Models';
+import { InBrainReward, InBrainNativeSurvey, InBrainSurveyFilter, OnCloseSurveysData, InBrainCurrencySale, InBrainWallOption } from './Models';
 
 const { InBrainSurveys } = NativeModules;
 
@@ -86,10 +86,18 @@ const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void 
 const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
 
 /**
- * Show the Survey Wall. All the configs should be done `BEFORE` calling `showSurveys()`.
+ * @deprecated Use openWall() instead
  */
 const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
 
+
+/**
+ * Opens the InBrain survey wall
+ * @param option Indicates which feature is available at the dashboard: Surveys, Offers, or both
+ */
+const openWall = (option: InBrainWallOption = InBrainWallOption.all) => 
+    wrapPromise<void>(() => InBrainSurveys.openWall(option));
+  
 /**
  * Get Native Surveys
  * @param filter an optional parameter
@@ -105,8 +113,9 @@ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNa
  * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
+ * @param showOffers Specifies whether to enable Offers feature at the dashboard or not
  */
-const showNativeSurvey = (id: string, searchId: string) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId));
+const showNativeSurvey = (id: string, searchId: string, showOffers: boolean = true) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId,showOffers));
 
 /**
  * Get the rewards
@@ -171,6 +180,7 @@ export default {
 
     checkSurveysAvailable,
     showSurveys,
+    openWall,
     getNativeSurveys,
     showNativeSurvey,
     getCurrencySale,

@@ -6,7 +6,11 @@ import {useInbrain} from '../context/InbrainContext';
 import {ActivityWithOverlay, ToastNotify} from '../common';
 import {useReward} from '../context/RewardContext';
 
-import {OnCloseSurveysData, InBrainReward} from 'inbrain-surveys';
+import {
+  OnCloseSurveysData,
+  InBrainReward,
+  InBrainWallOption,
+} from 'inbrain-surveys';
 
 interface RouterProps {
   navigation: NavigationProp<any, any>;
@@ -65,9 +69,11 @@ const Home = ({navigation}: RouterProps) => {
   /**
    * How to call inbrain.showSurveys()
    */
-  const getSurveyWall = () => {
+  const getInBrainWall = (
+    option: InBrainWallOption = InBrainWallOption.all,
+  ) => {
     inbrain
-      ?.showSurveys()
+      ?.openWall(option)
       .then(() => {
         console.log('[Show Surveys SUCCESS]');
       })
@@ -86,9 +92,8 @@ const Home = ({navigation}: RouterProps) => {
       ?.checkSurveysAvailable()
       .then((available: boolean) => {
         setIsLoading(false);
-
         if (available) {
-          getSurveyWall();
+          getInBrainWall(InBrainWallOption.all);
         } else {
           setNotifyMsg('Ooops... No surveys available right now!');
         }

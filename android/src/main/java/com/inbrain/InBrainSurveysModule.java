@@ -118,6 +118,23 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
 
+
+    // ************************x
+    // ***** OPEN WALL ******
+    // ************************
+    @ReactMethod
+    public void openWall(final Promise promise) {
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                InBrain.getInstance().openWall(getCurrentActivityOrThrow());
+                promise.resolve(null);
+            } catch (NullCurrentActivityException e) {
+                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+            }
+        });
+    }
+
+
     // ************************x
     // ***** GET REWARDS ******
     // ************************
@@ -230,20 +247,18 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SHOW NATIVE SURVEY ******
     // *******************************
     @ReactMethod
-    public void showNativeSurvey(final String id, final String searchId, final Promise promise) {
+    public void showNativeSurvey(final String id, final String searchId, final boolean showOffers, final Promise promise) {
         final StartSurveysCallback callback = new StartSurveysCallback() {
             public void onSuccess() {
                 promise.resolve(null);
             }
-
             public void onFail(String message) {
                 promise.reject("ERR_SHOW_SURVEYS", message);
             }
         };
-
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, callback);
+                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, showOffers, callback);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
             }

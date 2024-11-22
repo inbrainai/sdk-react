@@ -61,6 +61,14 @@ export type ConversionLevel = {
     categoryIds?: number[],
     excludedCategoryIds?: number[],
 }
+/**
+* OpenWallOption
+*/
+export enum InBrainWallOption {
+    all = 0,
+    surveys = 1,
+    offers = 2
+}
 
 /**
 * InBrainSurveyCategory

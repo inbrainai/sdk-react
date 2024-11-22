@@ -9,6 +9,7 @@ import {
   NavigationBarConfig,
   OnCloseSurveysData,
   InBrainNativeSurvey,
+  InBrainWallOption,
 } from 'inbrain-surveys';
 
 type InbrainContextType = {
@@ -41,6 +42,7 @@ type InbrainContextType = {
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;
   setOnCloseListener: (callback: () => void) => EmitterSubscription;
   setOnCloseListenerFromPage: (callback: () => void) => EmitterSubscription;
+  openWall: (option: InBrainWallOption) => Promise<void>;
 };
 
 export const InbrainContext = createContext<InbrainContextType | null>(null);
