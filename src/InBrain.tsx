@@ -113,9 +113,9 @@ const getNativeSurveys = (filter?: InBrainSurveyFilter) => wrapPromise<InBrainNa
  * Show a specific Native Survey. All the configs should be done `BEFORE` calling `showNativeSurvey()`.
  * @param id the survey's identifier
  * @param searchId a mandatory identifier
- * @param showOffers Specifies whether to enable Offers feature at the dashboard or not
+ * @param offersEnabled Specifies whether to enable Offers feature at the dashboard or not
  */
-const showNativeSurvey = (id: string, searchId: string, showOffers: boolean = true) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId,showOffers));
+const showNativeSurvey = (id: string, searchId: string, offersEnabled: boolean = true) => wrapPromise<void>(() => InBrainSurveys.showNativeSurvey(id, searchId,offersEnabled));
 
 /**
  * Get the rewards

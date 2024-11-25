@@ -152,9 +152,9 @@ RCT_EXPORT_METHOD(openWall:(NSInteger)option resolver:(RCTPromiseResolveBlock)re
 // *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id searchId:(NSString*)searchId showOffers:(BOOL)showOffers resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id searchId:(NSString*)searchId offersEnabled:(BOOL)offersEnabled resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_inbrain showNativeSurveyWithId:id searchId:searchId offersEnabled:showOffers from:nil];
+        [_inbrain showNativeSurveyWithId:id searchId:searchId offersEnabled:offersEnabled from:nil];
         resolve(@true);
     });
 }

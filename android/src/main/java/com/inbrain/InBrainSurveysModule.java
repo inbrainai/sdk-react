@@ -247,7 +247,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SHOW NATIVE SURVEY ******
     // *******************************
     @ReactMethod
-    public void showNativeSurvey(final String id, final String searchId, final boolean showOffers, final Promise promise) {
+    public void showNativeSurvey(final String id, final String searchId, final boolean offersEnabled, final Promise promise) {
         final StartSurveysCallback callback = new StartSurveysCallback() {
             public void onSuccess() {
                 promise.resolve(null);
@@ -258,7 +258,7 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         };
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, showOffers, callback);
+                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, offersEnabled, callback);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
             }
