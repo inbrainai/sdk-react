@@ -1,7 +1,6 @@
 import {createContext, useContext} from 'react';
 import {EmitterSubscription} from 'react-native';
 import {
-  InitOptions,
   InBrainReward,
   InBrainSurveyFilter,
   DataPoints,
@@ -34,11 +33,6 @@ type InbrainContextType = {
   showNativeSurvey: (id: string, searchId: string) => Promise<void>;
   getRewards: () => Promise<InBrainReward[]>;
   confirmRewards: (rewards: InBrainReward[]) => Promise<void>;
-  init: (
-    apiClientId: string,
-    apiSecret: string,
-    opts?: InitOptions | undefined,
-  ) => Promise<void>;
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;
   setOnCloseListener: (callback: () => void) => EmitterSubscription;
   setOnCloseListenerFromPage: (callback: () => void) => EmitterSubscription;
