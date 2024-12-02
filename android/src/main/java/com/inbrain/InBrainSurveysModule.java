@@ -92,41 +92,15 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         InBrain.getInstance().setDataOptions(toHashMap(data));
     }
 
-    // ************************
-    // ***** SHOW SURVEYS *****
-    // ************************
-    @ReactMethod
-    public void showSurveys(final Promise promise) {
-        // Build the callback
-        final StartSurveysCallback callback = new StartSurveysCallback() {
-            public void onSuccess() {
-                promise.resolve(null);
-            }
-
-            public void onFail(String message) {
-                promise.reject("ERR_SHOW_SURVEYS", message);
-            }
-        };
-
-        UiThreadUtil.runOnUiThread(() -> {
-            try {
-                InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
-            } catch (NullCurrentActivityException e) {
-                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-            }
-        });
-    }
-
-
 
     // ************************x
     // ***** OPEN WALL ******
     // ************************
     @ReactMethod
-    public void openWall(final Promise promise) {
+    public void openWall(final int option, final Promise promise) {
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().openWall(getCurrentActivityOrThrow());
+                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), option);
                 promise.resolve(null);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
