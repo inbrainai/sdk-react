@@ -8,7 +8,7 @@ import {
   NavigationBarConfig,
   OnCloseSurveysData,
   InBrainNativeSurvey,
-  InBrainWallOption
+  InBrainWallOption,
 } from 'inbrain-surveys';
 
 type InbrainContextType = {
