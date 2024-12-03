@@ -34,6 +34,7 @@ import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
 import com.inbrain.sdk.model.InBrainSurveyReward;
 import com.inbrain.sdk.model.CurrencySale;
+import com.inbrain.sdk.model.WallOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,12 +97,38 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ************************x
     // ***** OPEN WALL ******
     // ************************
+
+    // TODO: - Move the initFromRaw to Android SDK
+    WallOption mapRawToOption(Integer rawValue) {
+        switch (rawValue) {
+            case 0:
+                return WallOption.ALL;
+            case 1:
+                return WallOption.SURVEYS;
+            case 2:
+                return WallOption.OFFERS;
+        }
+
+        return WallOption.ALL;
+    }
+
     @ReactMethod
     public void openWall(final int option, final Promise promise) {
+        WallOption wallOption = mapRawToOption(option);
+
+        final StartSurveysCallback callback = new StartSurveysCallback() {
+            public void onSuccess() {
+                promise.resolve(null);
+            }
+
+            public void onFail(String message) {
+                promise.reject("ERR_SHOW_SURVEYS", message);
+            }
+        };
+
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), option);
-                promise.resolve(null);
+                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
             }

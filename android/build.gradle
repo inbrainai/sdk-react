@@ -35,6 +35,7 @@ buildscript {
 }
 
 android {
+    namespace 'com.inbrain'
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
@@ -46,7 +47,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    namespace 'com.inbrain.sdk-rn'
 }
 
 repositories {

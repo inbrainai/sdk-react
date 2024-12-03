@@ -29,12 +29,16 @@ type InbrainContextType = {
   getNativeSurveys: (
     filter?: InBrainSurveyFilter | undefined,
   ) => Promise<InBrainNativeSurvey[]>;
-  showNativeSurvey: (id: string, searchId: string, offersEnabled?: boolean) => Promise<void>;
+  showNativeSurvey: (
+    id: string,
+    searchId: string,
+    offersEnabled?: boolean,
+  ) => Promise<void>;
   getRewards: () => Promise<InBrainReward[]>;
   confirmRewards: (rewards: InBrainReward[]) => Promise<void>;
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;
-  setOnCloseListener: (callback: () => void) => EmitterSubscription;
-  setOnCloseListenerFromPage: (callback: () => void) => EmitterSubscription;
+  setOnCloseListener: (callback: () => void) => void;
+  setOnCloseListenerFromPage: (callback: () => void) => void;
   openWall: (option: InBrainWallOption) => Promise<void>;
 };
 
