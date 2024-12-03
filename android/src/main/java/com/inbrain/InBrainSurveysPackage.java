@@ -1,4 +1,4 @@
-package com.inbrain;
+package com.inbrain.rn;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.inbrain;
+package com.inbrain.rn;
 
 /**
  * Exception thrown when React current activity is null

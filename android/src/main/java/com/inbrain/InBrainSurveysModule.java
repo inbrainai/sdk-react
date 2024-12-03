@@ -1,4 +1,4 @@
-package com.inbrain;
+package com.inbrain.rn;
 
 import android.app.Activity;
 
