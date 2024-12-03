@@ -64,17 +64,6 @@ RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data) {
 }
 
 // ************************
-// ***** SHOW SURVEYS *****
-// ************************
-RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    // This requires the main thread
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[InBrain shared] showSurveysFrom:NULL];
-        resolve(nil);
-    });
-}
-
-// ************************
 // ***** GET REWARDS ******
 // ************************
 RCT_EXPORT_METHOD(getRewards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

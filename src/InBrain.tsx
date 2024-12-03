@@ -86,12 +86,6 @@ const setOnSurveysCloseLister = (callback: (result: OnCloseSurveysData) => void 
 const checkSurveysAvailable = () => wrapPromise<boolean>(() => InBrainSurveys.checkSurveysAvailable())
 
 /**
- * @deprecated Use openWall() instead
- */
-const showSurveys = () => wrapPromise<void>(() => InBrainSurveys.showSurveys());
-
-
-/**
  * Opens the InBrain survey wall
  * @param option Indicates which feature is available at the dashboard: Surveys, Offers, or both
  */
@@ -133,6 +127,11 @@ const confirmRewards = (rewards: InBrainReward[]) => wrapPromise<void>(() => InB
  */
 const getCurrencySale = () => wrapPromise<InBrainCurrencySale>(() => InBrainSurveys.getCurrencySale());
 
+// ----------------------- Deprecated -------------------------------
+/**
+ * @deprecated Use openWall() instead
+ */
+const showSurveys = () => wrapPromise<void>(() => openWall(InBrainWallOption.all));
 
 // ----------------------- Unsupported -------------------------------
 

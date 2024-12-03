@@ -26,7 +26,6 @@ type InbrainContextType = {
     callback: (eventData: OnCloseSurveysData) => void,
   ) => EmitterSubscription;
   checkSurveysAvailable: () => Promise<boolean>;
-  showSurveys: () => Promise<void>;
   getNativeSurveys: (
     filter?: InBrainSurveyFilter | undefined,
   ) => Promise<InBrainNativeSurvey[]>;
