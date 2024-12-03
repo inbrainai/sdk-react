@@ -29,7 +29,7 @@ type InbrainContextType = {
   getNativeSurveys: (
     filter?: InBrainSurveyFilter | undefined,
   ) => Promise<InBrainNativeSurvey[]>;
-  showNativeSurvey: (id: string, searchId: string) => Promise<void>;
+  showNativeSurvey: (id: string, searchId: string, offersEnabled?: boolean) => Promise<void>;
   getRewards: () => Promise<InBrainReward[]>;
   confirmRewards: (rewards: InBrainReward[]) => Promise<void>;
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;

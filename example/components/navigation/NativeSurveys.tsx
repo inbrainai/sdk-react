@@ -37,7 +37,7 @@ const NativeSurveysList = () => {
 
   useEffect(() => {
     getNativeSurveys();
-  }, []);
+  });
 
   useEffect(() => {
     /**
@@ -75,7 +75,7 @@ const NativeSurveysList = () => {
    */
   const onPressShowNativeSurvey = (nativeSurvey: InBrainNativeSurvey) => {
     inbrain
-      ?.showNativeSurvey(nativeSurvey.id, nativeSurvey.searchId)
+      ?.showNativeSurvey(nativeSurvey.id, nativeSurvey.searchId, true)
       .then(() => {
         console.log('[Show Native Surveys SUCCESS]');
       })

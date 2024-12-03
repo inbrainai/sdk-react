@@ -67,44 +67,16 @@ const Home = ({navigation}: RouterProps) => {
   };
 
   /**
-   * How to call inbrain.showSurveys()
+   * How to call inbrain.openWall()
    */
-  const getInBrainWall = (
-    option: InBrainWallOption = InBrainWallOption.all,
-  ) => {
+  const onClickShowWall = () => {
     inbrain
-      ?.openWall(option)
+      ?.openWall(InBrainWallOption.all)
       .then(() => {
         console.log('[Show Surveys SUCCESS]');
       })
       .catch((err: Error) => {
         console.log(err);
-      });
-  };
-
-  /**
-   * How to call inbrain.checkSurveysAvailable()
-   */
-
-  const onClickShowSurveys = () => {
-    setIsLoading(true);
-    inbrain
-      ?.checkSurveysAvailable()
-      .then((available: boolean) => {
-        setIsLoading(false);
-        if (available) {
-          getInBrainWall(InBrainWallOption.all);
-        } else {
-          setNotifyMsg('Ooops... No surveys available right now!');
-        }
-      })
-      .catch((err: Error) => {
-        setIsLoading(false);
-
-        setNotifyMsg('Ooops... No surveys available right now!');
-        console.log(
-          `[Check SurveysWall Available ERROR] => ${err.message || err}`,
-        );
       });
   };
 
@@ -116,8 +88,8 @@ const Home = ({navigation}: RouterProps) => {
         <Text style={styles.appSubtitle}>Example App</Text>
       </View>
       <ActionList
-        onClickShowSurveys={() => {
-          onClickShowSurveys();
+        onClickShowWall={() => {
+          onClickShowWall();
         }}
         onClickShowNativeSurveys={() => {
           navigation.navigate('NativeSurveys');
