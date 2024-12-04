@@ -75,7 +75,7 @@ const NativeSurveysList = () => {
    */
   const onPressShowNativeSurvey = (nativeSurvey: InBrainNativeSurvey) => {
     inbrain
-      ?.showNativeSurvey(nativeSurvey.id, nativeSurvey.searchId, true)
+      ?.showNativeSurvey(nativeSurvey.id, nativeSurvey.searchId)
       .then(() => {
         console.log('[Show Native Surveys SUCCESS]');
       })

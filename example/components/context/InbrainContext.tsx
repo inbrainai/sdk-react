@@ -39,7 +39,7 @@ type InbrainContextType = {
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;
   setOnCloseListener: (callback: () => void) => void;
   setOnCloseListenerFromPage: (callback: () => void) => void;
-  openWall: (option: InBrainWallOption) => Promise<void>;
+  openWall: (option?: InBrainWallOption) => Promise<void>;
 };
 
 export const InbrainContext = createContext<InbrainContextType | null>(null);
