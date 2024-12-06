@@ -17,7 +17,7 @@ end
 target 'InbrainReactNativeExample' do
   config = use_native_modules!
 
-  pod 'InBrainSurveys', :git => 'https://github.com/inbrainai/inBrainSurveys_SDK.git', :branch => 'develop'
+  pod 'InBrainSurveys', :git => 'https://github.com/inbrainai/inBrainSurveys_SDK.git', :tag => '2.5.0'
 
   use_react_native!(
     :path => config[:reactNativePath],

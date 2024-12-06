@@ -94,46 +94,35 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     }
 
 
-    // ************************x
-    // ***** OPEN WALL ******
-    // ************************
-
-    // TODO: - Move the initFromRaw to Android SDK
-    WallOption mapRawToOption(Integer rawValue) {
-        switch (rawValue) {
-            case 0:
-                return WallOption.ALL;
-            case 1:
-                return WallOption.SURVEYS;
-            case 2:
-                return WallOption.OFFERS;
-        }
-
-        return WallOption.ALL;
-    }
-
+// ************************
+// ***** OPEN WALL ******
+// ************************
     @ReactMethod
     public void openWall(final int option, final Promise promise) {
-        WallOption wallOption = mapRawToOption(option);
-
-        final StartSurveysCallback callback = new StartSurveysCallback() {
-            public void onSuccess() {
-                promise.resolve(null);
-            }
-
-            public void onFail(String message) {
-                promise.reject("ERR_SHOW_SURVEYS", message);
-            }
-        };
-
-        UiThreadUtil.runOnUiThread(() -> {
-            try {
-                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
-            } catch (NullCurrentActivityException e) {
-                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-            }
-        });
+    WallOption wallOption = WallOption.fromRaw(option);
+    if (wallOption == null) {
+        wallOption = WallOption.ALL;
     }
+
+    final StartSurveysCallback callback = new StartSurveysCallback() {
+        public void onSuccess() {
+            promise.resolve(null); 
+        }
+
+        public void onFail(String message) {
+            promise.reject("ERR_SHOW_SURVEYS", message);
+        }
+    };
+
+    UiThreadUtil.runOnUiThread(() -> {
+        try {
+            InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
+        } catch (NullCurrentActivityException e) {
+            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+        }
+    });
+}
+
 
 
     // ************************x
