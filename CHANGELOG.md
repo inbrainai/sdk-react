@@ -1,3 +1,18 @@
+## [3.2.0] - 2024-12-06
+
+### Added
+- New `openWall` method with `InBrainWallOption` to control survey wall display
+- Ability to show only surveys or only offers at the survey wall
+- New `showOffers` parameter to `showNativeSurvey` method
+
+### Changed
+- Updated native iOS SDK to 2.5.0
+- Updated native Android SDK to 2.5.0
+
+### Deprecated
+- Deprecated `showSurveys()` method in favor of new `openWall()` method
+
+
 ##[3.1.1] 2024-10-02
 
 ### Added
