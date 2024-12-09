@@ -17,8 +17,6 @@ end
 target 'InbrainReactNativeExample' do
   config = use_native_modules!
 
-  pod 'InBrainSurveys', :git => 'https://github.com/inbrainai/inBrainSurveys_SDK.git', :branch => 'develop'
-
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
