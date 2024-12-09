@@ -99,31 +99,27 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 // ************************
     @ReactMethod
     public void openWall(final int option, final Promise promise) {
-    WallOption wallOption = WallOption.fromRaw(option);
-    if (wallOption == null) {
-        wallOption = WallOption.ALL;
+        final WallOption optionFromRaw = WallOption.Companion.fromRaw(option);
+        final WallOption wallOption = (optionFromRaw != null) ? optionFromRaw : WallOption.ALL;
+
+        final StartSurveysCallback callback = new StartSurveysCallback() {
+            public void onSuccess() {
+                promise.resolve(null); 
+            }
+
+            public void onFail(String message) {
+                promise.reject("ERR_SHOW_SURVEYS", message);
+            }
+        };
+
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
+            } catch (NullCurrentActivityException e) {
+                promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
+            }
+        });
     }
-
-    final StartSurveysCallback callback = new StartSurveysCallback() {
-        public void onSuccess() {
-            promise.resolve(null); 
-        }
-
-        public void onFail(String message) {
-            promise.reject("ERR_SHOW_SURVEYS", message);
-        }
-    };
-
-    UiThreadUtil.runOnUiThread(() -> {
-        try {
-            InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
-        } catch (NullCurrentActivityException e) {
-            promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
-        }
-    });
-}
-
-
 
     // ************************x
     // ***** GET REWARDS ******
