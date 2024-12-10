@@ -12,12 +12,12 @@ import {
 import {useReward} from './context/RewardContext';
 
 type ActionListProps = {
-  onClickShowSurveys: () => void;
+  onClickShowWall: () => void;
   onClickShowNativeSurveys: () => void;
 };
 
 const ActionList = ({
-  onClickShowSurveys,
+  onClickShowWall,
   onClickShowNativeSurveys,
 }: ActionListProps) => {
   const [isPortrait, setIsPortrait] = useState<boolean>();
@@ -55,7 +55,7 @@ const ActionList = ({
         />
       </View>
       <View style={styles.flex}>
-        <ActionButton text="Open Survey Wall" onPress={onClickShowSurveys} />
+        <ActionButton text="Open Wall" onPress={onClickShowWall} />
         <ActionButton
           text="Show Native Surveys"
           onPress={onClickShowNativeSurveys}

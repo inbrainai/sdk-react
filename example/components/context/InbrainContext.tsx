@@ -1,7 +1,6 @@
 import {createContext, useContext} from 'react';
 import {EmitterSubscription} from 'react-native';
 import {
-  InitOptions,
   InBrainReward,
   InBrainSurveyFilter,
   DataPoints,
@@ -9,6 +8,7 @@ import {
   NavigationBarConfig,
   OnCloseSurveysData,
   InBrainNativeSurvey,
+  InBrainWallOption,
 } from 'inbrain-surveys';
 
 type InbrainContextType = {
@@ -26,21 +26,20 @@ type InbrainContextType = {
     callback: (eventData: OnCloseSurveysData) => void,
   ) => EmitterSubscription;
   checkSurveysAvailable: () => Promise<boolean>;
-  showSurveys: () => Promise<void>;
   getNativeSurveys: (
     filter?: InBrainSurveyFilter | undefined,
   ) => Promise<InBrainNativeSurvey[]>;
-  showNativeSurvey: (id: string, searchId: string) => Promise<void>;
+  showNativeSurvey: (
+    id: string,
+    searchId: string,
+    offersEnabled?: boolean,
+  ) => Promise<void>;
   getRewards: () => Promise<InBrainReward[]>;
   confirmRewards: (rewards: InBrainReward[]) => Promise<void>;
-  init: (
-    apiClientId: string,
-    apiSecret: string,
-    opts?: InitOptions | undefined,
-  ) => Promise<void>;
   setSessionParameters: (sessionUid: string, dataPoints: DataPoints) => void;
-  setOnCloseListener: (callback: () => void) => EmitterSubscription;
-  setOnCloseListenerFromPage: (callback: () => void) => EmitterSubscription;
+  setOnCloseListener: (callback: () => void) => void;
+  setOnCloseListenerFromPage: (callback: () => void) => void;
+  openWall: (option?: InBrainWallOption) => Promise<void>;
 };
 
 export const InbrainContext = createContext<InbrainContextType | null>(null);

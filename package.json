@@ -1,7 +1,7 @@
 {
   "name": "inbrain-surveys",
   "title": "Inbrain Survey",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "In-App monetization via surveys, powered by inBrain.ai.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,9 +10,9 @@
     "build": "./node_modules/typescript/bin/tsc",
     "watch": "./node_modules/typescript/bin/tsc -w",
     "clean": "rm -rf lib/ && cd ios && rm -rf build && cd .. && cd android && ./gradlew clean && rm -rf android/.idea && cd ..",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepare": "npm run clean && npm run build",
     "lint": "eslint .",
-    "test": "jest"
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",

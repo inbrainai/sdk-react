@@ -1,6 +1,7 @@
 #import "InBrainSurveys.h"
 #import <InBrainSurveys/InBrainSurveys.h>
 #import <React/RCTConvert.h>
+
 @implementation InBrainSurveys {
     InBrain* _inbrain;
     bool hasListeners;
@@ -60,17 +61,6 @@ RCT_EXPORT_METHOD(setDataOptions:(NSDictionary *)data) {
     }];
 
     [_inbrain setDataOptions: mapped];
-}
-
-// ************************
-// ***** SHOW SURVEYS *****
-// ************************
-RCT_EXPORT_METHOD(showSurveys:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    // This requires the main thread
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[InBrain shared] showSurveysFrom:NULL];
-        resolve(nil);
-    });
 }
 
 // ************************
@@ -139,11 +129,21 @@ RCT_EXPORT_METHOD(getNativeSurveys:(NSString * _Nullable)placementId categoryIDs
 }
 
 // *******************************
+// ***** OPEN WALL ******
+// *******************************
+RCT_EXPORT_METHOD(openWall:(NSInteger)option resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_inbrain openWallWith:(InBrainWallOption)option from:nil];
+        resolve(@true);
+    });
+}
+
+// *******************************
 // ***** SHOW NATIVE SURVEY ******
 // *******************************
-RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id  searchId:(NSString*)searchId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(showNativeSurvey:(NSString*)id searchId:(NSString*)searchId offersEnabled:(BOOL)offersEnabled resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_inbrain showNativeSurveyWithId:id searchId:searchId from:NULL];
+        [_inbrain showNativeSurveyWithId:id searchId:searchId offersEnabled:offersEnabled from:nil];
         resolve(@true);
     });
 }

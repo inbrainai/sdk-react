@@ -6,7 +6,11 @@ import {useInbrain} from '../context/InbrainContext';
 import {ActivityWithOverlay, ToastNotify} from '../common';
 import {useReward} from '../context/RewardContext';
 
-import {OnCloseSurveysData, InBrainReward} from 'inbrain-surveys';
+import {
+  OnCloseSurveysData,
+  InBrainReward,
+  InBrainWallOption,
+} from 'inbrain-surveys';
 
 interface RouterProps {
   navigation: NavigationProp<any, any>;
@@ -63,43 +67,16 @@ const Home = ({navigation}: RouterProps) => {
   };
 
   /**
-   * How to call inbrain.showSurveys()
+   * How to call inbrain.openWall()
    */
-  const getSurveyWall = () => {
+  const onClickShowWall = () => {
     inbrain
-      ?.showSurveys()
+      ?.openWall(InBrainWallOption.all)
       .then(() => {
         console.log('[Show Surveys SUCCESS]');
       })
       .catch((err: Error) => {
         console.log(err);
-      });
-  };
-
-  /**
-   * How to call inbrain.checkSurveysAvailable()
-   */
-
-  const onClickShowSurveys = () => {
-    setIsLoading(true);
-    inbrain
-      ?.checkSurveysAvailable()
-      .then((available: boolean) => {
-        setIsLoading(false);
-
-        if (available) {
-          getSurveyWall();
-        } else {
-          setNotifyMsg('Ooops... No surveys available right now!');
-        }
-      })
-      .catch((err: Error) => {
-        setIsLoading(false);
-
-        setNotifyMsg('Ooops... No surveys available right now!');
-        console.log(
-          `[Check SurveysWall Available ERROR] => ${err.message || err}`,
-        );
       });
   };
 
@@ -111,8 +88,8 @@ const Home = ({navigation}: RouterProps) => {
         <Text style={styles.appSubtitle}>Example App</Text>
       </View>
       <ActionList
-        onClickShowSurveys={() => {
-          onClickShowSurveys();
+        onClickShowWall={() => {
+          onClickShowWall();
         }}
         onClickShowNativeSurveys={() => {
           navigation.navigate('NativeSurveys');

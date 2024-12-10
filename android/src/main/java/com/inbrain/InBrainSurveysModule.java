@@ -1,4 +1,4 @@
-package com.inbrain;
+package com.inbrain.rn;
 
 import android.app.Activity;
 
@@ -34,6 +34,7 @@ import com.inbrain.sdk.model.SurveyCategory;
 import com.inbrain.sdk.model.SurveyFilter;
 import com.inbrain.sdk.model.InBrainSurveyReward;
 import com.inbrain.sdk.model.CurrencySale;
+import com.inbrain.sdk.model.WallOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,15 +93,18 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
         InBrain.getInstance().setDataOptions(toHashMap(data));
     }
 
-    // ************************
-    // ***** SHOW SURVEYS *****
-    // ************************
+
+// ************************
+// ***** OPEN WALL ******
+// ************************
     @ReactMethod
-    public void showSurveys(final Promise promise) {
-        // Build the callback
+    public void openWall(final int option, final Promise promise) {
+        final WallOption optionFromRaw = WallOption.Companion.fromRaw(option);
+        final WallOption wallOption = (optionFromRaw != null) ? optionFromRaw : WallOption.ALL;
+
         final StartSurveysCallback callback = new StartSurveysCallback() {
             public void onSuccess() {
-                promise.resolve(null);
+                promise.resolve(null); 
             }
 
             public void onFail(String message) {
@@ -110,13 +114,12 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
 
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().showSurveys(getCurrentActivityOrThrow(), callback);
+                InBrain.getInstance().openWall(getCurrentActivityOrThrow(), wallOption, callback);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
             }
         });
     }
-
 
     // ************************x
     // ***** GET REWARDS ******
@@ -230,20 +233,18 @@ public class InBrainSurveysModule extends ReactContextBaseJavaModule implements 
     // ***** SHOW NATIVE SURVEY ******
     // *******************************
     @ReactMethod
-    public void showNativeSurvey(final String id, final String searchId, final Promise promise) {
+    public void showNativeSurvey(final String id, final String searchId, final boolean offersEnabled, final Promise promise) {
         final StartSurveysCallback callback = new StartSurveysCallback() {
             public void onSuccess() {
                 promise.resolve(null);
             }
-
             public void onFail(String message) {
                 promise.reject("ERR_SHOW_SURVEYS", message);
             }
         };
-
         UiThreadUtil.runOnUiThread(() -> {
             try {
-                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, callback);
+                InBrain.getInstance().showNativeSurveyWith(getCurrentActivityOrThrow(), id, searchId, offersEnabled, callback);
             } catch (NullCurrentActivityException e) {
                 promise.reject("ERR_NULL_CURRENT_ACTIVITY", e.getMessage(), e);
             }
