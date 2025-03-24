@@ -1,3 +1,13 @@
+## [3.2.1] - 2025-24-03
+### Changed
+- Default option for `showSurveys()` method set to `false`
+- Disable the offers for `showNativeSurvey` by default
+- Updated native iOS SDK to 2.5.1
+- Updated native Android SDK to 2.5.1
+
+### Fixed:
+- Android deprecated API `setStatusBarColor`
+
 ## [3.2.0] - 2024-12-06
 
 ### Added
