@@ -118,7 +118,7 @@ const checkSurveysAvailable = () =>
  * Opens the InBrain survey wall
  * @param option Indicates which feature is available at the dashboard: Surveys, Offers, or both
  */
-const openWall = (option: InBrainWallOption = InBrainWallOption.all) =>
+const openWall = (option: InBrainWallOption = InBrainWallOption.surveys) =>
   wrapPromise<void>(() => InBrainSurveys.openWall(option));
 
 /**
@@ -145,7 +145,7 @@ const getNativeSurveys = (filter?: InBrainSurveyFilter) =>
 const showNativeSurvey = (
   id: string,
   searchId: string,
-  offersEnabled: boolean = true
+  offersEnabled: boolean = false
 ) =>
   wrapPromise<void>(() =>
     InBrainSurveys.showNativeSurvey(id, searchId, offersEnabled)
@@ -175,7 +175,7 @@ const getCurrencySale = () =>
  * @deprecated Use openWall() instead
  */
 const showSurveys = () =>
-  wrapPromise<void>(() => openWall(InBrainWallOption.all));
+  wrapPromise<void>(() => openWall(InBrainWallOption.surveys));
 
 // ----------------------- Unsupported -------------------------------
 
